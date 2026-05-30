@@ -587,7 +587,7 @@ ModelImporter:
     - name: neck.x
       parentName: spine_01.x
       position: {x: -0.000000046519588, y: 0.0049467105, z: -0.00014276951}
-      rotation: {x: 0.07584273, y: 0.00018866436, z: 0.001565629, w: 0.99711853}
+      rotation: {x: 0.07584274, y: 0.00018866436, z: 0.0015656292, w: 0.99711853}
       scale: {x: 1.0000006, y: 1.0000008, z: 1.0000006}
     - name: head.x
       parentName: neck.x
@@ -697,7 +697,7 @@ ModelImporter:
     - name: pinky1.l
       parentName: pinky1_base.l
       position: {x: -0.00002132353, y: 0.0012325423, z: -0.00002202229}
-      rotation: {x: 0.06859177, y: 0.009580288, z: 0.006567483, w: 0.9975772}
+      rotation: {x: 0.06859177, y: 0.009580289, z: 0.006567483, w: 0.99757725}
       scale: {x: 1.0000002, y: 1.0000013, z: 1.000001}
     - name: pinky2.l
       parentName: pinky1.l
@@ -717,7 +717,7 @@ ModelImporter:
     - name: ring1_base.l
       parentName: hand.l
       position: {x: 0.00008806642, y: 0.0006554402, z: -0.000010357331}
-      rotation: {x: -0.013526006, y: 0.0040635536, z: 0.06441937, w: 0.99782294}
+      rotation: {x: -0.013526007, y: 0.004063554, z: 0.064419374, w: 0.997823}
       scale: {x: 1.0000007, y: 0.99999994, z: 0.9999998}
     - name: ring1.l
       parentName: ring1_base.l
@@ -752,7 +752,7 @@ ModelImporter:
     - name: thumb3.l
       parentName: thumb2.l
       position: {x: -0.000026961035, y: 0.00031078773, z: -0.000029855817}
-      rotation: {x: -0.008975207, y: -0.34182376, z: 0.036282565, w: 0.9390205}
+      rotation: {x: -0.008975207, y: -0.3418238, z: 0.036282565, w: 0.9390206}
       scale: {x: 0.99999756, y: 1.0000068, z: 1.0000036}
     - name: thumb3.l_end
       parentName: thumb3.l
@@ -862,12 +862,12 @@ ModelImporter:
     - name: pinky2.r
       parentName: pinky1.r
       position: {x: 0.0000025078282, y: 0.00025502717, z: -0.0000015983637}
-      rotation: {x: -0.050676417, y: -0.005679562, z: 0.0029693611, w: 0.99869454}
+      rotation: {x: -0.048731446, y: -0.005782036, z: 0.0026148404, w: 0.99879175}
       scale: {x: 1.0007113, y: 1.0350543, z: 0.9636214}
     - name: pinky3.r
       parentName: pinky2.r
       position: {x: 7.9162416e-10, y: 0.00029698655, z: 2.0489097e-10}
-      rotation: {x: -0.06879558, y: 0.008804671, z: -0.01800388, w: 0.99742943}
+      rotation: {x: -0.068795584, y: 0.008804671, z: -0.018003881, w: 0.99742943}
       scale: {x: 0.9990824, y: 1.0470736, z: 0.95173407}
     - name: pinky3.r_end
       parentName: pinky3.r
@@ -887,7 +887,7 @@ ModelImporter:
     - name: ring2.r
       parentName: ring1.r
       position: {x: 0.0000027225167, y: 0.0003945721, z: 0.0000053693016}
-      rotation: {x: -0.03945985, y: -0.0025957671, z: -0.001868743, w: 0.999216}
+      rotation: {x: -0.03945985, y: -0.0025957674, z: -0.001868743, w: 0.9992161}
       scale: {x: 0.9999298, y: 1.0323783, z: 0.967527}
     - name: ring3.r
       parentName: ring2.r
@@ -912,7 +912,7 @@ ModelImporter:
     - name: thumb3.r
       parentName: thumb2.r
       position: {x: 5.7742e-10, y: 0.00032339303, z: 0.0000000021234154}
-      rotation: {x: 0.03505828, y: 0.3486145, z: 0.03163769, w: 0.93607587}
+      rotation: {x: 0.03181013, y: 0.34896943, z: 0.028862262, w: 0.9361493}
       scale: {x: 1.0947427, y: 0.8682703, z: 1.0525315}
     - name: thumb3.r_end
       parentName: thumb3.r

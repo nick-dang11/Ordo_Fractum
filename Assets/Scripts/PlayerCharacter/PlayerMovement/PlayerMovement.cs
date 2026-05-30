@@ -3,9 +3,15 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Components")]
     [SerializeField] private CharacterController _CharacterController;
     [SerializeField] private Animator _Animator;
     [SerializeField] private InputActionAsset _InputActions;
+
+    [Header("Movement Settings")]
+    [SerializeField] private float _moveSpeed = 2f;
+    [SerializeField] private float _rotationSpeed = 720f;
+
 
     private float _gravity = -9.81f;
     private Vector3 _velocity;
@@ -26,9 +32,9 @@ public class PlayerMovement : MonoBehaviour
         if(direction.magnitude > 0.1f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 720f * Time.deltaTime); // 720f is two 360s, or two rotations per second, scalable
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime); // 720f is two 360s, or two rotations per second, scalable
 
-            _CharacterController.Move(direction *5f * Time.deltaTime);
+            _CharacterController.Move(direction * _moveSpeed * Time.deltaTime);
         }
 
         _Animator.SetFloat("Speed", direction.magnitude);
