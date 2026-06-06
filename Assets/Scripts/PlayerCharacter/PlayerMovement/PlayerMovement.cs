@@ -57,7 +57,8 @@ public class PlayerMovement : MonoBehaviour
             _CharacterController.Move(moveDirection * _moveSpeed * Time.deltaTime);
         }
 
-        _Animator.SetFloat("Speed", input.magnitude);
+        float currentSpeed = Mathf.Clamp(input.magnitude * _moveSpeed * 3f, 0f, 6f);
+        _Animator.SetFloat("Speed", currentSpeed);
 
         if (_CharacterController.isGrounded && _velocity.y < 0) {
             _velocity.y = -2f;

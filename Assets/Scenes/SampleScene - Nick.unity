@@ -1090,12 +1090,28 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2448189098979044042, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2448189098979044042, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
       propertyPath: _MainCamera
       value: 
       objectReference: {fileID: 330585546}
+    - target: {fileID: 2920388717101339192, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 84a2b008f34c2b24fbd2d5dba4980f07, type: 2}
+    - target: {fileID: 2920388717101339192, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291261830347497589, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
