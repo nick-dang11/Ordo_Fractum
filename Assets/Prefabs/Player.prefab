@@ -74,6 +74,7 @@ MonoBehaviour:
   _CharacterController: {fileID: 6291261830347497589}
   _Animator: {fileID: 2920388717101339192}
   _InputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  _MainCamera: {fileID: 0}
   _moveSpeed: 2
   _rotationSpeed: 720
 --- !u!1001 &8785920036811501481
@@ -131,7 +132,7 @@ PrefabInstance:
     - target: {fileID: 5866666021909216657, guid: d05a9b72e8e1c2b499a12e2f841947b7, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 40db3173a05ae3242b1c182a09b0a183, type: 2}
+      objectReference: {fileID: 9100000, guid: 84a2b008f34c2b24fbd2d5dba4980f07, type: 2}
     - target: {fileID: 5866666021909216657, guid: d05a9b72e8e1c2b499a12e2f841947b7, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0
