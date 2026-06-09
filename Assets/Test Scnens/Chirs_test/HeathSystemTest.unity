@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 674567771}
   - component: {fileID: 674567770}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: UI Enemy Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -332,6 +332,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1447805751}
+  - {fileID: 2068673896}
   m_Father: {fileID: 1050565875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -386,7 +387,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0.936
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -402,8 +403,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596f2b8e1f1310645915399028d2d9ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::healthbar
-  healthbarSlider: {fileID: 0}
-  easeHealthbarSlider: {fileID: 0}
+  healthbarSlider: {fileID: 779422151}
+  easeHealthbarSlider: {fileID: 2068673895}
   maxHealth: 100
   health: 0
 --- !u!1 &1050565874
@@ -436,7 +437,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 779422150}
-  - {fileID: 2068673896}
   m_Father: {fileID: 674567773}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1365822338
@@ -990,9 +990,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 100
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 100
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1010,11 +1010,11 @@ RectTransform:
   m_Children:
   - {fileID: 1365822339}
   - {fileID: 1448528391}
-  m_Father: {fileID: 1050565875}
+  m_Father: {fileID: 779422150}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -7.701538, y: 64.953186}
+  m_AnchoredPosition: {x: 163.69849, y: -14.746765}
   m_SizeDelta: {x: 327.39697, y: 29.493591}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1660057539 &9223372036854775807

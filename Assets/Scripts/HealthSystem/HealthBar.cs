@@ -7,37 +7,53 @@ public class HealthBar : MonoBehaviour
     public Slider easeHealthbarSlider;
     public float maxHealth = 100f;
     public float health;
-    private float lerpSpeed = 5f;
+    private float lerpSpeed = 2f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         health = maxHealth;
+        healthbarSlider.maxValue = maxHealth;
+        easeHealthbarSlider.maxValue = maxHealth;
+        healthbarSlider.value = maxHealth;
+        easeHealthbarSlider.value = maxHealth;
+        Debug.Log(gameObject.name + " has the script");
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
         if(healthbarSlider.value != health)
         {
             healthbarSlider.value = health;
         }
-
-        if(healthbarSlider.value == easeHealthbarSlider.value)
+        //TakeDamage(10);
+        if(healthbarSlider.value != easeHealthbarSlider.value)
         {
             easeHealthbarSlider.value = Mathf.Lerp(easeHealthbarSlider.value, health, Time.deltaTime * lerpSpeed);
 
         }
 
-        if(health <= 0)
+        else
         {
-            Debug.Log("Player is Dead");
+            //Debug.Log("Player is Alive");
         }
     }
 
-    void TakeDamage(float damage)
+    public void TakeDamage(float damage)
     {
-        health -= damage;
+        health -= damage; 
+        health = Mathf.Clamp(health, 0, maxHealth);// (value,min,max)
+        Debug.Log("Enemy took damage: " + damage);
 
+        if(health <= 0)
+        {
+            Debug.Log("Enemy is Dead");
+            Destroy(gameObject);
+            return;
+        }
     
     }
 }
