@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class EnemyCollision : MonoBehaviour
 {
-    private HealthBar EnemyHealth;
+    private EnemyHealth _EnemyHealth;
 
     void Start()
     {
-        EnemyHealth = GetComponent<HealthBar>();
+        _EnemyHealth = GetComponent<EnemyHealth>();
         Debug.Log(gameObject.name + " has the script");
     }
     
@@ -16,9 +16,9 @@ public class EnemyCollision : MonoBehaviour
         {   
             Debug.Log("Enemy Collision with Player");
 
-            if(EnemyHealth != null)
+            if(_EnemyHealth != null)
             {
-                EnemyHealth.TakeDamage(10f);
+                _EnemyHealth.TakeDamage(10f);
             }
             else
             {
