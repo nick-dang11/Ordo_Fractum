@@ -22,6 +22,7 @@ using UnityEngine.InputSystem;
 
         [Header("Combat Inputs")]
         public bool attack;
+        public bool block;
 
 #if ENABLE_INPUT_SYSTEM
         public void OnAttack(InputValue value)
@@ -34,9 +35,20 @@ using UnityEngine.InputSystem;
             attack = newAttackState;
             Debug.Log($"Manager thinks attack is {attack}");
         }
+#if ENABLE_INPUT_SYSTEM
+    public void OnBlock(InputValue value)
+    {
+        BlockInput(value.isPressed);
+    }
+#endif
+    public void BlockInput(bool newBlockState)
+    {
+        block = newBlockState;
+        Debug.Log($"Manager thinks block is {block}");
+    }
 
 #if ENABLE_INPUT_SYSTEM
-        public void OnMove(InputValue value)
+    public void OnMove(InputValue value)
         {
             MoveInput(value.Get<Vector2>());
         }
