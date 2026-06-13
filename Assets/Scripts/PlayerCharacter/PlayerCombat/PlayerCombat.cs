@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
-    public PlayerInputManager input;
+    [SerializeField] public PlayerInputManager input;
+    [SerializeField] private Hitbox weaponHitbox;
+    [SerializeField] private Animator animate;
+
     private bool wasAttacking = false;
     private bool isAttacking = false;
     private bool isBlocking = false;
@@ -20,11 +23,10 @@ public class PlayerCombat : MonoBehaviour
 
     private float holdTimer = 0f;
 
-    private Animator animate;
-
     void Start()
     {
-        animate = GetComponent<Animator>();
+        //animate = GetComponent<Animator>();
+        // removed this since manual assignment with serialized fields above - N
     }
 
     void Update()
@@ -64,6 +66,10 @@ public class PlayerCombat : MonoBehaviour
             isHolding = true;
             holdTimer = 0f;
             Debug.Log("Attack input pressed.");
+
+            StartCoroutine(AttackRoutine(0.3f)); 
+            // currently used to launch attacks, enabling hitbox for 0.3s then disabling
+            // we will eventually pivot to animations once we get them but no news yet - N, 6/13
         }
 
         if (isHolding && input.attack)
@@ -127,5 +133,12 @@ public class PlayerCombat : MonoBehaviour
     public void DisableCombo()
     {
         canCombo = false;
+    }
+
+    private System.Collections.IEnumerator AttackRoutine(float duration)
+    {
+        weaponHitbox.EnableHitbox();
+        yield return new WaitForSeconds(duration);
+        weaponHitbox.DisableHitbox();
     }
 }
