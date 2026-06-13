@@ -6,6 +6,10 @@ public class PlayerCombat : MonoBehaviour
     private bool wasAttacking = false;
     private bool isAttacking = false;
     private bool isBlocking = false;
+    private bool isHolding = false;
+    private bool canCombo = false;
+
+    private int comboStep = 0;
 
     public float lightAttackCooldown = 0.4f;
     private float nextLightAttackTime = 0f;
@@ -15,7 +19,6 @@ public class PlayerCombat : MonoBehaviour
     private float nextHeavyAttackTime = 0f;
 
     private float holdTimer = 0f;
-    private bool isHolding = false;
 
     private Animator animate;
 
@@ -70,18 +73,31 @@ public class PlayerCombat : MonoBehaviour
 
         if (!input.attack && wasAttacking)
         {
-            Debug.Log($"Attack released after {holdTimer:F2} seconds.");
-            if (holdTimer >= heavyHoldTime && Time.time >= nextHeavyAttackTime)
+            if (canCombo)
             {
-                Debug.Log("Heavy");
-                animate.SetTrigger("HeavyAttack");
-                nextHeavyAttackTime = Time.time + heavyAttackCooldown;
+                animate.SetInteger("ComboStep", comboStep);
+                animate.SetTrigger("ComboAttack");
+                comboStep++;
             }
-            else if (Time.time >= nextLightAttackTime)
+            else
             {
-                Debug.Log("Light");
-                animate.SetTrigger("LightAttack");
-                nextLightAttackTime = Time.time + lightAttackCooldown;
+                Debug.Log($"Attack released after {holdTimer:F2} seconds.");
+                if (holdTimer >= heavyHoldTime && Time.time >= nextHeavyAttackTime)
+                {
+                    animate.SetInteger("ComboStep", comboStep);
+                    Debug.Log("Heavy");
+                    animate.SetTrigger("HeavyAttack");
+                    nextHeavyAttackTime = Time.time + heavyAttackCooldown;
+                    comboStep++;
+                }
+                else if (Time.time >= nextLightAttackTime)
+                {
+                    animate.SetInteger("ComboStep", comboStep);
+                    Debug.Log("Light");
+                    animate.SetTrigger("LightAttack");
+                    nextLightAttackTime = Time.time + lightAttackCooldown;
+                    comboStep++;
+                }
             }
             isHolding = false;
             holdTimer = 0f;
@@ -99,5 +115,17 @@ public class PlayerCombat : MonoBehaviour
     public void EndAttack()
     {
         isAttacking = false;
+        canCombo = false;
+        comboStep = 0;
+    }
+
+    public void EnableCombo()
+    {
+        canCombo = true;
+    }
+
+    public void DisableCombo()
+    {
+        canCombo = false;
     }
 }
