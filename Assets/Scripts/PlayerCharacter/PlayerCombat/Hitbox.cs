@@ -30,8 +30,6 @@ public class Hitbox : MonoBehaviour
         {
             Debug.Log("Hit: " + other.name);
             enemy.TakeDamage(10f);
-
-            DisableHitbox();
         }
     }
 }

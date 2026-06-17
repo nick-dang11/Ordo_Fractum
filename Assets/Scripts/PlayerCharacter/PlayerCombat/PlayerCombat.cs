@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerCombat : MonoBehaviour
 {
@@ -31,30 +32,30 @@ public class PlayerCombat : MonoBehaviour
 
     void Update()
     {
-        HandleBlock();
+        //HandleBlock();
         LightAndHeavy();
     }
 
-    void HandleBlock()
-    {
-        if (input == null) return;
-        if (isAttacking)
-        {
-            isBlocking = false;
-            animate.SetBool("Blocking", false);
-            return;
-        }
-        if (input.block)
-        {
-            isBlocking = true;
-            animate.SetBool("Blocking", true);
-        }
-        else
-        {
-            isBlocking = false;
-            animate.SetBool("Blocking", false);
-        }
-    }
+    //void HandleBlock()
+    //{
+    //    if (input == null) return;
+    //    if (isAttacking)
+    //    {
+    //        isBlocking = false;
+    //        animate.SetBool("Blocking", false);
+    //        return;
+    //    }
+    //    if (input.block)
+    //    {
+    //        isBlocking = true;
+    //        animate.SetBool("Blocking", true);
+    //    }
+    //    else
+    //    {
+    //        isBlocking = false;
+    //        animate.SetBool("Blocking", false);
+    //    }
+    //}
 
     void LightAndHeavy()
     {
@@ -63,21 +64,28 @@ public class PlayerCombat : MonoBehaviour
 
         if (input.attack && !wasAttacking)
         {
+            //Debug.Log("NEW Attack input detected.");
             isHolding = true;
             holdTimer = 0f;
-            Debug.Log("Attack input pressed.");
 
-            StartCoroutine(AttackRoutine(0.3f)); 
+            StartCoroutine(AttackRoutine(0.3f));
             // currently used to launch attacks, enabling hitbox for 0.3s then disabling
             // we will eventually pivot to animations once we get them but no news yet - N, 6/13
+
+            wasAttacking = true;
         }
 
-        if (isHolding && input.attack)
+        else if (!input.attack)
+        {
+            wasAttacking = false;
+        }
+
+        else if (isHolding && input.attack)
         {
             holdTimer += Time.deltaTime;
         }
 
-        if (!input.attack && wasAttacking)
+        else if (!input.attack && wasAttacking)
         {
             if (canCombo)
             {
@@ -135,10 +143,11 @@ public class PlayerCombat : MonoBehaviour
         canCombo = false;
     }
 
-    private System.Collections.IEnumerator AttackRoutine(float duration)
+    private IEnumerator AttackRoutine(float duration)
     {
         weaponHitbox.EnableHitbox();
         yield return new WaitForSeconds(duration);
         weaponHitbox.DisableHitbox();
+        isAttacking = false;
     }
 }
