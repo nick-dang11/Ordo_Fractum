@@ -4,6 +4,9 @@ public class Hitbox : MonoBehaviour
 {
     private Collider weaponCollider;
 
+    [SerializeField] public float playerDamage = 10f;
+    [SerializeField] public int  enemyDamage = 1;
+
     void Awake()
     {
         weaponCollider = GetComponent<Collider>();
@@ -24,12 +27,27 @@ public class Hitbox : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        EnemyHealth enemy = other.GetComponent<EnemyHealth>();
-
-        if (enemy != null)
+        if (other.CompareTag("Player"))
         {
-            Debug.Log("Hit: " + other.name);
-            enemy.TakeDamage(10f);
+            HealthSystem playerHealth = other.GetComponent<HealthSystem>();
+
+            if (playerHealth != null)
+            {
+                Debug.Log("Player Hit: " + other.name);
+                playerHealth.TakeDamage((int)enemyDamage);
+            }
+            return;
+        }
+        else if (other.CompareTag("Enemy"))
+        {
+            EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
+
+            if (enemyHealth != null)
+            {
+                Debug.Log("Enemy Hit: " + other.name);
+                enemyHealth.TakeDamage(playerDamage);
+            }
+            return;
         }
     }
 }
