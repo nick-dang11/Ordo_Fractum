@@ -7,27 +7,33 @@ public class EnemyCombat : MonoBehaviour
     public float enemyAttackRange = 3.0f;
     private bool canEnemyAttack = true;
 
-    [SerializeField] public Transform player;
-    [SerializeField] public Transform enemy;
-    [SerializeField] public GameObject weapon;
+    [Header("References")]
+    [SerializeField] private Transform player;
+    [SerializeField] private Hitbox weaponHitbox;
 
     void Update()
     {
-        float distanceToPlayer = Vector3.Distance(enemy.position, player.position);
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position); // distance from parent of component (should be enemy) to player position
 
-        //if (distanceToPlayer <= enemyAttackRange) => StartCoroutine(AttackRoutine)
-     //   if (Player's collider overlaps attackRadius && enemyattackCooldown = 0){ 
-     //radius will be more than weapon length so it can trigger while player is out of attack range
+        if (distanceToPlayer <= enemyAttackRange && canEnemyAttack)
+        {
+            StartCoroutine(AttackRoutine(0.3f));
+        }
+    }
 
+    private IEnumerator AttackRoutine(float duration)
+    {
+        canEnemyAttack = false;
 
-     //       Weapon.SetActive(true), Weapon.color Red, 0.3s coroutine, Weapon.color Grey, Weapon.SetActive(false)
-     //       TimerStarts
+        weaponHitbox.EnableHitbox();
+        weaponHitbox.GetComponent<Renderer>().material.color = Color.red;
 
+        yield return new WaitForSeconds(duration);
+        weaponHitbox.DisableHitbox();
+        weaponHitbox.GetComponent<Renderer>().material.color = Color.grey;
 
-     //       if{
-     //       player collider overlaps enemyAttackRange:
-     //               player takes damage
-     //}
+        yield return new WaitForSeconds(enemyAttackCooldown);
+        canEnemyAttack = true;
     }
 }
 
