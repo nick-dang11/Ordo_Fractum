@@ -144,6 +144,7 @@ MonoBehaviour:
   PlayerRoot: {fileID: 182215695}
   playerCameraPivot: {fileID: 1447921032}
   mainCamera: {fileID: 329413135}
+  characterModel: {fileID: 1809370881}
   freeLookCamera: {fileID: 644543248}
   lockOnCamera: {fileID: 972257881}
   lockOnCameraTarget: {fileID: 824432005}
@@ -1562,6 +1563,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1698139675}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1809370881 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9108357366367094850, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+  m_PrefabInstance: {fileID: 2087813732}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1877128542
 PrefabInstance:
   m_ObjectHideFlags: 0

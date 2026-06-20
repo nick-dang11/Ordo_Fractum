@@ -11,6 +11,7 @@ public class LockOnController : MonoBehaviour
     [SerializeField] private Transform PlayerRoot;
     [SerializeField] private Transform playerCameraPivot;
     [SerializeField] private Camera mainCamera;
+    [SerializeField] private Transform characterModel;
 
     [Header("Cameras")]
     [SerializeField] private GameObject freeLookCamera;
@@ -57,6 +58,8 @@ public class LockOnController : MonoBehaviour
 
         if (!IsLockedOn) 
             return;
+
+        HandleTargetSwitchInput();
 
         if(!TargetStillValid())
         {
@@ -216,7 +219,9 @@ public class LockOnController : MonoBehaviour
 
     private void RotatePlayerToTarget()
     {
-        Vector3 direction = CurrentTarget.position - PlayerRoot.position;
+        Transform objectToRotate = characterModel != null ? characterModel : PlayerRoot;
+
+        Vector3 direction = CurrentTarget.position - objectToRotate.position;
         direction.y = 0f;
 
         if (direction.sqrMagnitude < 0.001f)
@@ -224,8 +229,11 @@ public class LockOnController : MonoBehaviour
 
         Quaternion targetRotation = Quaternion.LookRotation(direction);
 
-        PlayerRoot.rotation = Quaternion.Slerp(PlayerRoot.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-
+        objectToRotate.rotation = Quaternion.Slerp(
+            objectToRotate.rotation,
+            targetRotation,
+            Time.deltaTime * rotationSpeed
+        );
     }
 
     private void SetCameraMode(bool lockedOn)
@@ -242,6 +250,108 @@ public class LockOnController : MonoBehaviour
 
             lockOnCameraTarget.position = playerPoint;
         }
+    }
+
+    private void HandleTargetSwitchInput()
+    {
+        if (Mouse.current == null)
+            return;
+
+        float scrollValue = Mouse.current.scroll.ReadValue().y;
+
+        if(scrollValue > 0f)
+        {
+            SwitchTarget(1);
+        }
+        else if(scrollValue < 0f)
+        {
+            SwitchTarget(-1);
+        }
+    }
+
+    private void SwitchTarget(int direction)
+    {
+        List<Transform> targets = FindAllValidTargets();
+
+        if (targets.Count <= 1)
+            return;
+
+        targets.Sort((a, b) =>
+        {
+            float ax = mainCamera.WorldToViewportPoint(a.position).x;
+            float bx = mainCamera.WorldToViewportPoint(b.position).x;
+            return ax.CompareTo(bx);
+        });
+
+        int currentIndex = targets.IndexOf(CurrentTarget);
+
+        if (currentIndex == -1)
+            return;
+
+        int nextIndex = currentIndex + direction;
+
+        if (nextIndex >= targets.Count)
+            nextIndex = 0;
+
+        if(nextIndex < 0)
+            nextIndex = targets.Count - 1;
+
+        LockOn(targets[nextIndex]);
+    }
+    private List<Transform> FindAllValidTargets()
+    {
+        List<Transform> targets = new List<Transform>();
+
+        Collider[] hits = Physics.OverlapSphere(
+            PlayerRoot.position,
+            lockRange,
+            enemyLayers,
+            QueryTriggerInteraction.Collide
+        );
+
+        HashSet<LockOnTarget> checkedTargets = new HashSet<LockOnTarget>();
+
+        foreach (Collider hit in hits)
+        {
+            LockOnTarget lockTarget = hit.GetComponentInParent<LockOnTarget>();
+
+            if (lockTarget == null)
+                continue;
+
+            if (!lockTarget.IsLockable)
+                continue;
+
+            if (checkedTargets.Contains(lockTarget))
+                continue;
+
+            checkedTargets.Add(lockTarget);
+
+            Transform aimPoint = lockTarget.AimPoint;
+
+            Vector3 viewportPoint = mainCamera.WorldToViewportPoint(aimPoint.position);
+
+            if (viewportPoint.z <= 0f)
+                continue;
+
+            float distance = Vector3.Distance(PlayerRoot.position, aimPoint.position);
+
+            if (distance > lockRange)
+                continue;
+
+            if (requireLineOfSight)
+            {
+                Vector3 origin = playerCameraPivot != null
+                    ? playerCameraPivot.position
+                    : PlayerRoot.position + Vector3.up * 1.5f;
+
+                if (Physics.Linecast(origin, aimPoint.position, obstacleLayers, QueryTriggerInteraction.Ignore))
+                    continue;
+            }
+
+            targets.Add(aimPoint);
+        }
+
+        return targets;
     }
 
 }
