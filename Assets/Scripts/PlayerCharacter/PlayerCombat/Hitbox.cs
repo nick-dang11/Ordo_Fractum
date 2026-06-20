@@ -4,8 +4,9 @@ public class Hitbox : MonoBehaviour
 {
     private Collider weaponCollider;
 
-    [SerializeField] public float playerDamage = 10f;
-    [SerializeField] public int  enemyDamage = 1;
+    [SerializeField] private GameObject parentObject;
+    [SerializeField] public float damageToEnemy = 10f;
+    [SerializeField] public int  damageToPlayer = 1;
 
     void Awake()
     {
@@ -27,6 +28,8 @@ public class Hitbox : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject == parentObject) return; // prevents weapon from damaging own parent
+
         if (other.CompareTag("Player"))
         {
             HealthSystem playerHealth = other.GetComponent<HealthSystem>();
@@ -34,7 +37,7 @@ public class Hitbox : MonoBehaviour
             if (playerHealth != null)
             {
                 Debug.Log("Player Hit: " + other.name);
-                playerHealth.TakeDamage((int)enemyDamage);
+                playerHealth.TakeDamage((int)damageToPlayer);
             }
             return;
         }
@@ -45,7 +48,7 @@ public class Hitbox : MonoBehaviour
             if (enemyHealth != null)
             {
                 Debug.Log("Enemy Hit: " + other.name);
-                enemyHealth.TakeDamage(playerDamage);
+                enemyHealth.TakeDamage(damageToEnemy);
             }
             return;
         }

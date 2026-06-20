@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6898766285396604641}
   - component: {fileID: 4314512831245376467}
   - component: {fileID: 4075066420366787807}
+  - component: {fileID: 5221989036913721363}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -262,6 +263,20 @@ MonoBehaviour:
   m_DefaultActionMap: 
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &5221989036913721363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ee7faf631c6c68408372ad6334938e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
+  health: 10
+  maxHealth: 10
 --- !u!1 &3214339575732242131
 GameObject:
   m_ObjectHideFlags: 0
@@ -417,6 +432,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f3a2b8009b9c074c8b3d1ad4b5fa951, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
+  parentObject: {fileID: 3047151988590228466}
+  damageToEnemy: 10
+  damageToPlayer: 1
 --- !u!1001 &8785920036811501481
 PrefabInstance:
   m_ObjectHideFlags: 0
