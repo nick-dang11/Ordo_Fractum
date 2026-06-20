@@ -6,6 +6,8 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] public PlayerInputManager input;
     [SerializeField] private Hitbox weaponHitbox;
     [SerializeField] private Animator animate;
+    [SerializeField] private float lightAttackDamage = 10f;
+    [SerializeField] private float heavyAttackDamage = 40f;
 
     private bool wasAttacking = false;
     private bool isAttacking = false;
@@ -32,30 +34,41 @@ public class PlayerCombat : MonoBehaviour
 
     void Update()
     {
-        //HandleBlock();
+        HandleBlock();
         LightAndHeavy();
     }
 
-    //void HandleBlock()
-    //{
-    //    if (input == null) return;
-    //    if (isAttacking)
-    //    {
-    //        isBlocking = false;
-    //        animate.SetBool("Blocking", false);
-    //        return;
-    //    }
-    //    if (input.block)
-    //    {
-    //        isBlocking = true;
-    //        animate.SetBool("Blocking", true);
-    //    }
-    //    else
-    //    {
-    //        isBlocking = false;
-    //        animate.SetBool("Blocking", false);
-    //    }
-    //}
+    void HandleBlock()
+    {
+        if (input == null) return;
+        if (isAttacking)
+        {
+            isBlocking = false;
+            animate.SetBool("Blocking", false);
+            return;
+        }
+        if (input.block)
+        {
+            isBlocking = true;
+            animate.SetBool("Blocking", true);
+        }
+        else
+        {
+            isBlocking = false;
+            animate.SetBool("Blocking", false);
+        }
+    }
+
+    public bool IsBlocking()
+    {
+        return isBlocking;
+    }
+
+    public void TriggerBlockFeedback()
+    {
+        Debug.Log("Player BLOCKED the attack!");
+        animate.SetTrigger("BlockHit");
+    }
 
     void LightAndHeavy()
     {
@@ -64,27 +77,21 @@ public class PlayerCombat : MonoBehaviour
 
         if (input.attack && !wasAttacking)
         {
-            //Debug.Log("NEW Attack input detected.");
             isHolding = true;
             holdTimer = 0f;
 
-            StartCoroutine(AttackRoutine(0.3f));
-            // currently used to launch attacks, enabling hitbox for 0.3s then disabling
-            // we will eventually pivot to animations once we get them but no news yet - N, 6/13
+            //StartCoroutine(AttackRoutine(0.3f));
 
             wasAttacking = true;
         }
 
-        else if (!input.attack)
-        {
-            wasAttacking = false;
-        }
-
+        // Continue holding
         else if (isHolding && input.attack)
         {
             holdTimer += Time.deltaTime;
         }
 
+        // Released attack
         else if (!input.attack && wasAttacking)
         {
             if (canCombo)
@@ -95,22 +102,21 @@ public class PlayerCombat : MonoBehaviour
             }
             else
             {
-                Debug.Log($"Attack released after {holdTimer:F2} seconds.");
                 if (holdTimer >= heavyHoldTime && Time.time >= nextHeavyAttackTime)
                 {
                     animate.SetInteger("ComboStep", comboStep);
-                    Debug.Log("Heavy");
                     animate.SetTrigger("HeavyAttack");
                     nextHeavyAttackTime = Time.time + heavyAttackCooldown;
                     comboStep++;
+                    StartCoroutine(AttackRoutine(0.6f, heavyAttackDamage));
                 }
                 else if (Time.time >= nextLightAttackTime)
                 {
                     animate.SetInteger("ComboStep", comboStep);
-                    Debug.Log("Light");
                     animate.SetTrigger("LightAttack");
                     nextLightAttackTime = Time.time + lightAttackCooldown;
                     comboStep++;
+                    StartCoroutine(AttackRoutine(0.3f, lightAttackDamage));
                 }
             }
             isHolding = false;
@@ -143,11 +149,15 @@ public class PlayerCombat : MonoBehaviour
         canCombo = false;
     }
 
-    private IEnumerator AttackRoutine(float duration)
+    private IEnumerator AttackRoutine(float duration, float damage)
     {
-        weaponHitbox.EnableHitbox();
-        yield return new WaitForSeconds(duration);
+        StartAttack(); // simulate animation event
+        weaponHitbox.EnableHitbox(damage);
+        yield return new WaitForSeconds(duration * 0.5f);
+        EnableCombo(); // simulate combo window
+        yield return new WaitForSeconds(duration * 0.5f);
+        DisableCombo();
         weaponHitbox.DisableHitbox();
-        isAttacking = false;
+        EndAttack(); // simulate animation event
     }
 }

@@ -5,39 +5,47 @@ public class Hitbox : MonoBehaviour
     private Collider weaponCollider;
 
     [SerializeField] private GameObject parentObject;
-    [SerializeField] public float damageToEnemy = 10f;
-    [SerializeField] public int  damageToPlayer = 1;
-
+    private float currentDamage;
     void Awake()
     {
         weaponCollider = GetComponent<Collider>();
         weaponCollider.enabled = false;
     }
 
-    public void EnableHitbox()
+    public void EnableHitbox(float damage)
     {
         weaponCollider.enabled = true;
-        Debug.Log("Hitbox enabled.");
+        currentDamage = damage;
+        Debug.Log("Hitbox enabled with damage: " + currentDamage);
+        //Debug.Log("Hitbox enabled.");
     }
 
     public void DisableHitbox()
     {
         weaponCollider.enabled = false;
-        Debug.Log("Hitbox disabled.");
+        //Debug.Log("Hitbox disabled.");
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == parentObject) return; // prevents weapon from damaging own parent
+        if (other.gameObject == parentObject) return;
 
         if (other.CompareTag("Player"))
         {
+            PlayerCombat playerCombat = other.GetComponent<PlayerCombat>();
             HealthSystem playerHealth = other.GetComponent<HealthSystem>();
+
+            if (playerCombat != null && playerCombat.IsBlocking())
+            {
+                Debug.Log("Player BLOCKED the attack!");
+                playerCombat.TriggerBlockFeedback();
+                return;
+            }
 
             if (playerHealth != null)
             {
                 Debug.Log("Player Hit: " + other.name);
-                playerHealth.TakeDamage((int)damageToPlayer);
+                playerHealth.TakeDamage((int)currentDamage);
             }
             return;
         }
@@ -48,9 +56,10 @@ public class Hitbox : MonoBehaviour
             if (enemyHealth != null)
             {
                 Debug.Log("Enemy Hit: " + other.name);
-                enemyHealth.TakeDamage(damageToEnemy);
+                enemyHealth.TakeDamage(currentDamage);
             }
             return;
         }
     }
+
 }

@@ -11,6 +11,9 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private Hitbox weaponHitbox;
 
+    [Header("Damage")]
+    [SerializeField] private float enemyDamage = 10f;
+
     void Update()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.position); // distance from parent of component (should be enemy) to player position
@@ -25,7 +28,7 @@ public class EnemyCombat : MonoBehaviour
     {
         canEnemyAttack = false;
 
-        weaponHitbox.EnableHitbox();
+        weaponHitbox.EnableHitbox(enemyDamage);
         weaponHitbox.GetComponent<Renderer>().material.color = Color.red;
 
         yield return new WaitForSeconds(duration);
