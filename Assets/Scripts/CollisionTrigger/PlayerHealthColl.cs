@@ -2,35 +2,20 @@ using UnityEngine;
 
 public class PlayerHealthColl : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Enemay"))
-        {
-            Debug.Log("Player took damage from Enemy");
-        }
-    }
+    public HealthSystem playerHealth; // Reference to the HealthSystem script that enables takedamage() function
+    public int damageAmount = 1; // Amount of damage to apply to the player from enemy collision. will need to change to be accessed by other scripts of enemy damage amount
 
-    private void OnCollisionExit(Collision collision)
+    void Start()
     {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            Debug.Log("Player exited Enemy Collision");
-        }
-    }
-
-    private void OnCollisionStay(Collision Collision)
-    {
-        if (Collision.gameObject.CompareTag("Enemy"))
-        {
-            Debug.Log("Player is taking damage from Enemy");
-        }
-    }
     
+        Debug.Log("PlayerHealthColl script is attached to " + gameObject.name);
+    }
    void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
+       if (other.gameObject.CompareTag("Enemy"))
         {
-            Debug.Log("Enter:Player took damage from Enemy ");
+            playerHealth.TakeDamage(damageAmount);
+            Debug.Log("Player took damage from Enemy");
         }
     }
 
