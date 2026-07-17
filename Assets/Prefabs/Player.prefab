@@ -15,10 +15,6 @@ GameObject:
   - component: {fileID: 4314512831245376467}
   - component: {fileID: 4075066420366787807}
   - component: {fileID: 5221989036913721363}
-  - component: {fileID: 5311676064601238170}
-  - component: {fileID: 3634602841917519097}
-  - component: {fileID: 7187214434558373669}
-  - component: {fileID: 6273003711192637447}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -101,11 +97,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
   input: {fileID: 4314512831245376467}
   weaponHitbox: {fileID: 4599588609929646065}
-<<<<<<< Updated upstream
   animate: {fileID: 3921508679667758998}
-=======
-  animate: {fileID: 2920388717101339192}
->>>>>>> Stashed changes
   lightAttackDamage: 10
   heavyAttackDamage: 40
   playerStamina: {fileID: 0}
@@ -287,80 +279,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee7faf631c6c68408372ad6334938e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
-  health: 4
-  maxHealth: 4
---- !u!114 &5311676064601238170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3047151988590228466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 551690d715b2ce742b321c551611bcd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  health: 4
-  maxHealth: 4
-  emptyHeart: {fileID: 21300002, guid: fed24bd82cefc0c4a8ef64dab6231b53, type: 3}
-  FullHeart: {fileID: 21300000, guid: fed24bd82cefc0c4a8ef64dab6231b53, type: 3}
-  hearts:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  playerHealth: {fileID: 5221989036913721363}
---- !u!114 &3634602841917519097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3047151988590228466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89ec709f7c7ddaa4b80c2873327598c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthColl
-  playerHealth: {fileID: 5221989036913721363}
-  damageAmount: 1
---- !u!136 &7187214434558373669
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3047151988590228466}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 3.062979
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.0314887, z: 0}
---- !u!114 &6273003711192637447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3047151988590228466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ab5ef15c2bf6a34db07baac21aaa8e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerRespawn
-  respawnPoint: {fileID: 0}
+  health: 10
+  maxHealth: 10
 --- !u!1 &3214339575732242131
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,7 +437,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
   parentObject: {fileID: 3047151988590228466}
-<<<<<<< Updated upstream
 --- !u!1001 &7422331257103944199
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -626,8 +545,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBridge
   parentPlayer: {fileID: 3047151988590228466}
-=======
->>>>>>> Stashed changes
 --- !u!1001 &8785920036811501481
 PrefabInstance:
   m_ObjectHideFlags: 0
