@@ -17,7 +17,7 @@ public class HealthSystem : MonoBehaviour
     {
         health -= damage_amount;
 
-        if(health <= 0)
+        if(health < 0)
         {
             health = 0;
             Debug.Log("Player is dead. Destroy player");
