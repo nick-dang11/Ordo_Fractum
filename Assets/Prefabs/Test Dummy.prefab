@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3694439141684847587}
   - component: {fileID: 3890921843086488875}
   - component: {fileID: 4062425085992664387}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Enemy Health UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,7 +113,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4121921133333648148}
   - component: {fileID: 2260796602047600691}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Ease Health Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 6300450586973543475}
   - component: {fileID: 8940825832699299349}
   - component: {fileID: 5114872253875103199}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,7 +280,7 @@ GameObject:
   - component: {fileID: 1365498890226867773}
   - component: {fileID: 5427696433377424456}
   - component: {fileID: 3401803183933360725}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -395,8 +395,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hitbox
   parentObject: {fileID: 5043930547961259473}
-  damageToEnemy: 10
-  damageToPlayer: 1
 --- !u!1 &4657652870639450824
 GameObject:
   m_ObjectHideFlags: 0
@@ -408,7 +406,7 @@ GameObject:
   - component: {fileID: 3152772219972399443}
   - component: {fileID: 2243347846359354733}
   - component: {fileID: 3252176299349018563}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -497,7 +495,7 @@ Transform:
   m_GameObject: {fileID: 4682333376427872100}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.0019904685, z: -0, w: 0.99999803}
-  m_LocalPosition: {x: -2.4083025, y: 0.24300015, z: 4.965629}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -518,7 +516,8 @@ GameObject:
   - component: {fileID: 4940494809748863242}
   - component: {fileID: 6394381186914963047}
   - component: {fileID: 4727365448537288004}
-  m_Layer: 0
+  - component: {fileID: 2553297122332229277}
+  m_Layer: 8
   m_Name: Test Dummy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -533,7 +532,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5043930547961259473}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.0019904685, z: -0, w: 0.99999803}
+  m_LocalRotation: {x: 0, y: -0.0019897546, z: 0, w: 0.99999803}
   m_LocalPosition: {x: 0.47244, y: 0.673, z: 3.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -681,6 +680,20 @@ MonoBehaviour:
   player: {fileID: 0}
   weaponHitbox: {fileID: 3401803183933360725}
   enemyDamage: 10
+--- !u!114 &2553297122332229277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5043930547961259473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82e03cb49ee1d2840aac1ab6a9b22f6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LockOnTarget
+  aimPoint: {fileID: 3030091251651716510}
+  IsLockable: 1
 --- !u!1 &5656037245105470748
 GameObject:
   m_ObjectHideFlags: 0
@@ -692,7 +705,7 @@ GameObject:
   - component: {fileID: 6154859257792311373}
   - component: {fileID: 3152911463708587836}
   - component: {fileID: 8964677764428859254}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -765,7 +778,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1279023163154544596}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Health Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -799,7 +812,7 @@ GameObject:
   - component: {fileID: 4283998552924437841}
   - component: {fileID: 3979833915786843339}
   - component: {fileID: 1900271612609436505}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Health Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}

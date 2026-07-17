@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 1705701616509091768}
   serializedVersion: 2
   m_LocalRotation: {x: 0.22975296, y: 5.516334e-11, z: -1.30222985e-11, w: 0.973249}
-  m_LocalPosition: {x: -0.91605, y: 2.1259, z: -3.0299501}
+  m_LocalPosition: {x: -0.91605, y: 2.4759002, z: -3.0299501}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -184,9 +184,9 @@ GameObject:
   - component: {fileID: 8180166857323879389}
   - component: {fileID: 5017126588447184219}
   - component: {fileID: 4469406579313871348}
-  - component: {fileID: 4587519761492654530}
+  - component: {fileID: 5302042873351755348}
   m_Layer: 0
-  m_Name: freeLookCamera
+  m_Name: Free Look Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -201,7 +201,7 @@ Transform:
   m_GameObject: {fileID: 2039418820228063181}
   serializedVersion: 2
   m_LocalRotation: {x: 0.22975293, y: 5.777265e-11, z: -2.407556e-11, w: 0.973249}
-  m_LocalPosition: {x: -0.91605, y: 2.1259, z: -3.0299501}
+  m_LocalPosition: {x: -0.91605, y: 2.4759002, z: -3.0299501}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -411,7 +411,7 @@ MonoBehaviour:
         DecelTime: 0
   PlayerIndex: -1
   AutoEnableInputs: 1
---- !u!114 &4587519761492654530
+--- !u!114 &5302042873351755348
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -481,7 +481,7 @@ Transform:
   m_GameObject: {fileID: 4884742537290570438}
   serializedVersion: 2
   m_LocalRotation: {x: 0.22975293, y: 5.777265e-11, z: -2.407556e-11, w: 0.973249}
-  m_LocalPosition: {x: -0.91605, y: 2.1259, z: -3.0299501}
+  m_LocalPosition: {x: -0.91605, y: 2.4759002, z: -3.0299501}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
