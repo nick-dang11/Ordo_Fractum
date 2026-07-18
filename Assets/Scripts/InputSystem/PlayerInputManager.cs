@@ -10,6 +10,7 @@ public class PlayerInputManager : MonoBehaviour
     public bool sprint;
     public bool attack;
     public bool block;
+    public bool self_heal;
 
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -31,6 +32,7 @@ public class PlayerInputManager : MonoBehaviour
     public void OnSprint(InputAction.CallbackContext context) => SprintInput(context.ReadValue<bool>());
     public void OnAttack(InputAction.CallbackContext context) => AttackInput(context.performed || context.started);
     public void OnBlock(InputAction.CallbackContext context) => BlockInput(context.performed || context.started);
+    public void OnSelfHeal(InputAction.CallbackContext context) => self_heal = (context.performed || context.started);
 
     // input setters
 
@@ -64,5 +66,13 @@ public class PlayerInputManager : MonoBehaviour
     private void SetCursorState(bool newState)
     {
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+    }
+
+    private void Self_HealInput(bool newSelfHealState)
+    {
+        self_heal = newSelfHealState;
+        Debug.Log($"Manager thinks self_heal is {self_heal}");
+        
+
     }
 }

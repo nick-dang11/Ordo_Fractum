@@ -2,10 +2,19 @@ using UnityEngine;
 
 public class HealthSystem : MonoBehaviour
 {
+
+    [Header("Health")]
    public int health;
    public int maxHealth = 4;
 
+   public int heal_Amount = 1;
+
+   [Header("Respawn")]
    PlayerRespawn playerRespawn;
+
+   [Header("References")]
+   public PlayerInputManager playerInputManager;
+
    void Start()
    {
        health = maxHealth;
@@ -13,11 +22,21 @@ public class HealthSystem : MonoBehaviour
 
    }
 
-   public void TakeDamage(int damage_amount)
+    void Update()
+    {
+        if(playerInputManager.self_heal)
+        {
+            Heal(heal_Amount);
+            Debug.Log("Player healed");
+
+        }
+    }
+
+    public void TakeDamage(int damage_amount)
     {
         health -= damage_amount;
 
-        if(health <= 0)
+        if(health < 0)
         {
             health = 0;
             Debug.Log("Player is dead. Destroy player");
@@ -29,7 +48,11 @@ public class HealthSystem : MonoBehaviour
     {
         if(health <= maxHealth)
         {
-            health += heal_amount;
+            health = health + heal_amount;
+            
+            health = Mathf.Clamp(health, 0, maxHealth);
+
+            Debug.Log("Player healed by " + heal_amount + ". Current health: " + health);
         }
         else
         {

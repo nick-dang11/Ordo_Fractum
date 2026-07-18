@@ -653,7 +653,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6720965089150851342, guid: 2bfd7050872c87243a53ee4e3d6ab5ee, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.0759001
+      value: 2.4759002
       objectReference: {fileID: 0}
     - target: {fileID: 6720965089150851342, guid: 2bfd7050872c87243a53ee4e3d6ab5ee, type: 3}
       propertyPath: m_LocalPosition.z
@@ -674,6 +674,10 @@ PrefabInstance:
     - target: {fileID: 6720965089150851342, guid: 2bfd7050872c87243a53ee4e3d6ab5ee, type: 3}
       propertyPath: m_LocalRotation.z
       value: -1.30222985e-11
+      objectReference: {fileID: 0}
+    - target: {fileID: 7193980351845993805, guid: 2bfd7050872c87243a53ee4e3d6ab5ee, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.0759001
       objectReference: {fileID: 0}
     - target: {fileID: 7193980351845993805, guid: 2bfd7050872c87243a53ee4e3d6ab5ee, type: 3}
       propertyPath: m_LocalRotation.w
@@ -792,11 +796,6 @@ MonoBehaviour:
     NearLimit: 5
     FarLimit: 30
     MaxQualityBoost: 0.2
---- !u!1 &597524279 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-  m_PrefabInstance: {fileID: 1766774527}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &724461340
 GameObject:
   m_ObjectHideFlags: 0
@@ -979,6 +978,11 @@ Transform:
   - {fileID: 1852294768}
   m_Father: {fileID: 201988880}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &886894122 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+  m_PrefabInstance: {fileID: 1766774527}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &908677425
 GameObject:
   m_ObjectHideFlags: 0
@@ -2180,6 +2184,50 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_DefaultActionMap
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_ActionId
+      value: d83f9fd0-d835-482d-9d54-8893c1a11a1a
+      objectReference: {fileID: 0}
+    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_ActionName
+      value: 'Player/Self_Heal[/Keyboard/r]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1766774529}
+    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnSelfHeal
+      objectReference: {fileID: 0}
+    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PlayerInputManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5221989036913721363, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
       propertyPath: health
       value: 4
@@ -2188,111 +2236,104 @@ PrefabInstance:
       propertyPath: maxHealth
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 5221989036913721363, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: playerInputManager
+      value: 
+      objectReference: {fileID: 1766774529}
+    - target: {fileID: 5311676064601238170, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: 'hearts.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1350983876}
+    - target: {fileID: 5311676064601238170, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: 'hearts.Array.data[1]'
+      value: 
+      objectReference: {fileID: 911349211}
+    - target: {fileID: 5311676064601238170, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: 'hearts.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1461567185}
+    - target: {fileID: 5311676064601238170, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: 'hearts.Array.data[3]'
+      value: 
+      objectReference: {fileID: 1844419746}
+    - target: {fileID: 6273003711192637447, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: respawnPoint
+      value: 
+      objectReference: {fileID: 489106159}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1766774531}
-    - targetCorrespondingSourceObject: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1766774532}
+      addedObject: {fileID: 1766774537}
     - targetCorrespondingSourceObject: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1766774536}
-    - targetCorrespondingSourceObject: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1766774543}
   m_SourcePrefab: {fileID: 100100000, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
 --- !u!4 &1766774528 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1635731429984112327, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
   m_PrefabInstance: {fileID: 1766774527}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1766774531
+--- !u!114 &1766774529 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 4314512831245376467, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+  m_PrefabInstance: {fileID: 1766774527}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 597524279}
+  m_GameObject: {fileID: 886894122}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 551690d715b2ce742b321c551611bcd4, type: 3}
+  m_Script: {fileID: 11500000, guid: bca18d7b51ce7e947a0ce91b745045f3, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  health: 4
-  maxHealth: 4
-  emptyHeart: {fileID: 21300002, guid: fed24bd82cefc0c4a8ef64dab6231b53, type: 3}
-  FullHeart: {fileID: 21300000, guid: fed24bd82cefc0c4a8ef64dab6231b53, type: 3}
-  hearts:
-  - {fileID: 1350983876}
-  - {fileID: 911349211}
-  - {fileID: 911349211}
-  - {fileID: 911349211}
-  playerHealth: {fileID: 1766774537}
---- !u!136 &1766774532
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputManager
+--- !u!114 &1766774531 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5221989036913721363, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+  m_PrefabInstance: {fileID: 1766774527}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 597524279}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
+  m_GameObject: {fileID: 886894122}
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 3.062979
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.0314887, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ee7faf631c6c68408372ad6334938e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
 --- !u!114 &1766774536
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 597524279}
+  m_GameObject: {fileID: 886894122}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89ec709f7c7ddaa4b80c2873327598c8, type: 3}
+  m_Script: {fileID: 11500000, guid: 551690d715b2ce742b321c551611bcd4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthColl
-  playerHealth: {fileID: 1766774537}
-  damageAmount: 1
---- !u!114 &1766774537 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5221989036913721363, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-  m_PrefabInstance: {fileID: 1766774527}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 597524279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ee7faf631c6c68408372ad6334938e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
---- !u!114 &1766774543
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  health: 1
+  maxHealth: 4
+  emptyHeart: {fileID: 21300002, guid: fed24bd82cefc0c4a8ef64dab6231b53, type: 3}
+  FullHeart: {fileID: 21300000, guid: fed24bd82cefc0c4a8ef64dab6231b53, type: 3}
+  hearts:
+  - {fileID: 1350983876}
+  - {fileID: 911349211}
+  - {fileID: 1461567185}
+  - {fileID: 1844419746}
+  playerHealth: {fileID: 1766774531}
+--- !u!114 &1766774537
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 597524279}
+  m_GameObject: {fileID: 886894122}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ab5ef15c2bf6a34db07baac21aaa8e5, type: 3}
+  m_Script: {fileID: 11500000, guid: 89ec709f7c7ddaa4b80c2873327598c8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerRespawn
-  respawnPoint: {fileID: 489106159}
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthColl
+  playerHealth: {fileID: 1766774531}
+  damageAmount: 1
 --- !u!1 &1844419744
 GameObject:
   m_ObjectHideFlags: 0

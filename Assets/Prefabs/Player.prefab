@@ -1,5 +1,67 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &321308730612413119
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1460188969602087767}
+  m_Layer: 0
+  m_Name: PlayerCameraPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1460188969602087767
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 321308730612413119}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1635731429984112327}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1074682694878721759
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2007088127728846315}
+  m_Layer: 0
+  m_Name: LockOnCameraTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2007088127728846315
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1074682694878721759}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1635731429984112327}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3047151988590228466
 GameObject:
   m_ObjectHideFlags: 0
@@ -15,6 +77,10 @@ GameObject:
   - component: {fileID: 4314512831245376467}
   - component: {fileID: 4075066420366787807}
   - component: {fileID: 5221989036913721363}
+  - component: {fileID: 730202206873846215}
+  - component: {fileID: 6634753710389791854}
+  - component: {fileID: 3439947799495762491}
+  - component: {fileID: 939655387691589675}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -32,11 +98,13 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6956886636886552044}
   - {fileID: 9108357366367094850}
+  - {fileID: 1460188969602087767}
+  - {fileID: 2007088127728846315}
   - {fileID: 253283916185130994}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -122,6 +190,7 @@ MonoBehaviour:
   sprint: 0
   attack: 0
   block: 0
+  self_heal: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
@@ -262,6 +331,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4314512831245376467}
+        m_TargetAssemblyTypeName: PlayerInputManager, Assembly-CSharp
+        m_MethodName: OnSelfHeal
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d83f9fd0-d835-482d-9d54-8893c1a11a1a
+    m_ActionName: 'Player/Self_Heal[/Keyboard/r]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: 
@@ -281,6 +366,101 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
   health: 10
   maxHealth: 10
+  heal_Amount: 1
+  playerInputManager: {fileID: 4314512831245376467}
+--- !u!114 &730202206873846215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ea6a6ad4f37a94a9269380861c68d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LockOnController
+  PlayerRoot: {fileID: 1635731429984112327}
+  playerCameraPivot: {fileID: 1460188969602087767}
+  mainCamera: {fileID: 0}
+  characterModel: {fileID: 6956886636886552044}
+  freeLookCamera: {fileID: 0}
+  lockOnCamera: {fileID: 0}
+  lockOnCameraTarget: {fileID: 2007088127728846315}
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 192
+  lockRange: 18
+  breakLockRange: 24
+  screenWindow: 0.45
+  requireLineOfSight: 1
+  cameraTargetWeight: 0.45
+  maxCameraTargetOffset: 5
+  cameraTargetSmoothSpeed: 12
+  rotatePlayerTowardTarget: 1
+  rotationSpeed: 14
+--- !u!114 &6634753710389791854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 551690d715b2ce742b321c551611bcd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  health: 4
+  maxHealth: 4
+  emptyHeart: {fileID: 21300002, guid: fed24bd82cefc0c4a8ef64dab6231b53, type: 3}
+  FullHeart: {fileID: 21300000, guid: fed24bd82cefc0c4a8ef64dab6231b53, type: 3}
+  hearts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  playerHealth: {fileID: 5221989036913721363}
+--- !u!136 &3439947799495762491
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 3.062979
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.0314887, z: 0}
+--- !u!114 &939655387691589675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89ec709f7c7ddaa4b80c2873327598c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthColl
+  playerHealth: {fileID: 5221989036913721363}
+  damageAmount: 1
 --- !u!1 &3214339575732242131
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,7 +491,7 @@ Transform:
   m_GameObject: {fileID: 3214339575732242131}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.034, y: 2.105, z: 1.046}
+  m_LocalPosition: {x: 0, y: 1.4, z: 1}
   m_LocalScale: {x: 0.1, y: 1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -447,27 +627,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 6ffda6c5b37048a41930712de91056b8, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.4285713
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ffda6c5b37048a41930712de91056b8, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.4285713
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ffda6c5b37048a41930712de91056b8, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.4285713
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ffda6c5b37048a41930712de91056b8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.022094
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ffda6c5b37048a41930712de91056b8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.71428573
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ffda6c5b37048a41930712de91056b8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.208334
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6ffda6c5b37048a41930712de91056b8, type: 3}
       propertyPath: m_LocalRotation.w
