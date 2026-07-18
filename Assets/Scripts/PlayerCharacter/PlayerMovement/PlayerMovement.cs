@@ -33,7 +33,8 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         Vector2 input = _moveAction.ReadValue<Vector2>();
-
+        _Animator.SetFloat("MoveX", input.x, 0.1f, Time.deltaTime);
+        _Animator.SetFloat("MoveY", input.y, 0.1f, Time.deltaTime);
         Vector3 moveDirection = Vector3.zero;
 
         if (input.magnitude > 0.1f && _MainCamera != null) { 
@@ -58,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         float currentSpeed = Mathf.Clamp(input.magnitude * _moveSpeed * 3f, 0f, 6f);
-        _Animator.SetFloat("Speed", currentSpeed);
+        
 
         if (_CharacterController.isGrounded && _velocity.y < 0) {
             _velocity.y = -2f;
