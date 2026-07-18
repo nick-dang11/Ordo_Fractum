@@ -82,6 +82,7 @@ GameObject:
   - component: {fileID: 3439947799495762491}
   - component: {fileID: 939655387691589675}
   - component: {fileID: 6212662419464609850}
+  - component: {fileID: 308716282217272228}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -170,6 +171,8 @@ MonoBehaviour:
   lightAttackDamage: 10
   heavyAttackDamage: 40
   playerPosture: {fileID: 6212662419464609850}
+  wasAttacking: 0
+  isAttacking: 0
   lightAttackCooldown: 0.4
   heavyHoldTime: 0.7
   heavyAttackCooldown: 1
@@ -350,6 +353,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: d83f9fd0-d835-482d-9d54-8893c1a11a1a
     m_ActionName: 'Player/Self_Heal[/Keyboard/r]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4314512831245376467}
+        m_TargetAssemblyTypeName: PlayerInputManager, Assembly-CSharp
+        m_MethodName: OnBlock
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ba2ae878-29ea-4d82-b184-dc190b4e829d
+    m_ActionName: 'Player/Block[/Mouse/rightButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: 
@@ -401,7 +420,7 @@ MonoBehaviour:
   screenWindow: 0.45
   requireLineOfSight: 1
   cameraTargetWeight: 0.45
-  maxCameraTargetOffset: 5
+  maxCameraTargetOffset: 0
   cameraTargetSmoothSpeed: 12
   rotatePlayerTowardTarget: 1
   rotationSpeed: 14
@@ -484,6 +503,19 @@ MonoBehaviour:
   recentHitTimer: 0
   recentHitDuration: 3
   postureSlider: {fileID: 0}
+--- !u!114 &308716282217272228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fb6683e7bfccf543a05c0197f4990b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StateManager
+  combat: {fileID: 6898766285396604641}
 --- !u!1 &3214339575732242131
 GameObject:
   m_ObjectHideFlags: 0
