@@ -622,7 +622,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6720965089150851342, guid: 2bfd7050872c87243a53ee4e3d6ab5ee, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.0759001
+      value: 2.4759002
       objectReference: {fileID: 0}
     - target: {fileID: 6720965089150851342, guid: 2bfd7050872c87243a53ee4e3d6ab5ee, type: 3}
       propertyPath: m_LocalPosition.z
@@ -643,6 +643,10 @@ PrefabInstance:
     - target: {fileID: 6720965089150851342, guid: 2bfd7050872c87243a53ee4e3d6ab5ee, type: 3}
       propertyPath: m_LocalRotation.z
       value: -1.30222985e-11
+      objectReference: {fileID: 0}
+    - target: {fileID: 7193980351845993805, guid: 2bfd7050872c87243a53ee4e3d6ab5ee, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.0759001
       objectReference: {fileID: 0}
     - target: {fileID: 7193980351845993805, guid: 2bfd7050872c87243a53ee4e3d6ab5ee, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2168,6 +2172,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1635731429984112327, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
   m_PrefabInstance: {fileID: 1766774527}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1766774529 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5221989036913721363, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+  m_PrefabInstance: {fileID: 1766774527}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 597524279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ee7faf631c6c68408372ad6334938e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
 --- !u!114 &1766774531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2189,6 +2204,7 @@ MonoBehaviour:
   - {fileID: 911349211}
   - {fileID: 1461567185}
   - {fileID: 1844419746}
+  playerHealth: {fileID: 1766774529}
 --- !u!136 &1766774532
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2224,6 +2240,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89ec709f7c7ddaa4b80c2873327598c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthColl
+  playerHealth: {fileID: 0}
+  damageAmount: 1
 --- !u!1 &1844419744
 GameObject:
   m_ObjectHideFlags: 0
