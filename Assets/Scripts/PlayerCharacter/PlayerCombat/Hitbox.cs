@@ -37,15 +37,44 @@ public class Hitbox : MonoBehaviour
 
             if (playerCombat != null && playerCombat.IsBlocking())
             {
-                Debug.Log("Player BLOCKED the attack!");
-                playerCombat.TriggerBlockFeedback();
-                return;
+                float timeSinceBlock = Time.time - playerCombat.lastBlockTime;
+                // DEFLECT
+                if (timeSinceBlock <= playerCombat.deflectWindow)
+                {
+                    Debug.Log("DEFLECT!");
+                    playerCombat.TriggerDeflectFeedback();
+                    // Small posture gain on deflect
+                    PlayerPosture posture = other.GetComponent<PlayerPosture>();
+                    if (posture != null)
+                    {
+                        posture.posture += posture.postureFillRate * 1f;
+                        posture.posture = Mathf.Clamp(posture.posture, 0f, posture.maxPosture);
+                        posture.postureSlider.value = posture.posture;
+                    }
+                    return;
+                }
+                else
+                {
+                    // Normal Block
+                    Debug.Log("Player BLOCKED the attack!");
+                    playerCombat.TriggerBlockFeedback();
+                    return;
+                }
             }
 
             if (playerHealth != null)
             {
                 Debug.Log("Player Hit: " + other.name);
                 playerHealth.TakeDamage((int)currentDamage);
+                PlayerPosture posture = other.GetComponent<PlayerPosture>();
+                if (posture != null)
+                {
+                    posture.posture += posture.postureFillRate * 5f;
+                    posture.posture = Mathf.Clamp(posture.posture, 0f, posture.maxPosture);
+                    posture.postureSlider.value = posture.posture;
+                    posture.NotifyHit();
+                }
+
             }
             return;
         }
@@ -61,5 +90,4 @@ public class Hitbox : MonoBehaviour
             return;
         }
     }
-
 }

@@ -29,6 +29,9 @@ public class PlayerCombat : MonoBehaviour
 
     private float holdTimer = 0f;
 
+    public float lastBlockTime = 0f;
+    public float deflectWindow = 0.3f;
+
     void Start()
     {
         //animate = GetComponent<Animator>();
@@ -47,10 +50,21 @@ public class PlayerCombat : MonoBehaviour
         if (isAttacking)
         {
             isBlocking = false;
-            animate.SetBool("Blocking", false);
+            animate.SetBool("Block", false);
             return;
         }
-        //if (input.block && playerStamina.HasStamina(playerStamina.blockStaminaCost))
+        if (input.block)
+        {
+            lastBlockTime = Time.time;
+            isBlocking = true;
+            animate.SetBool("Block", true);
+        }
+        else
+        {
+            isBlocking = false;
+            animate.SetBool("Block", false);
+        }
+        //if (input.block && playerStamina.HasStamina(playerStamina.blockStaminaCost)) - Getting rid of Stamina - Jacob
         //{
         //    isBlocking = true;
         //    animate.SetBool("Blocking", true);
@@ -60,16 +74,6 @@ public class PlayerCombat : MonoBehaviour
         //    isBlocking = false;
         //    animate.SetBool("Blocking", false);
         //}
-        if (input.block && playerPosture.posture < playerPosture.maxPosture)
-        {
-            isBlocking = true;
-            animate.SetBool("Blocking", true);
-        }
-        else
-        {
-            isBlocking = false;
-            animate.SetBool("Blocking", false);
-        }
     }
 
     public bool IsBlocking()
@@ -81,6 +85,9 @@ public class PlayerCombat : MonoBehaviour
     {
         Debug.Log("Player BLOCKED the attack!");
         animate.SetTrigger("BlockHit");
+        playerPosture.posture += playerPosture.postureFillRate * 3f;
+        playerPosture.posture = Mathf.Clamp(playerPosture.posture, 0f, playerPosture.maxPosture);
+        playerPosture.postureSlider.value = playerPosture.posture;
     }
 
     void LightAndHeavy()
@@ -117,9 +124,9 @@ public class PlayerCombat : MonoBehaviour
             {
                 if (holdTimer >= heavyHoldTime && Time.time >= nextHeavyAttackTime)
                 {
-                    //if (playerStamina.HasStamina(playerStamina.heavyAttackStaminaCost)) {
+                    //if (playerStamina.HasStamina(playerStamina.heavyAttackStaminaCost)) { - Getting rid of Stamina - Jacob
                     //    playerStamina.UseStamina(playerStamina.heavyAttackStaminaCost);
-                        animate.SetInteger("ComboStep", comboStep);
+                    animate.SetInteger("ComboStep", comboStep);
                         animate.SetTrigger("HeavyAttack");
                         nextHeavyAttackTime = Time.time + heavyAttackCooldown;
                         comboStep++;
@@ -132,9 +139,9 @@ public class PlayerCombat : MonoBehaviour
                 }
                 else if (Time.time >= nextLightAttackTime)
                 {
-                    //if (playerStamina.HasStamina(playerStamina.lightAttackStaminaCost)) {
+                    //if (playerStamina.HasStamina(playerStamina.lightAttackStaminaCost)) { - Getting rid of Stamina - Jacob
                     //    playerStamina.UseStamina(playerStamina.lightAttackStaminaCost);
-                        animate.SetInteger("ComboStep", comboStep);
+                    animate.SetInteger("ComboStep", comboStep);
                         animate.SetTrigger("LightAttack");
                         nextLightAttackTime = Time.time + lightAttackCooldown;
                         comboStep++;
@@ -142,7 +149,7 @@ public class PlayerCombat : MonoBehaviour
                     //}
                     //else
                     //{
-                    //    Debug.Log("Not enough stamina for light attack!");
+                    //    Debug.Log("Not enough stamina for light attack!"); - Getting rid of Stamina - Jacob
                     //}
                 }
             }
@@ -156,7 +163,7 @@ public class PlayerCombat : MonoBehaviour
     {
         isAttacking = true;
         isBlocking = false;
-        animate.SetBool("Blocking", false);
+        animate.SetBool("Block", false);
     }
 
     public void EndAttack()
@@ -178,7 +185,7 @@ public class PlayerCombat : MonoBehaviour
     public void ForceStopBlocking()
     {
         isBlocking = false;
-        animate.SetBool("Blocking", false);
+        animate.SetBool("Block", false);
     }
 
     private IEnumerator AttackRoutine(float duration, float damage)
@@ -191,5 +198,10 @@ public class PlayerCombat : MonoBehaviour
         DisableCombo();
         weaponHitbox.DisableHitbox();
         EndAttack(); // simulate animation event
+    }
+    public void TriggerDeflectFeedback()
+    {
+        Debug.Log("DEFLECT!");
+        animate.SetTrigger("Deflect");
     }
 }

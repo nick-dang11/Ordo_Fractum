@@ -7,10 +7,12 @@ public class PlayerPosture : MonoBehaviour
     [Header("Posture Settings")]
     public float maxPosture = 100f;
     public float posture = 0f;
-    public float postureFillRate = 15f;
+    public float postureFillRate = 10f;
     public float posturedecreaseRate = 10f;
     public float decreaseDelay = 1.5f;
     private float decayTimer = 0f;
+    public float recentHitTimer = 0f;
+    public float recentHitDuration = 3f;
 
     [Header("UI")]
     public Slider postureSlider;
@@ -24,13 +26,10 @@ public class PlayerPosture : MonoBehaviour
 
     void Update()
     {
-        if (playerCombat.IsBlocking())
-        {
-            posture += postureFillRate * Time.deltaTime;
-            posture = Mathf.Clamp(posture, 0f, maxPosture);
-            decayTimer = 0f; // Reset the decay timer when blocking
-        }
-        else
+        if (recentHitTimer > 0)
+            recentHitTimer -= Time.deltaTime;
+        float recoveryMultiplier = (recentHitTimer > 0) ? 0.3f : 1f;
+        if (!playerCombat.IsBlocking())
         {
             decayTimer += Time.deltaTime;
             if (decayTimer >= decreaseDelay)
@@ -40,14 +39,17 @@ public class PlayerPosture : MonoBehaviour
             }
         }
         postureSlider.value = posture;
+
         if (posture >= maxPosture)
-        {
             TriggerGuardBreak();
-        }
     }
 
     void TriggerGuardBreak()
     {
         playerCombat.ForceStopBlocking();
+    }
+    public void NotifyHit()
+    {
+        recentHitTimer = recentHitDuration;
     }
 }
