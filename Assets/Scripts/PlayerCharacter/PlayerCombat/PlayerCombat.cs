@@ -11,8 +11,8 @@ public class PlayerCombat : MonoBehaviour
     // [SerializeField] private PlayerStamina playerStamina;
     [SerializeField] private PlayerPosture playerPosture;
 
-    private bool wasAttacking = false;
-    private bool isAttacking = false;
+    public bool wasAttacking = false;
+    public bool isAttacking = false;
     private bool isBlocking = false;
     private bool isHolding = false;
     private bool canCombo = false;
@@ -40,11 +40,11 @@ public class PlayerCombat : MonoBehaviour
 
     void Update()
     {
-        HandleBlock();
-        LightAndHeavy();
+        //HandleBlock();
+        //LightAndHeavy();
     }
 
-    void HandleBlock()
+    public void HandleBlock()
     {
         if (input == null) return;
         if (isAttacking)
@@ -90,7 +90,7 @@ public class PlayerCombat : MonoBehaviour
         playerPosture.postureSlider.value = playerPosture.posture;
     }
 
-    void LightAndHeavy()
+    public void LightAndHeavy()
     {
         if (input == null) return;
         if (isBlocking) return;

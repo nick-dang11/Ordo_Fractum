@@ -14,6 +14,16 @@ public class BlockingState : BaseState
 
     public override void UpdateState(StateManager context)
     {
-        //needs to be implemented
+        context.combat.HandleBlock();
+
+        if (!context.combat.input.block)
+        {
+            context.SwitchState(context.idleState, true);
+        }
+    }
+
+    public override void ExitState(StateManager context)
+    {
+        context.combat.ForceStopBlocking();
     }
 }

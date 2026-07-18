@@ -4,4 +4,6 @@ public abstract class BaseState
 
     public abstract void EnterState(StateManager context);
     public abstract void UpdateState(StateManager context);
+
+    public virtual void ExitState(StateManager context) { }
 }

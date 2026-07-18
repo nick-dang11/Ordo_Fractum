@@ -14,6 +14,13 @@ public class IdleState : BaseState
 
     public override void UpdateState(StateManager context)
     {
-        //needs to be implemented
+        if (context.combat.input.block)
+        {
+            context.SwitchState(context.blockState);
+        }
+        else if (context.combat.input.attack)
+        {
+            context.SwitchState(context.attackingState);
+        }
     }
 }
