@@ -9,6 +9,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float lightAttackDamage = 10f;
     [SerializeField] private float heavyAttackDamage = 40f;
     [SerializeField] private PlayerStamina playerStamina;
+    [SerializeField] private PlayerPosture playerPosture;
 
     private bool wasAttacking = false;
     private bool isAttacking = false;
