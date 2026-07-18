@@ -2148,33 +2148,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.size
-      value: 1
+    - target: {fileID: 5221989036913721363, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: health
+      value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1766774530}
-    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnSelfHeal
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: PlayerInputManager, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
+    - target: {fileID: 5221989036913721363, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: maxHealth
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6634753710389791854, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
       propertyPath: 'hearts.Array.data[0]'
@@ -2202,17 +2182,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1635731429984112327, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
   m_PrefabInstance: {fileID: 1766774527}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1766774530 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4314512831245376467, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-  m_PrefabInstance: {fileID: 1766774527}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bca18d7b51ce7e947a0ce91b745045f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputManager
 --- !u!1 &1844419744
 GameObject:
   m_ObjectHideFlags: 0

@@ -48,7 +48,7 @@ public class HealthSystem : MonoBehaviour
     {
         if(health <= maxHealth)
         {
-            health += heal_amount;
+            health = health + heal_amount;
             
             health = Mathf.Clamp(health, 0, maxHealth);
 
