@@ -28,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1705701616509091768}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.22975296, y: 5.516334e-11, z: -1.30222985e-11, w: 0.973249}
-  m_LocalPosition: {x: -0.91605, y: 2.4759002, z: -3.0299501}
+  m_LocalRotation: {x: 0.105350815, y: -0.000000023139462, z: 0.000000002451403, w: 0.99443513}
+  m_LocalPosition: {x: 0, y: 3.4, z: -3.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -200,8 +200,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2039418820228063181}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.22975293, y: 5.777265e-11, z: -2.407556e-11, w: 0.973249}
-  m_LocalPosition: {x: -0.91605, y: 2.4759002, z: -3.0299501}
+  m_LocalRotation: {x: 0.2897842, y: 1.0977302e-15, z: -2.225881e-15, w: 0.95709205}
+  m_LocalPosition: {x: 0, y: 2.4, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -274,13 +274,13 @@ MonoBehaviour:
   Orbits:
     Top:
       Radius: 1
-      Height: 3
+      Height: 1.5
     Center:
       Radius: 1.5
-      Height: 2
+      Height: 1
     Bottom:
       Radius: 2
-      Height: 0.5
+      Height: 0
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
@@ -335,7 +335,7 @@ MonoBehaviour:
       Size: {x: 0.8, y: 0.8}
       Offset: {x: 0, y: 0}
   CenterOnActivate: 1
-  TargetOffset: {x: 0, y: 1.25, z: 0}
+  TargetOffset: {x: 0, y: 0, z: 0}
   Damping: {x: 0.5, y: 0.5}
   Lookahead:
     Enabled: 0
@@ -480,8 +480,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4884742537290570438}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.22975293, y: 5.777265e-11, z: -2.407556e-11, w: 0.973249}
-  m_LocalPosition: {x: -0.91605, y: 2.4759002, z: -3.0299501}
+  m_LocalRotation: {x: 0.10535081, y: -0.00000002313946, z: 0.0000000024514024, w: 0.9944352}
+  m_LocalPosition: {x: 0, y: 3.4, z: -3.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -542,7 +542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b5d7c088409d9a40b7b09aa707777f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineOrbitalFollow
-  TargetOffset: {x: 0, y: 0, z: 0}
+  TargetOffset: {x: 0, y: 0, z: -2}
   TrackerSettings:
     BindingMode: 1
     PositionDamping: {x: 1, y: 1, z: 1}

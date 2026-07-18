@@ -81,6 +81,7 @@ GameObject:
   - component: {fileID: 6634753710389791854}
   - component: {fileID: 3439947799495762491}
   - component: {fileID: 939655387691589675}
+  - component: {fileID: 6212662419464609850}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -168,10 +169,12 @@ MonoBehaviour:
   animate: {fileID: 3921508679667758998}
   lightAttackDamage: 10
   heavyAttackDamage: 40
-  playerStamina: {fileID: 0}
+  playerPosture: {fileID: 6212662419464609850}
   lightAttackCooldown: 0.4
   heavyHoldTime: 0.7
   heavyAttackCooldown: 1
+  lastBlockTime: 0
+  deflectWindow: 0.3
 --- !u!114 &4314512831245376467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -461,6 +464,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthColl
   playerHealth: {fileID: 5221989036913721363}
   damageAmount: 1
+--- !u!114 &6212662419464609850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb1733de2a1c5741813a4b1bbb86b53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerPosture
+  maxPosture: 100
+  posture: 0
+  postureFillRate: 15
+  posturedecreaseRate: 10
+  decreaseDelay: 1.5
+  recentHitTimer: 0
+  recentHitDuration: 3
+  postureSlider: {fileID: 0}
 --- !u!1 &3214339575732242131
 GameObject:
   m_ObjectHideFlags: 0
