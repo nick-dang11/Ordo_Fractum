@@ -8,7 +8,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private Animator animate;
     [SerializeField] private float lightAttackDamage = 10f;
     [SerializeField] private float heavyAttackDamage = 40f;
-    [SerializeField] private PlayerStamina playerStamina;
+    // [SerializeField] private PlayerStamina playerStamina;
     [SerializeField] private PlayerPosture playerPosture;
 
     private bool wasAttacking = false;
@@ -50,7 +50,17 @@ public class PlayerCombat : MonoBehaviour
             animate.SetBool("Blocking", false);
             return;
         }
-        if (input.block && playerStamina.HasStamina(playerStamina.blockStaminaCost))
+        //if (input.block && playerStamina.HasStamina(playerStamina.blockStaminaCost))
+        //{
+        //    isBlocking = true;
+        //    animate.SetBool("Blocking", true);
+        //}
+        //else
+        //{
+        //    isBlocking = false;
+        //    animate.SetBool("Blocking", false);
+        //}
+        if (input.block && playerPosture.posture < playerPosture.maxPosture)
         {
             isBlocking = true;
             animate.SetBool("Blocking", true);
@@ -107,33 +117,33 @@ public class PlayerCombat : MonoBehaviour
             {
                 if (holdTimer >= heavyHoldTime && Time.time >= nextHeavyAttackTime)
                 {
-                    if (playerStamina.HasStamina(playerStamina.heavyAttackStaminaCost)) {
-                        playerStamina.UseStamina(playerStamina.heavyAttackStaminaCost);
+                    //if (playerStamina.HasStamina(playerStamina.heavyAttackStaminaCost)) {
+                    //    playerStamina.UseStamina(playerStamina.heavyAttackStaminaCost);
                         animate.SetInteger("ComboStep", comboStep);
                         animate.SetTrigger("HeavyAttack");
                         nextHeavyAttackTime = Time.time + heavyAttackCooldown;
                         comboStep++;
                         StartCoroutine(AttackRoutine(0.6f, heavyAttackDamage));
-                    }
-                    else
-                    {
-                        Debug.Log("Not enough stamina for heavy attack!");
-                    }
+                    //}
+                    //else
+                    //{
+                    //    Debug.Log("Not enough stamina for heavy attack!");
+                    //}
                 }
                 else if (Time.time >= nextLightAttackTime)
                 {
-                    if (playerStamina.HasStamina(playerStamina.lightAttackStaminaCost)) {
-                        playerStamina.UseStamina(playerStamina.lightAttackStaminaCost);
+                    //if (playerStamina.HasStamina(playerStamina.lightAttackStaminaCost)) {
+                    //    playerStamina.UseStamina(playerStamina.lightAttackStaminaCost);
                         animate.SetInteger("ComboStep", comboStep);
                         animate.SetTrigger("LightAttack");
                         nextLightAttackTime = Time.time + lightAttackCooldown;
                         comboStep++;
                         StartCoroutine(AttackRoutine(0.3f, lightAttackDamage));
-                    }
-                    else
-                    {
-                        Debug.Log("Not enough stamina for light attack!");
-                    }
+                    //}
+                    //else
+                    //{
+                    //    Debug.Log("Not enough stamina for light attack!");
+                    //}
                 }
             }
             isHolding = false;
