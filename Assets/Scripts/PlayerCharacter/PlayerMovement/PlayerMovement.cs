@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Animator _Animator;
     [SerializeField] private InputActionAsset _InputActions;
     [SerializeField] private Transform _MainCamera;
+    [SerializeField] private CombatDetection _combatDetection;
 
     [Header("Movement Settings")]
     [SerializeField] private float _moveSpeed = 2f;
@@ -32,6 +33,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        bool inCombat = _combatDetection != null && _combatDetection.isEnemyNearby;
+        _Animator.SetBool("InCombat", inCombat); // differentiates whether to play combat or non-combat animations;
+
         Vector2 input = _moveAction.ReadValue<Vector2>();
         _Animator.SetFloat("MoveX", input.x, 0.1f, Time.deltaTime);
         _Animator.SetFloat("MoveY", input.y, 0.1f, Time.deltaTime);
