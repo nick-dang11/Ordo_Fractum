@@ -7,7 +7,7 @@ public class WeaponHitbox : MonoBehaviour
 
     [SerializeField] private GameObject parentObject;
     private Color activeColor = Color.red;
-    private Color inactiveColor = Color.white;
+    private Color inactiveColor = Color.grey;
 
     private float currentDamage;
 
@@ -30,7 +30,11 @@ public class WeaponHitbox : MonoBehaviour
         weaponCollider.enabled = true;
         currentDamage = damage;
         Debug.Log("Hitbox enabled with damage: " + currentDamage);
-        this.GetComponent<Renderer>().material.color = Color.grey;
+        
+        if(weaponRenderer != null)
+        {
+            SetWeaponColor(inactiveColor);
+        }
         //Debug.Log("Hitbox enabled.");
 
         SetWeaponColor(activeColor);
@@ -53,7 +57,11 @@ public class WeaponHitbox : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == parentObject) return;
+        PlayerCombat ownerCombat = GetComponentInParent<PlayerCombat>();
+        if (ownerCombat != null && other.transform.root == ownerCombat.transform.root)
+        {
+            return;
+        }
 
         if (other.CompareTag("Player"))
         {
@@ -69,6 +77,7 @@ public class WeaponHitbox : MonoBehaviour
                     Debug.Log("DEFLECT!");
                     playerCombat.TriggerDeflectFeedback();
                     // Small posture gain on deflect
+                    // correction, only avoid/evade restores a bit of posture! - N, 7/22/26
                     PlayerPosture posture = other.GetComponent<PlayerPosture>();
                     if (posture != null)
                     {

@@ -145,7 +145,7 @@ public class PlayerCombat : MonoBehaviour
                         animate.SetTrigger("LightAttack");
                         nextLightAttackTime = Time.time + lightAttackCooldown;
                         comboStep++;
-                        StartCoroutine(AttackRoutine(0.3f, lightAttackDamage));
+                        StartCoroutine(AttackRoutine(0.3f, lightAttackDamage)); 
                     //}
                     //else
                     //{
