@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Hitbox : MonoBehaviour
+public class WeaponHitbox : MonoBehaviour
 {
     private Collider weaponCollider;
 

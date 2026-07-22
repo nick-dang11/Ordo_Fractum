@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerCombat : MonoBehaviour
 {
     [SerializeField] public PlayerInputManager input;
-    [SerializeField] private Hitbox weaponHitbox;
+    [SerializeField] private WeaponHitbox weaponHitbox;
     [SerializeField] private Animator animate;
     [SerializeField] private float lightAttackDamage = 10f;
     [SerializeField] private float heavyAttackDamage = 40f;

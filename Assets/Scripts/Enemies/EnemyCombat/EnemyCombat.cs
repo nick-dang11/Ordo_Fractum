@@ -11,7 +11,7 @@ public class EnemyCombat : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Transform player;
-    [SerializeField] private Hitbox weaponHitbox;
+    [SerializeField] private WeaponHitbox weaponHitbox;
 
     [Header("Damage")]
     [SerializeField] private float enemyDamage = 10f;
