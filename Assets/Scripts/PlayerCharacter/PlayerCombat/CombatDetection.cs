@@ -12,7 +12,7 @@ public class CombatDetection : MonoBehaviour
     private void Update()
     {
         isEnemyNearby = CheckForEnemies() >= 1;
-        Debug.Log(isEnemyNearby);
+        //Debug.Log(isEnemyNearby);
     }
 
     private int CheckForEnemies()

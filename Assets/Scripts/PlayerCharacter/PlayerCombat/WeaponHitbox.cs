@@ -3,13 +3,26 @@ using UnityEngine;
 public class WeaponHitbox : MonoBehaviour
 {
     private Collider weaponCollider;
+    private Renderer weaponRenderer;
 
     [SerializeField] private GameObject parentObject;
+    private Color activeColor = Color.red;
+    private Color inactiveColor = Color.white;
+
     private float currentDamage;
+
     void Awake()
     {
         weaponCollider = GetComponent<Collider>();
         weaponCollider.enabled = false;
+
+        weaponRenderer = GetComponent<Renderer>();
+        if (weaponRenderer == null)
+        {
+            weaponRenderer = GetComponentInChildren<Renderer>();
+        }
+
+        SetWeaponColor(inactiveColor);
     }
 
     public void EnableHitbox(float damage)
@@ -17,13 +30,25 @@ public class WeaponHitbox : MonoBehaviour
         weaponCollider.enabled = true;
         currentDamage = damage;
         Debug.Log("Hitbox enabled with damage: " + currentDamage);
+        this.GetComponent<Renderer>().material.color = Color.grey;
         //Debug.Log("Hitbox enabled.");
+
+        SetWeaponColor(activeColor);
     }
 
     public void DisableHitbox()
     {
         weaponCollider.enabled = false;
         //Debug.Log("Hitbox disabled.");
+        SetWeaponColor(inactiveColor);
+    }
+
+    private void SetWeaponColor(Color color)
+    {
+        if (weaponRenderer != null)
+        {
+            weaponRenderer.material.color = color; // may need material.SetColor("_BaseColor", color) with URP/HDRP
+        }
     }
 
     void OnTriggerEnter(Collider other)
