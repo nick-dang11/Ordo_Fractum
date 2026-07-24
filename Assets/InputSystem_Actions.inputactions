@@ -496,7 +496,7 @@
                     "name": "",
                     "id": "0f388696-5613-4e30-91b9-fa9853eecd1b",
                     "path": "<Keyboard>/r",
-                    "interactions": "",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Self_Heal",

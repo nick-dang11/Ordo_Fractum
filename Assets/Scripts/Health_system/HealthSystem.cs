@@ -29,6 +29,8 @@ public class HealthSystem : MonoBehaviour
             Heal(heal_Amount);
             Debug.Log("Player healed");
 
+            playerInputManager.self_heal = false;
+
         }
     }
 
@@ -53,6 +55,8 @@ public class HealthSystem : MonoBehaviour
             health = Mathf.Clamp(health, 0, maxHealth);
 
             Debug.Log("Player healed by " + heal_amount + ". Current health: " + health);
+
+            playerInputManager.self_heal = false;
         }
         else
         {

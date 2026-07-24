@@ -386,8 +386,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee7faf631c6c68408372ad6334938e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
-  health: 10
-  maxHealth: 10
+  health: 4
+  maxHealth: 4
   heal_Amount: 1
   playerInputManager: {fileID: 4314512831245376467}
 --- !u!114 &730202206873846215
