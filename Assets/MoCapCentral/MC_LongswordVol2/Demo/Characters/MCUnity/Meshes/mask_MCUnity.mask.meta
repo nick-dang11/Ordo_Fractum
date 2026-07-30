@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f0e057ef003fd2c419ac56ecd1d35c0a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 31900000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 362498
+  packageName: MC Longsword Vol.2 - Believable 3D Animations by MoCap Central
+  packageVersion: 1.1.0
+  assetPath: Assets/MoCapCentral/MC_LongswordVol2/Demo/Characters/MCUnity/Meshes/mask_MCUnity.mask
+  uploadId: 906122

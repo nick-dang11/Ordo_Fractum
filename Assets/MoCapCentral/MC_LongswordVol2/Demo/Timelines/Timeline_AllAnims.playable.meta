@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 414aba4ecd3b0f4418037a42862bfaf9
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 362498
+  packageName: MC Longsword Vol.2 - Believable 3D Animations by MoCap Central
+  packageVersion: 1.1.0
+  assetPath: Assets/MoCapCentral/MC_LongswordVol2/Demo/Timelines/Timeline_AllAnims.playable
+  uploadId: 906122
