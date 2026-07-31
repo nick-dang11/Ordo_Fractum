@@ -63,7 +63,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         float currentSpeed = Mathf.Clamp(input.magnitude * _moveSpeed * 3f, 0f, 6f);
-        
+        bool isMoving = input.magnitude > 0.1f;
+        _Animator.SetBool("IsMoving", isMoving);
+        Debug.Log("MoveX: " + _Animator.GetFloat("MoveX") + " | InCombat: " + _Animator.GetBool("InCombat"));
 
         if (_CharacterController.isGrounded && _velocity.y < 0) {
             _velocity.y = -2f;

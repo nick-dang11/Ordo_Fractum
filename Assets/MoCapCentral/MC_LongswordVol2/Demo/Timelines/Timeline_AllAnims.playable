@@ -53,7 +53,7 @@ MonoBehaviour:
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
-    m_BlendOutDuration: 0
+    m_BlendOutDuration: 0.0000000000000004440892098500626
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -103,7 +103,7 @@ MonoBehaviour:
     m_ParentTrack: {fileID: -9143763705149104078}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0
+    m_BlendInDuration: 0.0000000000000004440892098500626
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
@@ -2756,7 +2756,7 @@ MonoBehaviour:
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
-    m_BlendOutDuration: 0
+    m_BlendOutDuration: 0.0000000000000017763568394002505
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -2806,8 +2806,8 @@ MonoBehaviour:
     m_ParentTrack: {fileID: -7361373606411783367}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0
-    m_BlendOutDuration: 0
+    m_BlendInDuration: 0.0000000000000017763568394002505
+    m_BlendOutDuration: 0.000000000000004440892098500626
     m_MixInCurve:
       serializedVersion: 2
       m_Curve: []
@@ -2839,7 +2839,7 @@ MonoBehaviour:
     m_ParentTrack: {fileID: -7361373606411783367}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0
+    m_BlendInDuration: 0.000000000000004440892098500626
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
@@ -3029,7 +3029,7 @@ MonoBehaviour:
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
-    m_BlendOutDuration: 0
+    m_BlendOutDuration: 0.000000000000003552713678800501
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -3079,7 +3079,7 @@ MonoBehaviour:
     m_ParentTrack: {fileID: -7361373606411783367}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0
+    m_BlendInDuration: 0.000000000000003552713678800501
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
@@ -20299,7 +20299,7 @@ MonoBehaviour:
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
-    m_BlendOutDuration: 0
+    m_BlendOutDuration: 0.000000000000005329070518200751
     m_MixInCurve:
       serializedVersion: 2
       m_Curve: []
@@ -20331,7 +20331,7 @@ MonoBehaviour:
     m_ParentTrack: {fileID: 5838691303878571602}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0
+    m_BlendInDuration: 0.000000000000005329070518200751
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
