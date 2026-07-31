@@ -992,13 +992,8 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-<<<<<<< Updated upstream
   - m_Name: IsMoving
     m_Type: 4
-=======
-  - m_Name: Heal
-    m_Type: 9
->>>>>>> Stashed changes
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
