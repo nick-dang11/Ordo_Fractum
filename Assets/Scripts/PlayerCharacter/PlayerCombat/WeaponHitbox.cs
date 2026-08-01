@@ -5,7 +5,7 @@ public class WeaponHitbox : MonoBehaviour
     private Collider weaponCollider;
     private Renderer weaponRenderer;
 
-    [SerializeField] private GameObject parentObject;
+    [SerializeField] private GameObject PlayerObject;
     private Color activeColor = Color.red;
     private Color inactiveColor = Color.grey;
 
