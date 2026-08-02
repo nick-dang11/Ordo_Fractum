@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerCombat : MonoBehaviour
 {
     [SerializeField] public PlayerInputManager input;
-    [SerializeField] private WeaponHitbox weaponHitbox;
+    [SerializeField] public WeaponHitbox weaponHitbox;
     [SerializeField] private Animator animate;
     [SerializeField] private float lightAttackDamage = 10f;
     [SerializeField] private float heavyAttackDamage = 40f;
@@ -32,17 +32,10 @@ public class PlayerCombat : MonoBehaviour
     public float lastBlockTime = 0f;
     public float deflectWindow = 0.3f;
 
-    void Start()
-    {
-        //animate = GetComponent<Animator>();
-        // removed this since manual assignment with serialized fields above - N
-    }
+    public float pendingDamage;
+    void Start() {}
 
-    void Update()
-    {
-        //HandleBlock();
-        //LightAndHeavy();
-    }
+    void Update() {}
 
     public void HandleBlock()
     {
@@ -64,16 +57,6 @@ public class PlayerCombat : MonoBehaviour
             isBlocking = false;
             animate.SetBool("Block", false);
         }
-        //if (input.block && playerStamina.HasStamina(playerStamina.blockStaminaCost)) - Getting rid of Stamina - Jacob
-        //{
-        //    isBlocking = true;
-        //    animate.SetBool("Blocking", true);
-        //}
-        //else
-        //{
-        //    isBlocking = false;
-        //    animate.SetBool("Blocking", false);
-        //}
     }
 
     public bool IsBlocking()
@@ -99,9 +82,6 @@ public class PlayerCombat : MonoBehaviour
         {
             isHolding = true;
             holdTimer = 0f;
-
-            //StartCoroutine(AttackRoutine(0.3f));
-
             wasAttacking = true;
         }
 
@@ -124,33 +104,19 @@ public class PlayerCombat : MonoBehaviour
             {
                 if (holdTimer >= heavyHoldTime && Time.time >= nextHeavyAttackTime)
                 {
-                    //if (playerStamina.HasStamina(playerStamina.heavyAttackStaminaCost)) { - Getting rid of Stamina - Jacob
-                    //    playerStamina.UseStamina(playerStamina.heavyAttackStaminaCost);
                     animate.SetInteger("ComboStep", comboStep);
                         animate.SetTrigger("HeavyAttack");
                         nextHeavyAttackTime = Time.time + heavyAttackCooldown;
                         comboStep++;
                         StartCoroutine(AttackRoutine(0.6f, heavyAttackDamage));
-                    //}
-                    //else
-                    //{
-                    //    Debug.Log("Not enough stamina for heavy attack!");
-                    //}
                 }
                 else if (Time.time >= nextLightAttackTime)
                 {
-                    //if (playerStamina.HasStamina(playerStamina.lightAttackStaminaCost)) { - Getting rid of Stamina - Jacob
-                    //    playerStamina.UseStamina(playerStamina.lightAttackStaminaCost);
                     animate.SetInteger("ComboStep", comboStep);
                         animate.SetTrigger("LightAttack");
                         nextLightAttackTime = Time.time + lightAttackCooldown;
                         comboStep++;
                         StartCoroutine(AttackRoutine(0.3f, lightAttackDamage)); 
-                    //}
-                    //else
-                    //{
-                    //    Debug.Log("Not enough stamina for light attack!"); - Getting rid of Stamina - Jacob
-                    //}
                 }
             }
             isHolding = false;
@@ -191,7 +157,7 @@ public class PlayerCombat : MonoBehaviour
     private IEnumerator AttackRoutine(float duration, float damage)
     {
         StartAttack(); // simulate animation event
-        weaponHitbox.EnableHitbox(damage);
+        pendingDamage = damage;
         yield return new WaitForSeconds(duration * 0.5f);
         EnableCombo(); // simulate combo window
         yield return new WaitForSeconds(duration * 0.5f);
@@ -203,5 +169,10 @@ public class PlayerCombat : MonoBehaviour
     {
         Debug.Log("DEFLECT!");
         animate.SetTrigger("Deflect");
+    }
+
+    public void SetPendingDamage(float damage)
+    {
+        pendingDamage = damage;
     }
 }

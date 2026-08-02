@@ -35,8 +35,6 @@ public class WeaponHitbox : MonoBehaviour
         {
             SetWeaponColor(inactiveColor);
         }
-        //Debug.Log("Hitbox enabled.");
-
         SetWeaponColor(activeColor);
     }
 
