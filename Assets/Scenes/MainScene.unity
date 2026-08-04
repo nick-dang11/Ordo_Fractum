@@ -2339,6 +2339,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3686223353678128997, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.024
+      objectReference: {fileID: 0}
+    - target: {fileID: 3686223353678128997, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0452
+      objectReference: {fileID: 0}
+    - target: {fileID: 3686223353678128997, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.0208
+      objectReference: {fileID: 0}
+    - target: {fileID: 3686223353678128997, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.77496207
+      objectReference: {fileID: 0}
+    - target: {fileID: 3686223353678128997, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.16080606
+      objectReference: {fileID: 0}
+    - target: {fileID: 3686223353678128997, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.5709004
+      objectReference: {fileID: 0}
+    - target: {fileID: 3686223353678128997, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.21828431
+      objectReference: {fileID: 0}
     - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
       propertyPath: m_Camera
       value: 
@@ -2355,6 +2383,10 @@ PrefabInstance:
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 330585546}
+    - target: {fileID: 4174983778475235283, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: _combatDetection
+      value: 
+      objectReference: {fileID: 939421551388515723}
     - target: {fileID: 6212662419464609850, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
       propertyPath: postureSlider
       value: 
@@ -2412,6 +2444,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationRelay
   playerCombat: {fileID: 939421551388515715}
+--- !u!114 &939421551388515723 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3307104090667302471, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+  m_PrefabInstance: {fileID: 939421551388515701}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2070178139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 252dd4a2243048b4e9b8bcaae049e546, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatDetection
 --- !u!1001 &3923968974002340270
 PrefabInstance:
   m_ObjectHideFlags: 0

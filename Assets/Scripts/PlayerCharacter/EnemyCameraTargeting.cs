@@ -7,6 +7,7 @@ public class PlayerActionController : MonoBehaviour
     [SerializeField] private PlayerCombat playerCombat;
     [SerializeField] private LockOnController lockOnController;
     [SerializeField] private PlayerInputManager inputManager;
+    [SerializeField] private CombatDetection _combatDetection;
 
     [Header("Transforms")]
     [SerializeField] private Transform playerModel;
@@ -33,15 +34,19 @@ public class PlayerActionController : MonoBehaviour
     {
         if (inputManager == null || playerCombat == null) return;
 
-        
-        if (lockOnController != null && lockOnController.IsLockedOn)
+        if ((_combatDetection != null && !_combatDetection.isEnemyNearby)
+            || (lockOnController != null && lockOnController.IsLockedOn))
         {
+            if (_combatDetection != null && !_combatDetection.isEnemyNearby)
+            {
+                currentFocusTarget = null;
+            }
+
             wasAttackButtonPressed = inputManager.attack;
             wasBlockButtonPressed = inputManager.block;
             return;
         }
 
-        
         ManageFocusTarget();
 
         
