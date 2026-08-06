@@ -2388,13 +2388,63 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 939421551388515707}
   m_SourcePrefab: {fileID: 100100000, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
 --- !u!4 &939421551388515702 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1635731429984112327, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
   m_PrefabInstance: {fileID: 939421551388515701}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &939421551388515703 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8937205026060797890, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+  m_PrefabInstance: {fileID: 939421551388515701}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &939421551388515704 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5221989036913721363, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+  m_PrefabInstance: {fileID: 939421551388515701}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939421551388515706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ee7faf631c6c68408372ad6334938e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
+--- !u!114 &939421551388515705 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4314512831245376467, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+  m_PrefabInstance: {fileID: 939421551388515701}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939421551388515706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bca18d7b51ce7e947a0ce91b745045f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputManager
+--- !u!1 &939421551388515706 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+  m_PrefabInstance: {fileID: 939421551388515701}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &939421551388515707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939421551388515706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b61353cbb61a5943b40c0c366abb12d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealing
+  playerInputManager: {fileID: 939421551388515705}
+  healthSystem: {fileID: 939421551388515704}
+  playerAnimator: {fileID: 939421551388515703}
 --- !u!1001 &3923968974002340270
 PrefabInstance:
   m_ObjectHideFlags: 0
