@@ -817,11 +817,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
   m_Asset: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_ActionId: 24908448-c609-4bc3-a128-ea258674378a
---- !u!1 &554093708 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-  m_PrefabInstance: {fileID: 939421551388515701}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &575043054
 GameObject:
   m_ObjectHideFlags: 0
@@ -1684,11 +1679,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
   m_Asset: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_ActionId: 7607c7b6-cd76-4816-beef-bd0341cfe950
---- !u!95 &1270182222 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 3921508679667758998, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-  m_PrefabInstance: {fileID: 939421551388515701}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1392956972 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1460188969602087767, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
@@ -2371,25 +2361,14 @@ PrefabInstance:
       propertyPath: m_UIInputModule
       value: 
       objectReference: {fileID: 1169850605}
-<<<<<<< Updated upstream
     - target: {fileID: 4174983778475235283, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 330585546}
-=======
-    - target: {fileID: 5221989036913721363, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: health
-      value: 4
-      objectReference: {fileID: 0}
->>>>>>> Stashed changes
     - target: {fileID: 6212662419464609850, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
       propertyPath: postureSlider
       value: 
       objectReference: {fileID: 747990541}
-    - target: {fileID: 6634753710389791854, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: health
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 6634753710389791854, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
       propertyPath: 'hearts.Array.data[0]'
       value: 
@@ -2409,53 +2388,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 939421551388515716}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
 --- !u!4 &939421551388515702 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1635731429984112327, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
   m_PrefabInstance: {fileID: 939421551388515701}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &939421551388515710 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5221989036913721363, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-  m_PrefabInstance: {fileID: 939421551388515701}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 554093708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ee7faf631c6c68408372ad6334938e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
---- !u!114 &939421551388515712 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4314512831245376467, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-  m_PrefabInstance: {fileID: 939421551388515701}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 554093708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bca18d7b51ce7e947a0ce91b745045f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputManager
---- !u!114 &939421551388515716
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 554093708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b61353cbb61a5943b40c0c366abb12d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealing
-  playerInputManager: {fileID: 939421551388515712}
-  healthSystem: {fileID: 939421551388515710}
-  playerAnimator: {fileID: 1270182222}
 --- !u!1001 &3923968974002340270
 PrefabInstance:
   m_ObjectHideFlags: 0
