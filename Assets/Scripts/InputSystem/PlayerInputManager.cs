@@ -32,7 +32,20 @@ public class PlayerInputManager : MonoBehaviour
     public void OnSprint(InputAction.CallbackContext context) => SprintInput(context.ReadValue<bool>());
     public void OnAttack(InputAction.CallbackContext context) => AttackInput(context.performed || context.started);
     public void OnBlock(InputAction.CallbackContext context) => BlockInput(context.performed || context.started);
-    public void OnSelfHeal(InputAction.CallbackContext context) => self_heal = (context.performed || context.started);
+    public void OnSelfHeal(InputAction.CallbackContext context)
+    {
+        if(context.performed || context.started)
+        {
+            Self_HealInput(true);
+            Debug.Log("Self heal input detected");
+        }
+        else if(context.canceled)
+        {
+            Self_HealInput(false);
+        }
+    }
+     //public void OnSelfHeal(InputAction.CallbackContext context) => self_heal = (context.performed || context.started);
+
 
     // input setters
 

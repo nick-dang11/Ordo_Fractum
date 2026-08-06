@@ -22,23 +22,11 @@ public class HealthSystem : MonoBehaviour
 
    }
 
-    void Update()
-    {
-        if(playerInputManager.self_heal)
-        {
-            Heal(heal_Amount);
-            Debug.Log("Player healed");
-
-            playerInputManager.self_heal = false;
-
-        }
-    }
-
     public void TakeDamage(int damage_amount)
     {
         health -= damage_amount;
 
-        if(health < 0)
+        if(health <= 0)
         {
             health = 0;
             Debug.Log("Player is dead. Destroy player");
@@ -48,7 +36,7 @@ public class HealthSystem : MonoBehaviour
 
     public void Heal(int heal_amount)
     {
-        if(health <= maxHealth)
+        if(health < maxHealth)
         {
             health = health + heal_amount;
             
