@@ -23,31 +23,31 @@ public class PlayerHealth : MonoBehaviour
     }
     void Update()
     {
+        //Debug.Log("UI Health: " + playerHealth.health + " / " + playerHealth.maxHealth);
       health = playerHealth.health;
       maxHealth = playerHealth.maxHealth;
-
         for(int i = 0; i < hearts.Length; i++)
         {
             if(i < health)
             {
-                //hearts[i].sprite = FullHeart; 1
+                hearts[i].sprite = FullHeart; 
                 //will take its sprite
             }
             else
             {
-                //hearts[i].sprite = emptyHeart; 2
+                hearts[i].sprite = emptyHeart; 
             }
 
             if(i < maxHealth)
             {
-                //hearts[i].enabled = true; 3
+                hearts[i].enabled = true; 
                 // the purpose of this if/else is to check each heart in our UI
                 //to see if it should be turned on 
             }
 
             else
             {
-                //hearts[i].enabled = false; 4
+                hearts[i].enabled = false; 
                 //Turn off any hearts that should not be active
             }
         } 

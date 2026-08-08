@@ -14,7 +14,7 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] private WeaponHitbox weaponHitbox;
 
     [Header("Damage")]
-    [SerializeField] private float enemyDamage = 10f;
+    [SerializeField] private float enemyDamage = 1f;
 
     void Update()
     {

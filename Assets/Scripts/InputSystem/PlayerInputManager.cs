@@ -84,7 +84,7 @@ public class PlayerInputManager : MonoBehaviour
     private void Self_HealInput(bool newSelfHealState)
     {
         self_heal = newSelfHealState;
-        Debug.Log($"Manager thinks self_heal is {self_heal}");
+        //Debug.Log($"Manager thinks self_heal is {self_heal}");
         
 
     }

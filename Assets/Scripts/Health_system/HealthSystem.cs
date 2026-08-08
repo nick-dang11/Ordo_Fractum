@@ -25,6 +25,8 @@ public class HealthSystem : MonoBehaviour
     public void TakeDamage(int damage_amount)
     {
         health -= damage_amount;
+        health = Mathf.Clamp(health, 0, maxHealth);
+        Debug.Log("Current Health: " + health);
 
         if(health <= 0)
         {

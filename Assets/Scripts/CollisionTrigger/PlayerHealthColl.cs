@@ -12,24 +12,24 @@ public class PlayerHealthColl : MonoBehaviour
     }
    void OnTriggerEnter(Collider other)
     {
-       if (other.gameObject.CompareTag("Enemy"))
+       if (other.gameObject.CompareTag("EnemyWeapon"))
         {
             playerHealth.TakeDamage(damageAmount);
-            Debug.Log("Player took damage from Enemy");
+            Debug.Log("Player took damage from EnemyWeapon");
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
+        if (other.gameObject.CompareTag("EnemyWeapon"))
         {
-            Debug.Log("Exit:Player exited Enemy Collision");
+            Debug.Log("Exit:Player exited EnemyWeapon Collision");
         }
     }
 
     void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
+        if (other.gameObject.CompareTag("EnemyWeapon"))
         {
             Debug.Log("Stay: Player is taking damage from Enemy");
         }

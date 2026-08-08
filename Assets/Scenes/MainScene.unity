@@ -2079,6 +2079,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3054470976782735820, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
+      propertyPath: m_TagString
+      value: EnemyWeapon
+      objectReference: {fileID: 0}
     - target: {fileID: 3152772219972399443, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -2093,7 +2097,7 @@ PrefabInstance:
       objectReference: {fileID: 939421551388515702}
     - target: {fileID: 4727365448537288004, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: enemyDamage
-      value: 10
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5043930547961259473, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_Name
@@ -2294,6 +2298,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3054470976782735820, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
+      propertyPath: m_TagString
+      value: EnemyWeapon
+      objectReference: {fileID: 0}
     - target: {fileID: 3152772219972399443, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -2302,10 +2310,18 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3401803183933360725, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
+      propertyPath: PlayerObject
+      value: 
+      objectReference: {fileID: 2029241504}
     - target: {fileID: 4727365448537288004, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 939421551388515702}
+    - target: {fileID: 4727365448537288004, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
+      propertyPath: enemyDamage
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5043930547961259473, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_Name
       value: Test Dummy 2
@@ -2561,6 +2577,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3054470976782735820, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
+      propertyPath: m_TagString
+      value: EnemyWeapon
+      objectReference: {fileID: 0}
     - target: {fileID: 3152772219972399443, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -2573,6 +2593,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 939421551388515702}
+    - target: {fileID: 4727365448537288004, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
+      propertyPath: enemyDamage
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5043930547961259473, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_Name
       value: Test Dummy 1
