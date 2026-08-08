@@ -20,7 +20,7 @@ public class PlayerSheathSwordToggle : MonoBehaviour
 
     public void EquipSword()
     {
-        Debug.Log("EquipSword called from animator event!");
+        //Debug.Log("EquipSword called from animator event!");
         if(inactiveSword != null && activeSword != null)
         {
             activeSword.SetActive(true);
@@ -29,7 +29,7 @@ public class PlayerSheathSwordToggle : MonoBehaviour
     }
     public void UnequipSword()
     {
-        Debug.Log("UnequipSword called from animator event!");
+        //Debug.Log("UnequipSword called from animator event!");
 
         if (inactiveSword != null && activeSword != null)
         {
