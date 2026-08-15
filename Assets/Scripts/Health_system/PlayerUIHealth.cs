@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerUIHealth : MonoBehaviour
 {
 //FIle is to be used to display the players health on the UI. The files is to display the players heart health on the UI.
     [Header("Health")]
@@ -14,7 +14,7 @@ public class PlayerHealth : MonoBehaviour
     public Sprite FullHeart;
     public Image[] hearts;
 
-    public HealthSystem playerHealth;
+    public HealthSystem playerUIHealth;
 
 
     void Start()
@@ -24,8 +24,8 @@ public class PlayerHealth : MonoBehaviour
     void Update()
     {
         //Debug.Log("UI Health: " + playerHealth.health + " / " + playerHealth.maxHealth);
-      health = playerHealth.health;
-      maxHealth = playerHealth.maxHealth;
+      health = playerUIHealth.health;
+      maxHealth = playerUIHealth.maxHealth;
         for(int i = 0; i < hearts.Length; i++)
         {
             if(i < health)

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerHealing : MonoBehaviour
+public class HealingAnimation : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private PlayerInputManager playerInputManager;
