@@ -34,57 +34,107 @@ public class PlayerActionController : MonoBehaviour
     {
         if (inputManager == null || playerCombat == null) return;
 
-        if ((_combatDetection != null && !_combatDetection.isEnemyNearby)
-            || (lockOnController != null && lockOnController.IsLockedOn))
+        if (lockOnController != null && lockOnController.IsLockedOn)
         {
-            if (_combatDetection != null && !_combatDetection.isEnemyNearby)
-            {
-                currentFocusTarget = null;
-            }
-
             wasAttackButtonPressed = inputManager.attack;
             wasBlockButtonPressed = inputManager.block;
             return;
         }
 
-        ManageFocusTarget();
+        //ManageFocusTarget();
 
-        
         bool isAttackButtonPressed = inputManager.attack;
         bool isBlockButtonPressed = inputManager.block;
-
-        
+        bool isEngaging = playerCombat.isAttacking || inputManager.block;
         if (!isAttackButtonPressed && wasAttackButtonPressed)
         {
             PerformDirectionalAttackSnap();
         }
-        
         else if (isBlockButtonPressed && !wasBlockButtonPressed)
         {
-            
             UpdateFocusToNearestEnemy();
         }
 
-        
-        FaceCurrentFocusTarget();
+        //FaceCurrentFocusTarget();
+        if(isEngaging)
+        {
+            if(currentFocusTarget != null)
+            {
+                Vector3 dirToTarget = (currentFocusTarget.position - transform.position).normalized;
+                dirToTarget.y = 0;
 
-        
+                if(dirToTarget.sqrMagnitude > 0.001f)
+                {
+                    Quaternion targetRot = Quaternion.LookRotation(dirToTarget);
+                    playerModel.rotation = Quaternion.Slerp(playerModel.rotation, targetRot, Time.deltaTime * passiveRotationSpeed);
+                }
+            }
+        }
+        else
+        {
+            currentFocusTarget = null;
+            playerModel.localRotation = Quaternion.Slerp(playerModel.localRotation, Quaternion.identity, Time.deltaTime * passiveRotationSpeed);
+        }
+
         wasAttackButtonPressed = isAttackButtonPressed;
         wasBlockButtonPressed = isBlockButtonPressed;
     }
 
+    /*
     private void ManageFocusTarget()
     {
-        
-        if (currentFocusTarget == null || !currentFocusTarget.gameObject.activeInHierarchy)
+        Collider[] allEnemies = Physics.OverlapSphere(transform.position, targetingRadius, enemyLayer);
+
+        if (allEnemies.Length == 0)
         {
-            currentFocusTarget = FindNearestEnemy();
+            currentFocusTarget = null;
+            return;
+        }
+
+        bool currentTargetValid = false;
+        if (currentFocusTarget != null && currentFocusTarget.gameObject.activeInHierarchy)
+        {
+            foreach (Collider col in allEnemies)
+            {
+                if(col.transform == currentFocusTarget)
+                {
+                    currentTargetValid = true;
+                    break;
+                }
+            }
+        }
+
+        if (!currentTargetValid)
+        {
+            currentFocusTarget = FindNearestEnemy(allEnemies);
         }
     }
 
+    private void FaceCurrentFocusTarget()
+    {
+        if (currentFocusTarget != null)
+        {
+            Vector3 dirToTarget = (currentFocusTarget.position - transform.position).normalized;
+            dirToTarget.y = 0;
+
+            if (dirToTarget.sqrMagnitude > 0.001f)
+            {
+                Quaternion targetRot = Quaternion.LookRotation(dirToTarget);
+                playerModel.rotation = Quaternion.Slerp(playerModel.rotation, targetRot, Time.deltaTime * passiveRotationSpeed);
+            }
+        }
+        else
+        {
+            playerModel.localRotation = Quaternion.Slerp(playerModel.localRotation, Quaternion.identity, Time.deltaTime * passiveRotationSpeed);
+        }
+    }
+    */
+
+
+
     private void PerformDirectionalAttackSnap()
     {
-        Vector3 inputDir = GetCameraRelativeInput();
+        Vector3 currentInput = GetCameraRelativeInput(GetRawWASD());
         Collider[] potentialTargets = Physics.OverlapSphere(transform.position, targetingRadius, enemyLayer);
 
         Transform bestTarget = null;
@@ -92,13 +142,11 @@ public class PlayerActionController : MonoBehaviour
 
         if (potentialTargets.Length == 1)
         {
-            
             bestTarget = potentialTargets[0].transform;
         }
         else if (potentialTargets.Length > 1)
         {
-            
-            Vector3 referenceDir = inputDir.sqrMagnitude > 0.01f ? inputDir : playerModel.forward;
+            Vector3 referenceDir = currentInput.sqrMagnitude > 0.01f ? currentInput : playerModel.forward;
 
             foreach (Collider col in potentialTargets)
             {
@@ -113,59 +161,50 @@ public class PlayerActionController : MonoBehaviour
             }
         }
 
-        
         if (bestTarget != null)
         {
             currentFocusTarget = bestTarget;
-
-            SnapRotationToDirection((currentFocusTarget.position - transform.position).normalized);
-        }
-        else if (inputDir.sqrMagnitude > 0.01f)
-        {
-            SnapRotationToDirection(inputDir);
-        }
-    }
-
-    private void FaceCurrentFocusTarget()
-    {
-        if (currentFocusTarget != null)
-        {
-            
             Vector3 dirToTarget = (currentFocusTarget.position - transform.position).normalized;
-            dirToTarget.y = 0; 
+            dirToTarget.y = 0;
 
-            if (dirToTarget.sqrMagnitude > 0.001f)
-            {
-                Quaternion targetRot = Quaternion.LookRotation(dirToTarget);
-                playerModel.rotation = Quaternion.Slerp(playerModel.rotation, targetRot, Time.deltaTime * passiveRotationSpeed);
-            }
+            playerModel.rotation = Quaternion.LookRotation(dirToTarget);
         }
-        else
+        else if (currentInput.sqrMagnitude > 0.01f)
         {
-            
-            Vector3 inputDir = GetCameraRelativeInput();
-            if (inputDir.sqrMagnitude > 0.01f && !playerCombat.isAttacking)
-            {
-                Quaternion targetRot = Quaternion.LookRotation(inputDir);
-                playerModel.rotation = Quaternion.Slerp(playerModel.rotation, targetRot, Time.deltaTime * passiveRotationSpeed);
-            }
+            playerModel.rotation = Quaternion.LookRotation(currentInput);
         }
     }
 
-    private void UpdateFocusToNearestEnemy()
+
+    private Vector2 GetRawWASD()
     {
-        Transform nearest = FindNearestEnemy();
-        if (nearest != null)
+        Vector2 moveInput = Vector2.zero;
+        if (Keyboard.current != null)
         {
-            currentFocusTarget = nearest;
+            if (Keyboard.current.wKey.isPressed) moveInput.y += 1;
+            if (Keyboard.current.sKey.isPressed) moveInput.y -= 1;
+            if (Keyboard.current.dKey.isPressed) moveInput.x += 1;
+            if (Keyboard.current.aKey.isPressed) moveInput.x -= 1;
         }
+        return moveInput;
     }
 
-    private Transform FindNearestEnemy()
+    private Vector3 GetCameraRelativeInput(Vector2 rawInput)
     {
-        Collider[] allEnemies = Physics.OverlapSphere(transform.position, targetingRadius, enemyLayer);
+        Vector3 camForward = mainCamera.forward;
+        camForward.y = 0;
+        camForward.Normalize();
+
+        Vector3 camRight = mainCamera.right;
+        camRight.y = 0;
+        camRight.Normalize();
+
+        return (camForward * rawInput.y) + (camRight * rawInput.x);
+    }
+
+    private Transform FindNearestEnemy(Collider[] allEnemies)
+    {
         if (allEnemies.Length == 0) return null;
-
         Transform nearest = null;
         float minDistance = Mathf.Infinity;
 
@@ -181,36 +220,10 @@ public class PlayerActionController : MonoBehaviour
         return nearest;
     }
 
-    private Vector3 GetCameraRelativeInput()
+    private void UpdateFocusToNearestEnemy()
     {
-        Vector2 moveInput = Vector2.zero;
-
-        
-        if (Keyboard.current != null)
-        {
-            if (Keyboard.current.wKey.isPressed) moveInput.y += 1; 
-            if (Keyboard.current.sKey.isPressed) moveInput.y -= 1; 
-            if (Keyboard.current.dKey.isPressed) moveInput.x += 1; 
-            if (Keyboard.current.aKey.isPressed) moveInput.x -= 1; 
-        }
-
-        Vector3 camForward = mainCamera.forward;
-        camForward.y = 0;
-        camForward.Normalize();
-
-        Vector3 camRight = mainCamera.right;
-        camRight.y = 0;
-        camRight.Normalize();
-
-        return (camForward * moveInput.y) + (camRight * moveInput.x);
-    }
-
-    private void SnapRotationToDirection(Vector3 direction)
-    {
-        direction.y = 0;
-        if (direction.sqrMagnitude > 0.001f)
-        {
-            playerModel.rotation = Quaternion.LookRotation(direction);
-        }
+        Collider[] allEnemies = Physics.OverlapSphere(transform.position, targetingRadius, enemyLayer);
+        Transform nearest = FindNearestEnemy(allEnemies);
+        if (nearest != null) currentFocusTarget = nearest;
     }
 }
