@@ -9,6 +9,11 @@ public class EnemyMovement : MonoBehaviour
 
     private NavMeshAgent Agent;
 
+    private void Awake()
+    {
+        Agent = GetComponent<NavMeshAgent>();
+    }
+
     private void Start()
     {
         StartCoroutine(FollowTarget());
