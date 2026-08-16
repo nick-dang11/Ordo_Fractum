@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 public class PlayerCombat : MonoBehaviour
 {
@@ -23,7 +22,7 @@ public class PlayerCombat : MonoBehaviour
     public float lightAttackCooldown = 0.4f;
     private float nextLightAttackTime = 0f;
 
-    public float heavyHoldTime = 0.7f;
+    public float heavyHoldTime = 0.5f;
     public float heavyAttackCooldown = 1.0f;
     private float nextHeavyAttackTime = 0f;
 
@@ -33,9 +32,10 @@ public class PlayerCombat : MonoBehaviour
     public float deflectWindow = 0.3f;
 
     public float pendingDamage;
-    void Start() {}
 
-    void Update() {}
+    void Start() { }
+
+    void Update() { }
 
     public void HandleBlock()
     {
@@ -84,41 +84,40 @@ public class PlayerCombat : MonoBehaviour
             holdTimer = 0f;
             wasAttacking = true;
         }
-
         // Continue holding
         else if (isHolding && input.attack)
         {
             holdTimer += Time.deltaTime;
         }
-
         // Released attack
         else if (!input.attack && wasAttacking)
         {
-            if (canCombo)
+            bool isHeavy = holdTimer >= heavyHoldTime;
+
+            if (canCombo && comboStep < 3)
             {
-                animate.SetInteger("ComboStep", comboStep);
-                animate.SetTrigger("ComboAttack");
+                // Continuing an existing chain — Animator resolves the exact branch (LA_LA, HA_LA, etc.) based on the state it's already in.
+                animate.SetTrigger(isHeavy ? "ComboHeavy" : "ComboLight");
                 comboStep++;
+                SetPendingDamage(isHeavy ? heavyAttackDamage : lightAttackDamage);
             }
-            else
+            else if (Time.time >= (isHeavy ? nextHeavyAttackTime : nextLightAttackTime))
             {
-                if (holdTimer >= heavyHoldTime && Time.time >= nextHeavyAttackTime)
+                // Starting a fresh combo at step 1
+                if (isHeavy)
                 {
-                    animate.SetInteger("ComboStep", comboStep);
-                        animate.SetTrigger("HeavyAttack");
-                        nextHeavyAttackTime = Time.time + heavyAttackCooldown;
-                        comboStep++;
-                        StartCoroutine(AttackRoutine(0.6f, heavyAttackDamage));
+                    animate.SetTrigger("HeavyAttack");
+                    nextHeavyAttackTime = Time.time + heavyAttackCooldown;
                 }
-                else if (Time.time >= nextLightAttackTime)
+                else
                 {
-                    animate.SetInteger("ComboStep", comboStep);
-                        animate.SetTrigger("LightAttack");
-                        nextLightAttackTime = Time.time + lightAttackCooldown;
-                        comboStep++;
-                        StartCoroutine(AttackRoutine(0.3f, lightAttackDamage)); 
+                    animate.SetTrigger("LightAttack");
+                    nextLightAttackTime = Time.time + lightAttackCooldown;
                 }
+                comboStep = 1;
+                SetPendingDamage(isHeavy ? heavyAttackDamage : lightAttackDamage);
             }
+
             isHolding = false;
             holdTimer = 0f;
         }
@@ -148,23 +147,23 @@ public class PlayerCombat : MonoBehaviour
     {
         canCombo = false;
     }
+
+    public void EnableWeaponHitbox()
+    {
+        weaponHitbox.EnableHitbox(pendingDamage);
+    }
+
+    public void DisableWeaponHitbox()
+    {
+        weaponHitbox.DisableHitbox();
+    }
+
     public void ForceStopBlocking()
     {
         isBlocking = false;
         animate.SetBool("Block", false);
     }
 
-    private IEnumerator AttackRoutine(float duration, float damage)
-    {
-        StartAttack(); // simulate animation event
-        pendingDamage = damage;
-        yield return new WaitForSeconds(duration * 0.5f);
-        EnableCombo(); // simulate combo window
-        yield return new WaitForSeconds(duration * 0.5f);
-        DisableCombo();
-        weaponHitbox.DisableHitbox();
-        EndAttack(); // simulate animation event
-    }
     public void TriggerDeflectFeedback()
     {
         Debug.Log("DEFLECT!");

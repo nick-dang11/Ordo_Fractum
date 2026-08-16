@@ -30,8 +30,28 @@ public class PlayerInputManager : MonoBehaviour
     }
     public void OnJump(InputAction.CallbackContext context) => JumpInput(context.ReadValue<bool>());
     public void OnSprint(InputAction.CallbackContext context) => SprintInput(context.ReadValue<bool>());
-    public void OnAttack(InputAction.CallbackContext context) => AttackInput(context.performed || context.started);
-    public void OnBlock(InputAction.CallbackContext context) => BlockInput(context.performed || context.started);
+    public void OnAttack(InputAction.CallbackContext context)
+    {
+        if (context.performed || context.started)
+        {
+            AttackInput(true);
+        }
+        else if (context.canceled)
+        {
+            AttackInput(false);
+        }
+    }
+    public void OnBlock(InputAction.CallbackContext context)
+    {
+        if (context.performed || context.started)
+        {
+            BlockInput(true);
+        }
+        else if (context.canceled)
+        {
+            BlockInput(false);
+        }
+    }
     public void OnSelfHeal(InputAction.CallbackContext context)
     {
         if(context.performed || context.started)
