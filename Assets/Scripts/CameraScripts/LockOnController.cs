@@ -27,9 +27,9 @@ public class LockOnController : MonoBehaviour
     [SerializeField] private bool  requireLineOfSight = true;
 
     [Header("Camera Target")]
-    [SerializeField] private float cameraTargetWeight = 0.45f;
-    [SerializeField] private float maxCameraTargetOffset = 5f;
-    [SerializeField] private float cameraTargetSmoothSpeed = 12f;
+    //[SerializeField] private float cameraTargetWeight = 0.45f;
+    //[SerializeField] private float maxCameraTargetOffset = 5f;
+    //[SerializeField] private float cameraTargetSmoothSpeed = 12f;
 
     [Header("Player Rotation")]
     [SerializeField] private bool rotatePlayerTowardTarget = true;
