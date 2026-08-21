@@ -4116,11 +4116,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3152772219972399443, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3152772219972399443, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4727365448537288004, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: player
@@ -4136,15 +4136,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5043930547961259473, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6154859257792311373, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6154859257792311373, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4455,10 +4455,6 @@ PrefabInstance:
       propertyPath: playerCombat
       value: 
       objectReference: {fileID: 939421551388515718}
-    - target: {fileID: 2249948433049224511, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
-      propertyPath: aimPoint
-      value: 
-      objectReference: {fileID: 2029241507}
     - target: {fileID: 2318940930115141374, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -4669,17 +4665,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3030091251651716510, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3030091251651716510, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3030091251651716510, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3030091251651716510, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3054470976782735820, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_TagString
       value: EnemyWeapon
       objectReference: {fileID: 0}
     - target: {fileID: 3152772219972399443, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3152772219972399443, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3401803183933360725, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: PlayerObject
@@ -4699,15 +4711,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5043930547961259473, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6154859257792311373, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6154859257792311373, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4734,11 +4746,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 760844ee280b49e41834ab76274d260b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCollision
---- !u!4 &2029241507 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3030091251651716510, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
-  m_PrefabInstance: {fileID: 2029241503}
-  m_PrefabAsset: {fileID: 0}
 --- !u!20 &2101627719 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 7472990452387868360, guid: 2bfd7050872c87243a53ee4e3d6ab5ee, type: 3}
