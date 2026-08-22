@@ -2,15 +2,39 @@ using UnityEngine;
 
 public class EnemyCombat : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] public WeaponHitbox weaponHitbox;
+    [SerializeField] private Animator animate;
+    [SerializeField] private float enemyDamage = 1f;
+
+    public bool wasAttacking = false;
+    public bool isAttacking = false;
+    public bool IsAttacking => isAttacking;
+
+    public void StartAttack()
     {
-        
+        isAttacking = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void EndAttack()
     {
-        
+        isAttacking = false;
+        animate.ResetTrigger("Attack");
+        Debug.Log($"[Combat] EndAttack fired at {Time.time}");
+    }
+
+
+    public void EnableWeaponHitbox()
+    {
+        weaponHitbox.EnableHitbox(enemyDamage);
+    }
+
+    public void DisableWeaponHitbox()
+    {
+        weaponHitbox.DisableHitbox();
+    }
+
+    public void SetEnemyDamage(float damage)
+    {
+        enemyDamage = damage;
     }
 }
