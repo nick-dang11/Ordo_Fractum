@@ -47,12 +47,10 @@ public class PlayerInputManager : MonoBehaviour
         if (context.performed || context.started)
         {
             HeavyAttackInput(true);
-            heavyAttack = true;
         }
         else if (context.canceled)
         {
             HeavyAttackInput(false);
-            heavyAttack = false;
         }
     }
     public void OnBlock(InputAction.CallbackContext context)
@@ -125,7 +123,5 @@ public class PlayerInputManager : MonoBehaviour
     {
         self_heal = newSelfHealState;
         //Debug.Log($"Manager thinks self_heal is {self_heal}");
-        
-
     }
 }

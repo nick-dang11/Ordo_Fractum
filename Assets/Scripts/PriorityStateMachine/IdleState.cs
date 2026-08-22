@@ -18,7 +18,7 @@ public class IdleState : BaseState
         {
             context.SwitchState(context.blockState);
         }
-        else if (context.combat.input.attack)
+        else if (context.combat.input.attack || context.combat.input.heavyAttack)
         {
             context.SwitchState(context.attackingState);
         }

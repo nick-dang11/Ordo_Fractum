@@ -22,7 +22,7 @@ public class AttackingState : BaseState
 
         context.combat.LightAndHeavy();
 
-        if(!context.combat.IsAttacking && !context.combat.input.attack)
+        if (!context.combat.IsAttacking && !context.combat.input.attack && !context.combat.input.heavyAttack)
         {
             context.SwitchState(context.idleState, true);
         }

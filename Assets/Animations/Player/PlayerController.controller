@@ -954,10 +954,10 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 7327495833316749458}
-    m_Position: {x: 0, y: 200, z: 0}
+    m_Position: {x: -20, y: 200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4646568000528160031}
-    m_Position: {x: -100, y: 420, z: 0}
+    m_Position: {x: -180, y: 420, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2804477893951400538}
     m_Position: {x: 150, y: 580, z: 0}
@@ -1632,7 +1632,25 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
+  - m_Name: LightAttack
+    m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
   - m_Name: HeavyAttack
+    m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: ComboLight
+    m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: ComboHeavy
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -1646,12 +1664,6 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   - m_Name: ComboStep
     m_Type: 3
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: LightAttack
-    m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
@@ -1681,18 +1693,6 @@ AnimatorController:
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
   - m_Name: Heal
-    m_Type: 9
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: ComboLight
-    m_Type: 9
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: ComboHeavy
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0

@@ -329,6 +329,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: ba2ae878-29ea-4d82-b184-dc190b4e829d
     m_ActionName: 'Player/Block[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4314512831245376467}
+        m_TargetAssemblyTypeName: PlayerInputManager, Assembly-CSharp
+        m_MethodName: OnHeavyAttack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d8466378-2ee6-44cd-8cfe-3cf671bfc72e
+    m_ActionName: 'Player/HeavyAttack[/Mouse/rightButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: 
@@ -392,7 +408,6 @@ MonoBehaviour:
   wasAttacking: 0
   isAttacking: 0
   lightAttackCooldown: 0.4
-  heavyHoldTime: 0.5
   heavyAttackCooldown: 1
   lastBlockTime: 0
   deflectWindow: 0.3
@@ -438,6 +453,7 @@ MonoBehaviour:
   jump: 0
   sprint: 0
   attack: 0
+  heavyAttack: 0
   block: 0
   self_heal: 0
   analogMovement: 0
@@ -490,9 +506,6 @@ MonoBehaviour:
   breakLockRange: 24
   screenWindow: 0.45
   requireLineOfSight: 1
-  cameraTargetWeight: 0.45
-  maxCameraTargetOffset: 0
-  cameraTargetSmoothSpeed: 12
   rotatePlayerTowardTarget: 1
   rotationSpeed: 14
 --- !u!114 &5221989036913721363

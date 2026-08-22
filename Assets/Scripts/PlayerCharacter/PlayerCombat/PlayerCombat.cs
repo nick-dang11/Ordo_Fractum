@@ -91,11 +91,12 @@ public class PlayerCombat : MonoBehaviour
         }
         wasLightAttacking = input.attack;
         wasHeavyAttacking = input.heavyAttack;
-        wasAttacking = input.attack || input.heavyAttack;
+        //wasAttacking = input.attack || input.heavyAttack;
     }
 
     private void ProcessAttackInput(bool isHeavy)
     {
+        Debug.Log($"[Combat] Input received. canCombo={canCombo}, comboStep={comboStep}, isHeavy={isHeavy}");
         if (canCombo && comboStep < 3)
         {
             // Continuing an existing chain — Animator resolves the exact
@@ -133,6 +134,11 @@ public class PlayerCombat : MonoBehaviour
         isAttacking = false;
         canCombo = false;
         comboStep = 0;
+        animate.ResetTrigger("LightAttack");
+        animate.ResetTrigger("HeavyAttack");
+        animate.ResetTrigger("ComboLight");
+        animate.ResetTrigger("ComboHeavy");
+        Debug.Log($"[Combat] EndAttack fired at {Time.time}");
     }
 
     public void EnableCombo()
