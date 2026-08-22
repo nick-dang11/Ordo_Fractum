@@ -31,7 +31,7 @@ public class WeaponHitbox : MonoBehaviour
 
     public void EnableHitbox(float damage)
     {
-        if(parent game object is Layer player)
+        //if(parent game object is Layer player)
 
             hitTargets.Clear();
             isHitboxActive = true;
@@ -43,16 +43,16 @@ public class WeaponHitbox : MonoBehaviour
             SetWeaponColor(activeColor);
 
 
-        if (parent game object is Layer Enemy)
+        //if (parent game object is Layer Enemy)
 
-            hitTargets.Clear();
-            isHitboxActive = true;
+        //    hitTargets.Clear();
+        //    isHitboxActive = true;
 
-            weaponCollider.enabled = true;
-            currentDamage = damage;
-            Debug.Log("Hitbox enabled with damage: " + currentDamage);
+        //    weaponCollider.enabled = true;
+        //    currentDamage = damage;
+        //    Debug.Log("Hitbox enabled with damage: " + currentDamage);
 
-            SetWeaponColor(activeColor);
+        //    SetWeaponColor(activeColor);
     }
 
     public void DisableHitbox()
