@@ -9,6 +9,7 @@ public class PlayerInputManager : MonoBehaviour
     public bool jump;
     public bool sprint;
     public bool attack;
+    public bool heavyAttack;
     public bool block;
     public bool self_heal;
 
@@ -39,6 +40,19 @@ public class PlayerInputManager : MonoBehaviour
         else if (context.canceled)
         {
             AttackInput(false);
+        }
+    }
+    public void OnHeavyAttack(InputAction.CallbackContext context)
+    {
+        if (context.performed || context.started)
+        {
+            HeavyAttackInput(true);
+            heavyAttack = true;
+        }
+        else if (context.canceled)
+        {
+            HeavyAttackInput(false);
+            heavyAttack = false;
         }
     }
     public void OnBlock(InputAction.CallbackContext context)
@@ -81,6 +95,12 @@ public class PlayerInputManager : MonoBehaviour
     {
         attack = newAttackState;
         Debug.Log($"Manager thinks attack is {attack}");
+    }
+    
+    public void HeavyAttackInput(bool newHeavyAttackState)
+    {
+        heavyAttack = newHeavyAttackState;
+        Debug.Log($"Manager thinks heavyAttack is {heavyAttack}");
     }
 
     public void BlockInput(bool newBlockState)

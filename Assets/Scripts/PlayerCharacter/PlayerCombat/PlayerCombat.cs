@@ -13,7 +13,6 @@ public class PlayerCombat : MonoBehaviour
     public bool wasAttacking = false;
     public bool isAttacking = false;
     private bool isBlocking = false;
-    private bool isHolding = false;
     private bool canCombo = false;
     public bool IsAttacking => isAttacking;
 
@@ -22,11 +21,11 @@ public class PlayerCombat : MonoBehaviour
     public float lightAttackCooldown = 0.4f;
     private float nextLightAttackTime = 0f;
 
-    public float heavyHoldTime = 0.5f;
     public float heavyAttackCooldown = 1.0f;
     private float nextHeavyAttackTime = 0f;
 
-    private float holdTimer = 0f;
+    private bool wasLightAttacking = false;
+    private bool wasHeavyAttacking = false;
 
     public float lastBlockTime = 0f;
     public float deflectWindow = 0.3f;
@@ -78,50 +77,48 @@ public class PlayerCombat : MonoBehaviour
         if (input == null) return;
         if (isBlocking) return;
 
-        if (input.attack && !wasAttacking)
-        {
-            isHolding = true;
-            holdTimer = 0f;
-            wasAttacking = true;
-        }
-        // Continue holding
-        else if (isHolding && input.attack)
-        {
-            holdTimer += Time.deltaTime;
-        }
-        // Released attack
-        else if (!input.attack && wasAttacking)
-        {
-            bool isHeavy = holdTimer >= heavyHoldTime;
+        bool lightPressed = input.attack && !wasLightAttacking;
+        bool heavyPressed = input.heavyAttack && !wasHeavyAttacking;
 
-            if (canCombo && comboStep < 3)
-            {
-                // Continuing an existing chain — Animator resolves the exact branch (LA_LA, HA_LA, etc.) based on the state it's already in.
-                animate.SetTrigger(isHeavy ? "ComboHeavy" : "ComboLight");
-                comboStep++;
-                SetPendingDamage(isHeavy ? heavyAttackDamage : lightAttackDamage);
-            }
-            else if (Time.time >= (isHeavy ? nextHeavyAttackTime : nextLightAttackTime))
-            {
-                // Starting a fresh combo at step 1
-                if (isHeavy)
-                {
-                    animate.SetTrigger("HeavyAttack");
-                    nextHeavyAttackTime = Time.time + heavyAttackCooldown;
-                }
-                else
-                {
-                    animate.SetTrigger("LightAttack");
-                    nextLightAttackTime = Time.time + lightAttackCooldown;
-                }
-                comboStep = 1;
-                SetPendingDamage(isHeavy ? heavyAttackDamage : lightAttackDamage);
-            }
-
-            isHolding = false;
-            holdTimer = 0f;
+        // If both are pressed on the same frame, heavy takes priority.
+        if (heavyPressed)
+        {
+            ProcessAttackInput(isHeavy: true);
         }
-        wasAttacking = input.attack;
+        else if (lightPressed)
+        {
+            ProcessAttackInput(isHeavy: false);
+        }
+        wasLightAttacking = input.attack;
+        wasHeavyAttacking = input.heavyAttack;
+        wasAttacking = input.attack || input.heavyAttack;
+    }
+
+    private void ProcessAttackInput(bool isHeavy)
+    {
+        if (canCombo && comboStep < 3)
+        {
+            // Continuing an existing chain — Animator resolves the exact
+            // branch (LA_LA, HA_LA, etc.) based on the state it's already in.
+            animate.SetTrigger(isHeavy ? "ComboHeavy" : "ComboLight");
+            comboStep++;
+            SetPendingDamage(isHeavy ? heavyAttackDamage : lightAttackDamage);
+        }
+        else if (Time.time >= (isHeavy ? nextHeavyAttackTime : nextLightAttackTime))
+        {
+            if (isHeavy)
+            {
+                animate.SetTrigger("HeavyAttack");
+                nextHeavyAttackTime = Time.time + heavyAttackCooldown;
+            }
+            else
+            {
+                animate.SetTrigger("LightAttack");
+                nextLightAttackTime = Time.time + lightAttackCooldown;
+            }
+            comboStep = 1;
+            SetPendingDamage(isHeavy ? heavyAttackDamage : lightAttackDamage);
+        }
     }
 
     public void StartAttack()
