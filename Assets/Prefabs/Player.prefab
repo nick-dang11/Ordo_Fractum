@@ -75,7 +75,6 @@ GameObject:
   - component: {fileID: 6291261830347497589}
   - component: {fileID: 4075066420366787807}
   - component: {fileID: 4174983778475235283}
-  - component: {fileID: 2054912707813525746}
   - component: {fileID: 6898766285396604641}
   - component: {fileID: 3307104090667302471}
   - component: {fileID: 4314512831245376467}
@@ -374,19 +373,6 @@ MonoBehaviour:
   targetingRadius: 12
   maxTargetingAngle: 90
   passiveRotationSpeed: 15
---- !u!114 &2054912707813525746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3047151988590228466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e38f0d3e591b2df469ac81a598313c61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AnimationRelay
-  playerCombat: {fileID: 6898766285396604641}
 --- !u!114 &6898766285396604641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -747,6 +733,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 84a2b008f34c2b24fbd2d5dba4980f07, type: 2}
+    - target: {fileID: 8755059101848656986, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
+      propertyPath: m_Name
+      value: Player Sword
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5735622107476761961, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
     m_RemovedGameObjects: []

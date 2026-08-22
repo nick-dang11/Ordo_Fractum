@@ -403,7 +403,7 @@ Transform:
   m_GameObject: {fileID: 2701789511668554087}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.318, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -420,11 +420,9 @@ GameObject:
   - component: {fileID: 1635731429984112327}
   - component: {fileID: 8937205026060797890}
   - component: {fileID: 6291261830347497589}
-  - component: {fileID: 2054912707813525746}
   - component: {fileID: 3307104090667302471}
   - component: {fileID: 3707159666292891715}
   - component: {fileID: 6230063808028939835}
-  - component: {fileID: 8211775524425926445}
   - component: {fileID: 2249948433049224511}
   m_Layer: 8
   m_Name: MocapEnemy
@@ -500,19 +498,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.85, z: 0}
---- !u!114 &2054912707813525746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3047151988590228466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e38f0d3e591b2df469ac81a598313c61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AnimationRelay
-  playerCombat: {fileID: 0}
 --- !u!114 &3307104090667302471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -520,7 +505,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3047151988590228466}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 252dd4a2243048b4e9b8bcaae049e546, type: 3}
   m_Name: 
@@ -544,7 +529,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3047151988590228466}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b24c67d7a7f4dd64aa9da860ede30397, type: 3}
   m_Name: 
@@ -567,23 +552,6 @@ MonoBehaviour:
   easeHealthbarSlider: {fileID: 2720201093358475105}
   maxHealth: 100
   health: 100
---- !u!114 &8211775524425926445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3047151988590228466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab3f0bea5c9c9ac428bfc103945bc25e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyCombat
-  enemyAttackCooldown: 2
-  enemyAttackRange: 3
-  player: {fileID: 0}
-  weaponHitbox: {fileID: 6484216535753736626}
-  enemyDamage: 1
 --- !u!114 &2249948433049224511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1339,6 +1307,10 @@ PrefabInstance:
     - target: {fileID: 8745352215218059039, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8755059101848656986, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
+      propertyPath: m_Name
+      value: Enemy Sword
       objectReference: {fileID: 0}
     - target: {fileID: 8755059101848656986, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
       propertyPath: m_Layer

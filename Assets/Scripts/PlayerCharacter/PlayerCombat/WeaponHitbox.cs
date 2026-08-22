@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponHitbox : MonoBehaviour
@@ -8,6 +9,9 @@ public class WeaponHitbox : MonoBehaviour
     [SerializeField] private GameObject PlayerObject;
     private Color activeColor = Color.red;
     private Color inactiveColor = Color.grey;
+
+    private bool isHitboxActive = false;
+    private HashSet<Collider> hitTargets = new HashSet<Collider>();
 
     private float currentDamage;
 
@@ -27,20 +31,22 @@ public class WeaponHitbox : MonoBehaviour
 
     public void EnableHitbox(float damage)
     {
+        hitTargets.Clear();
+        isHitboxActive = true;
+
         weaponCollider.enabled = true;
         currentDamage = damage;
         Debug.Log("Hitbox enabled with damage: " + currentDamage);
-        
-        if(weaponRenderer != null)
-        {
-            SetWeaponColor(inactiveColor);
-        }
+
         SetWeaponColor(activeColor);
     }
 
     public void DisableHitbox()
     {
+        isHitboxActive = false;
         weaponCollider.enabled = false;
+        hitTargets.Clear();
+
         //Debug.Log("Hitbox disabled.");
         SetWeaponColor(inactiveColor);
     }
@@ -55,6 +61,8 @@ public class WeaponHitbox : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (hitTargets.Contains(other)) return;
+
         PlayerCombat ownerCombat = GetComponentInParent<PlayerCombat>();
         if (ownerCombat != null && other.transform.root == ownerCombat.transform.root)
         {
@@ -83,6 +91,7 @@ public class WeaponHitbox : MonoBehaviour
                         posture.posture = Mathf.Clamp(posture.posture, 0f, posture.maxPosture);
                         posture.postureSlider.value = posture.posture;
                     }
+                    hitTargets.Add(other);
                     return;
                 }
                 else
@@ -90,6 +99,7 @@ public class WeaponHitbox : MonoBehaviour
                     // Normal Block
                     Debug.Log("Player BLOCKED the attack!");
                     playerCombat.TriggerBlockFeedback();
+                    hitTargets.Add(other);
                     return;
                 }
             }
@@ -98,6 +108,9 @@ public class WeaponHitbox : MonoBehaviour
             {
                 Debug.Log("Player Hit: " + other.name);
                 playerHealth.TakeDamage((int)currentDamage);
+
+                hitTargets.Add(other);
+
                 PlayerPosture posture = other.GetComponent<PlayerPosture>();
                 if (posture != null)
                 {
@@ -118,6 +131,7 @@ public class WeaponHitbox : MonoBehaviour
             {
                 Debug.Log("Enemy Hit: " + other.name);
                 enemyHealth.TakeDamage(currentDamage);
+                hitTargets.Add(other);
             }
             return;
         }

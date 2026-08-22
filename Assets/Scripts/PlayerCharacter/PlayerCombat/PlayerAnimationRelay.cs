@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AnimationRelay : MonoBehaviour
+public class PlayerAnimationRelay : MonoBehaviour
 {
     public PlayerCombat playerCombat;
 

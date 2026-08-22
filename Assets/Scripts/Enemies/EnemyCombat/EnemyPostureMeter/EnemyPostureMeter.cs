@@ -13,10 +13,10 @@ public class EnemyPostureMeter : MonoBehaviour
 
     [Header("UI")]
     public Slider postureSlider;
-    private EnemyCombat enemyCombat;
+    private PillEnemyCombat enemyCombat;
     void Start()
     {
-        enemyCombat = GetComponent<EnemyCombat>();
+        enemyCombat = GetComponent<PillEnemyCombat>();
         if (postureSlider != null)
         {
             postureSlider.maxValue = maxPosture;
