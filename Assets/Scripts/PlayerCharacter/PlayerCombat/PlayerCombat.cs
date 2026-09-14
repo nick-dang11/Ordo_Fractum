@@ -7,6 +7,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private Animator animate;
     [SerializeField] private float lightAttackDamage = 10f;
     [SerializeField] private float heavyAttackDamage = 40f;
+    [SerializeField] private BlockZone blockZone;
     // [SerializeField] private PlayerStamina playerStamina;
     [SerializeField] private PlayerPosture playerPosture;
 
@@ -31,30 +32,36 @@ public class PlayerCombat : MonoBehaviour
     public float deflectWindow = 0.3f;
 
     public float pendingDamage;
+    private bool wasBlockHeld = false;
+    public bool BlockPressedThisFrame => input != null && input.block && !wasBlockHeld;
+    public bool BlockReleasedThisFrame => input != null && !input.block && wasBlockHeld;
 
     void Start() { }
 
     void Update() { }
 
+    private void LateUpdate()
+    {
+        if (input != null)
+        {
+            wasBlockHeld = input.block;
+        }
+    }
+
     public void HandleBlock()
     {
-        if (input == null) return;
+        if (input == null)
+            return;
+
         if (isAttacking)
         {
-            isBlocking = false;
-            animate.SetBool("Block", false);
+            ForceStopBlocking();
             return;
         }
-        if (input.block)
+
+        if (!input.block && isBlocking)
         {
-            lastBlockTime = Time.time;
-            isBlocking = true;
-            animate.SetBool("Block", true);
-        }
-        else
-        {
-            isBlocking = false;
-            animate.SetBool("Block", false);
+            EndBlock();
         }
     }
 
@@ -165,8 +172,7 @@ public class PlayerCombat : MonoBehaviour
 
     public void ForceStopBlocking()
     {
-        isBlocking = false;
-        animate.SetBool("Block", false);
+        EndBlock();
     }
 
     public void TriggerDeflectFeedback()
@@ -178,5 +184,37 @@ public class PlayerCombat : MonoBehaviour
     public void SetPendingDamage(float damage)
     {
         pendingDamage = damage;
+    }
+    public void BeginBlock()
+    {
+        if (input == null)
+            return;
+
+        if (isAttacking)
+            return;
+
+        lastBlockTime = Time.time;
+
+        isBlocking = true;
+
+        animate.SetBool("Block", true);
+
+        if (blockZone != null)
+        {
+            blockZone.SetActive(true);
+        }
+
+        Debug.Log($"[Block] Block started at {lastBlockTime}");
+    }
+    private void EndBlock()
+    {
+        isBlocking = false;
+
+        animate.SetBool("Block", false);
+
+        if (blockZone != null)
+        {
+            blockZone.SetActive(false);
+        }
     }
 }

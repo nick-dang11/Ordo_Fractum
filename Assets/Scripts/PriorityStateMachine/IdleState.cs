@@ -20,8 +20,8 @@ public class IdleState : BaseState
             return;
         }
 
-       
-        if (context.combat.input.block)
+
+        if (context.combat.BlockPressedThisFrame)
         {
             context.SwitchState(context.blockState);
         }

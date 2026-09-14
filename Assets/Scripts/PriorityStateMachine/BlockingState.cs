@@ -10,6 +10,7 @@ public class BlockingState : BaseState
     public override void EnterState(StateManager context)
     {
         Debug.Log("Entered Blocking State");
+        context.combat.BeginBlock();
     }
 
     public override void UpdateState(StateManager context)
