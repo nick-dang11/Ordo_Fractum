@@ -2361,6 +2361,19 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &3876797717176038328
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adc219cefe73bbc45a58889d90471c50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttackStateBehaviour
+  attackData: {fileID: 11400000, guid: 67c132c1b79bd5f498037bd8df05082f, type: 2}
 --- !u!1101 &4380372673407925602
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -3084,7 +3097,8 @@ AnimatorState:
   - {fileID: 5641629507655179949}
   - {fileID: 3499603229665557629}
   - {fileID: 5895720977255314059}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 3876797717176038328}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
