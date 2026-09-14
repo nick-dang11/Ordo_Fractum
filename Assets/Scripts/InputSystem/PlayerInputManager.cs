@@ -20,6 +20,11 @@ public class PlayerInputManager : MonoBehaviour
     public bool cursorLocked = true;
     public bool cursorInputForLook = true;
 
+    [Header("Evade Input Tracking")]
+    public bool IsEvadeRequested {  get; private set; }
+    public Vector2 EvadeDirection { get; private set; }
+    private bool blockReleased = true;
+
     // input callbacks
     // link these in inspector: PlayerInput via "Invoke Unity Events"
     // see pinned messages in #github-commits for example
@@ -124,4 +129,22 @@ public class PlayerInputManager : MonoBehaviour
         self_heal = newSelfHealState;
         //Debug.Log($"Manager thinks self_heal is {self_heal}");
     }
+
+    private void Update()
+    {
+        if (!block)
+        {
+            blockReleased = true;
+            return;
+        }
+
+        if(block && blockReleased && move.magnitude > 0.2f)
+        {
+            IsEvadeRequested = true;
+            EvadeDirection = move.normalized;
+            blockReleased = false;
+        }
+    }
+
+    public void ConsumeEvadeRequest() => IsEvadeRequested = false;
 }
