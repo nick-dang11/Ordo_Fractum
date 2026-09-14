@@ -14,6 +14,13 @@ public class IdleState : BaseState
 
     public override void UpdateState(StateManager context)
     {
+        if (context.inputManager.IsEvadeRequested && context.movement.IsGrounded) 
+        { 
+            context.SwitchState(context.EvadingState); 
+            return;
+        }
+
+       
         if (context.combat.input.block)
         {
             context.SwitchState(context.blockState);
@@ -22,5 +29,6 @@ public class IdleState : BaseState
         {
             context.SwitchState(context.attackingState);
         }
+        
     }
 }

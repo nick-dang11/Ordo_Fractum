@@ -14,6 +14,12 @@ public class BlockingState : BaseState
 
     public override void UpdateState(StateManager context)
     {
+        if (context.inputManager.IsEvadeRequested && context.movement.IsGrounded)
+        {
+            context.SwitchState(context.EvadingState); 
+            return;
+        }
+
         context.combat.HandleBlock();
 
         if (!context.combat.input.block)

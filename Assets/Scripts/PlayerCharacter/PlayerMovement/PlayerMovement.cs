@@ -127,4 +127,27 @@ public class PlayerMovement : MonoBehaviour
     {
         _moveAction.Disable();
     }
+
+    public Vector3 GetCameraRelativeDirection(Vector2 input)
+    {
+        if (_MainCamera == null) return new Vector3(input.x, 0, input.y);
+
+        Vector3 camForward = _MainCamera.forward;
+        Vector3 camRight = _MainCamera.right;
+
+        camForward.y = 0f;
+        camRight.y = 0f;
+        camForward.Normalize();
+        camRight.Normalize();
+
+        return(camForward * input.y) + (camRight * input.x);
+    }
+
+    public bool IsGrounded
+    {
+        get
+        {
+            return _CharacterController != null && _CharacterController.isGrounded;
+        }
+    }
 }

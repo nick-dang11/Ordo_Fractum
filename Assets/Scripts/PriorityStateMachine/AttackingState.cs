@@ -15,9 +15,16 @@ public class AttackingState : BaseState
 
     public override void UpdateState(StateManager context)
     {
+        if (context.inputManager.IsEvadeRequested && context.movement.IsGrounded)
+        {
+            context.SwitchState(context.EvadingState);
+            return;
+        }
+
         if (context.combat.input.block)
         {
             context.SwitchState(context.blockState);
+            return;
         }
 
         context.combat.LightAndHeavy();
