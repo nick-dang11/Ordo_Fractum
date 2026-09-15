@@ -75,7 +75,9 @@ GameObject:
   - component: {fileID: 6291261830347497589}
   - component: {fileID: 4075066420366787807}
   - component: {fileID: 4174983778475235283}
+  - component: {fileID: 6845934194426328787}
   - component: {fileID: 6898766285396604641}
+  - component: {fileID: 3259752650087854291}
   - component: {fileID: 3307104090667302471}
   - component: {fileID: 4314512831245376467}
   - component: {fileID: 2448189098979044042}
@@ -329,22 +331,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: ba2ae878-29ea-4d82-b184-dc190b4e829d
     m_ActionName: 'Player/Block[/Mouse/rightButton]'
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4314512831245376467}
-        m_TargetAssemblyTypeName: PlayerInputManager, Assembly-CSharp
-        m_MethodName: OnHeavyAttack
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: d8466378-2ee6-44cd-8cfe-3cf671bfc72e
-    m_ActionName: 'Player/HeavyAttack[/Mouse/rightButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: 
@@ -374,6 +360,19 @@ MonoBehaviour:
   targetingRadius: 12
   maxTargetingAngle: 90
   passiveRotationSpeed: 15
+--- !u!114 &6845934194426328787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35da7ca9fce5a99489822a1edf9a182f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttackTimelineDriver
+  weaponHitbox: {fileID: 5391989435848990772}
 --- !u!114 &6898766285396604641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -387,7 +386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
   input: {fileID: 4314512831245376467}
-  weaponHitbox: {fileID: 6484216535753736626}
+  weaponHitbox: {fileID: 0}
   animate: {fileID: 8937205026060797890}
   lightAttackDamage: 10
   heavyAttackDamage: 40
@@ -400,6 +399,20 @@ MonoBehaviour:
   lastBlockTime: 0
   deflectWindow: 0.3
   pendingDamage: 0
+--- !u!114 &3259752650087854291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 197c0b2d6ef06eb418b5e10253fa5bb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerEvade
+  animator: {fileID: 8937205026060797890}
+  safetyTimeout: 1.5
 --- !u!114 &3307104090667302471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -821,32 +834,19 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8755059101848656986, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6484216535753736626}
-    - targetCorrespondingSourceObject: {fileID: 8755059101848656986, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 2651832125006811639}
     - targetCorrespondingSourceObject: {fileID: 8755059101848656986, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4234863292276951553}
+    - targetCorrespondingSourceObject: {fileID: 8755059101848656986, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5391989435848990772}
   m_SourcePrefab: {fileID: 100100000, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
 --- !u!1 &1633380261206561143 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8755059101848656986, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
   m_PrefabInstance: {fileID: 8010453946812812589}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6484216535753736626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1633380261206561143}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f3a2b8009b9c074c8b3d1ad4b5fa951, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeaponHitbox
-  PlayerObject: {fileID: 3047151988590228466}
 --- !u!136 &2651832125006811639
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -864,7 +864,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.05
   m_Height: 1
@@ -897,6 +897,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &5391989435848990772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1633380261206561143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a197d49356d5c3b4ca7123bead37827f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponHitbox
+  showHitboxState: 1
+  activeColor: {r: 1, g: 0, b: 0, a: 1}
+  inactiveColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!4 &8526422762743204414 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1835543676097021715, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}

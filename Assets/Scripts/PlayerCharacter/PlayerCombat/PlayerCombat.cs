@@ -160,11 +160,13 @@ public class PlayerCombat : MonoBehaviour
 
     public void EnableWeaponHitbox()
     {
+        Debug.Log("[PlayerCombat] EnableWeaponHitbox called");
         weaponHitbox.EnableHitbox(pendingDamage);
     }
 
     public void DisableWeaponHitbox()
     {
+        Debug.Log("[PlayerCombat] DisableWeaponHitbox called");
         weaponHitbox.DisableHitbox();
     }
 
