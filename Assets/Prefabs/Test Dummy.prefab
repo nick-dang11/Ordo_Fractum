@@ -279,10 +279,9 @@ GameObject:
   - component: {fileID: 957155147319687573}
   - component: {fileID: 1365498890226867773}
   - component: {fileID: 5427696433377424456}
-  - component: {fileID: 3401803183933360725}
   m_Layer: 8
   m_Name: Weapon
-  m_TagString: Untagged
+  m_TagString: EnemyWeapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -382,19 +381,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3401803183933360725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3054470976782735820}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f3a2b8009b9c074c8b3d1ad4b5fa951, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Hitbox
-  parentObject: {fileID: 5043930547961259473}
 --- !u!1 &4657652870639450824
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,6 +503,9 @@ GameObject:
   - component: {fileID: 6394381186914963047}
   - component: {fileID: 4727365448537288004}
   - component: {fileID: 2553297122332229277}
+  - component: {fileID: 944794368688548140}
+  - component: {fileID: 1238099486713571838}
+  - component: {fileID: 1114930181194133213}
   m_Layer: 8
   m_Name: Test Dummy
   m_TagString: Enemy
@@ -622,7 +611,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -678,8 +667,8 @@ MonoBehaviour:
   enemyAttackCooldown: 2
   enemyAttackRange: 3
   player: {fileID: 0}
-  weaponHitbox: {fileID: 3401803183933360725}
-  enemyDamage: 10
+  weaponHitbox: {fileID: 0}
+  enemyDamage: 1
 --- !u!114 &2553297122332229277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -694,6 +683,84 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LockOnTarget
   aimPoint: {fileID: 3030091251651716510}
   IsLockable: 1
+--- !u!114 &944794368688548140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5043930547961259473}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0324517e1d4a6084582df2a28a35d6a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
+  Target: {fileID: 0}
+  updateSpeed: 0.1
+--- !u!195 &1238099486713571838
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5043930547961259473}
+  m_Enabled: 1
+  m_AgentTypeID: -1372625422
+  m_Radius: 0.5
+  m_Speed: 2
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &1114930181194133213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5043930547961259473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphAgent
+  m_Graph: {fileID: 3084970616320676880, guid: d9215997741ad7a4c91eead94d302153, type: 2}
+  m_BlackboardVariableOverridesList:
+  - rid: 8990957766093832201
+  - rid: 8990957766093832360
+  m_OriginalGraph: {fileID: 3084970616320676880, guid: d9215997741ad7a4c91eead94d302153, type: 2}
+  m_IsInitialised: 0
+  m_IsStarted: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 8990957766093832201
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 5043930547961259473}
+    - rid: 8990957766093832360
+      type: {class: 'BlackboardVariable`1[[System.Collections.Generic.List`1[[UnityEngine.GameObject, UnityEngine.CoreModule]], mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 3003461833447844251
+          m_Value1: 3622686186274304372
+        Name: PatrolPoints
+        m_Value:
+        - {fileID: 0}
+        - {fileID: 0}
+        - {fileID: 0}
+        - {fileID: 0}
 --- !u!1 &5656037245105470748
 GameObject:
   m_ObjectHideFlags: 0

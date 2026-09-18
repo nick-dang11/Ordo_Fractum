@@ -1342,9 +1342,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8755059101848656986, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6484216535753736626}
-    - targetCorrespondingSourceObject: {fileID: 8755059101848656986, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 2651832125006811639}
     - targetCorrespondingSourceObject: {fileID: 8755059101848656986, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
       insertIndex: -1
@@ -1355,19 +1352,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8755059101848656986, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
   m_PrefabInstance: {fileID: 8010453946812812589}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6484216535753736626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1633380261206561143}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f3a2b8009b9c074c8b3d1ad4b5fa951, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeaponHitbox
-  PlayerObject: {fileID: 3047151988590228466}
 --- !u!136 &2651832125006811639
 CapsuleCollider:
   m_ObjectHideFlags: 0

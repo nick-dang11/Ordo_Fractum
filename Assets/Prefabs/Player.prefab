@@ -85,7 +85,6 @@ GameObject:
   - component: {fileID: 5221989036913721363}
   - component: {fileID: 3398993597898389615}
   - component: {fileID: 6634753710389791854}
-  - component: {fileID: 939655387691589675}
   - component: {fileID: 6212662419464609850}
   - component: {fileID: 3707159666292891715}
   - component: {fileID: 308716282217272228}
@@ -564,20 +563,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   playerUIHealth: {fileID: 5221989036913721363}
---- !u!114 &939655387691589675
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3047151988590228466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89ec709f7c7ddaa4b80c2873327598c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthColl
-  playerHealth: {fileID: 5221989036913721363}
-  damageAmount: 1
 --- !u!114 &6212662419464609850
 MonoBehaviour:
   m_ObjectHideFlags: 0
