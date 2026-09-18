@@ -12,6 +12,10 @@ public abstract class WeaponHitbox : MonoBehaviour
     [SerializeField] private Color activeColor = Color.red;
     [SerializeField] private Color inactiveColor = Color.grey;
 
+    [Header("Hit VFX")]
+    [SerializeField] private GameObject bloodVFXPrefab;
+    [SerializeField] private float bloodVFXLifetime = 2f;
+
     private bool isHitboxActive = false;
     private float currentDamage;
 
@@ -100,6 +104,24 @@ public abstract class WeaponHitbox : MonoBehaviour
 
         hitTargets.Add(targetRoot);
         HandleHit(other);
+    }
+
+    protected void SpawnBloodVFX(Collider target)
+    {
+        if(bloodVFXPrefab == null)
+        {
+            return;
+        }
+
+        Vector3 hitpoint = target.ClosestPoint(weaponCollider.bounds.center);
+
+        GameObject bloodVFX = Instantiate(
+            bloodVFXPrefab,
+            hitpoint,
+            Quaternion.identity
+        );
+
+        Destroy( bloodVFX, bloodVFXLifetime);
     }
 
     protected abstract bool IsValidTarget(Collider other);
