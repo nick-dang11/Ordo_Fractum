@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerCombat : MonoBehaviour
+public class PlayerCombat : MonoBehaviour, IAttackDamageSource
 {
     [SerializeField] public PlayerInputManager input;
     [SerializeField] public WeaponHitbox weaponHitbox;
@@ -216,5 +216,10 @@ public class PlayerCombat : MonoBehaviour
         {
             blockZone.SetActive(false);
         }
+    }
+
+    public float GetAttackDamage(AttackData attackData)
+    {
+        return pendingDamage;
     }
 }

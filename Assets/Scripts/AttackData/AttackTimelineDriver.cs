@@ -6,8 +6,14 @@ public class AttackTimelineDriver : MonoBehaviour
 
     private AttackData currentAttackData;
     private bool hitboxActive;
-
     private int currentAttackToken = 0;
+    private float currentDamage;
+    private IAttackDamageSource damageSource;
+
+    private void Awake()
+    {
+        damageSource = GetComponent<IAttackDamageSource>();
+    }
 
     public int BeginAttack(AttackData attackData)
     {
@@ -24,17 +30,28 @@ public class AttackTimelineDriver : MonoBehaviour
             return currentAttackToken;
         }
 
-        Debug.Log(
-            $"AttackTimelineDriver beginning {currentAttackData.name}. " +
-            $"Start = {currentAttackData.StartNormalized:F3}, " +
-            $"End = {currentAttackData.EndNormalized:F3}, " +
-            $"Token = {currentAttackToken}."
-            );
+        if (damageSource != null)
+        {
+            currentDamage = damageSource.GetAttackDamage(attackData);
+        }
+        else
+        {
+            currentDamage = 0;
+            Debug.LogWarning($"{name}: No IAttackDamageSource found.");
+        }
+
+            Debug.Log(
+                $"AttackTimelineDriver beginning {currentAttackData.name}. " +
+                $"Start = {currentAttackData.StartNormalized:F3}, " +
+                $"End = {currentAttackData.EndNormalized:F3}, " +
+                $"Token = {currentAttackToken}, " +
+                $"Damage = {currentDamage}."
+                );
 
         return currentAttackToken;
     }
 
-    public void EvaluateAttack(int attackToken, float normalizedTime, float damage)
+    public void EvaluateAttack(int attackToken, float normalizedTime)
     {
         if (attackToken != currentAttackToken) return;
         if (currentAttackData == null) return;
@@ -45,7 +62,7 @@ public class AttackTimelineDriver : MonoBehaviour
 
         if(shouldHitboxBeActive && !hitboxActive)
         {
-            weaponHitbox.EnableHitbox(damage);
+            weaponHitbox.EnableHitbox(currentDamage);
             hitboxActive = true;
 
             Debug.Log($"AttackTimelineDriver successfully enabled hitbox at {normalizedTime:F3}");
@@ -64,6 +81,7 @@ public class AttackTimelineDriver : MonoBehaviour
         if (attackToken != currentAttackToken) return;
         if (hitboxActive) weaponHitbox.DisableHitbox();
 
+        currentDamage = 0;
         hitboxActive= false;
         currentAttackData = null;
         Debug.Log("AttackTimelineDriver attack ended.");

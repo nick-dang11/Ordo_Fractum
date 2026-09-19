@@ -5,7 +5,6 @@ public class AttackStateBehaviour : StateMachineBehaviour
     [SerializeField] private AttackData attackData;
     private AttackTimelineDriver timelineDriver;
     private int attackToken;
-    private int lightAttackDamage = 10;
 
     public override void OnStateEnter(
         Animator animator,
@@ -23,7 +22,7 @@ public class AttackStateBehaviour : StateMachineBehaviour
         if (attackData == null)
         {
             Debug.LogWarning($"AttackStateBehavior on {animator.name} has no AttackData assigned." +
-                $"Check Player Animator's behavior for this attack.");
+                $"AttackStateBehaviour on {animator.name} has no AttackData assigned.");
             return;
         }
 
@@ -35,7 +34,7 @@ public class AttackStateBehaviour : StateMachineBehaviour
     {
         if (timelineDriver == null || attackData == null) return;
 
-        timelineDriver.EvaluateAttack(attackToken, stateInfo.normalizedTime, lightAttackDamage); // temp 10 damage
+        timelineDriver.EvaluateAttack(attackToken, stateInfo.normalizedTime);
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
