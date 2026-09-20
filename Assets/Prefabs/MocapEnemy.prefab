@@ -424,6 +424,8 @@ GameObject:
   - component: {fileID: 3707159666292891715}
   - component: {fileID: 6230063808028939835}
   - component: {fileID: 2249948433049224511}
+  - component: {fileID: 872181531737438651}
+  - component: {fileID: 7124248941740884681}
   m_Layer: 8
   m_Name: MocapEnemy
   m_TagString: Enemy
@@ -566,6 +568,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LockOnTarget
   aimPoint: {fileID: 7020222195393435300}
   IsLockable: 1
+--- !u!114 &872181531737438651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2756ca0542ecc8b4196044c834c22af8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyCombat
+  weaponHitbox: {fileID: 9208360456012289320}
+  animate: {fileID: 8937205026060797890}
+  enemyDamage: 1
+  wasAttacking: 0
+  isAttacking: 0
+--- !u!114 &7124248941740884681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35da7ca9fce5a99489822a1edf9a182f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttackTimelineDriver
+  weaponHitbox: {fileID: 9208360456012289320}
 --- !u!1 &5486334316737279811
 GameObject:
   m_ObjectHideFlags: 0
@@ -1346,6 +1378,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8755059101848656986, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4234863292276951553}
+    - targetCorrespondingSourceObject: {fileID: 8755059101848656986, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9208360456012289320}
   m_SourcePrefab: {fileID: 100100000, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
 --- !u!1 &1633380261206561143 stripped
 GameObject:
@@ -1402,6 +1437,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &9208360456012289320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1633380261206561143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4984127024601954c8280760a4a239d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyWeaponHitbox
+  showHitboxState: 1
+  activeColor: {r: 1, g: 0, b: 0, a: 1}
+  inactiveColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  bloodVFXPrefab: {fileID: 0}
+  bloodVFXLifetime: 2
 --- !u!4 &8526422762743204414 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1835543676097021715, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
