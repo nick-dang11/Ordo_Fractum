@@ -8,6 +8,7 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource
     [SerializeField] private float lightAttackDamage = 10f;
     [SerializeField] private float heavyAttackDamage = 40f;
     [SerializeField] private BlockZone blockZone;
+    [SerializeField] private CombatClashFeedback clashFeedback;
     // [SerializeField] private PlayerStamina playerStamina;
     [SerializeField] private PlayerPosture playerPosture;
 
@@ -74,6 +75,10 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource
     {
         Debug.Log("Player BLOCKED the attack!");
         animate.SetTrigger("BlockHit");
+        if (clashFeedback != null)
+        {
+            clashFeedback.PlayBlock();
+        }
         playerPosture.posture += playerPosture.postureFillRate * 3f;
         playerPosture.posture = Mathf.Clamp(playerPosture.posture, 0f, playerPosture.maxPosture);
         playerPosture.postureSlider.value = playerPosture.posture;
@@ -179,6 +184,10 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource
     {
         Debug.Log("DEFLECT!");
         animate.SetTrigger("Deflect");
+        if (clashFeedback != null)
+        {
+            clashFeedback.PlayDeflect();
+        }
     }
 
     public void SetPendingDamage(float damage)
