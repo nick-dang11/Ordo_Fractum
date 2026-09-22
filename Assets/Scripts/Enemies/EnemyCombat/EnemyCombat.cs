@@ -67,4 +67,10 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource
 
         return enemyDamage;
     }
+
+    [ContextMenu("DEBUG Trigger Attack")]
+    private void DebugTriggerAttack()
+    {
+        animate.SetTrigger("Attack");
+    }
 }

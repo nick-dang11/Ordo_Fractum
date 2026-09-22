@@ -3167,6 +3167,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MocapEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 3307104090667302471, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6168619457890461158, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
