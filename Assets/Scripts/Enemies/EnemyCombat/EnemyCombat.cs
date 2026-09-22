@@ -37,4 +37,10 @@ public class EnemyCombat : MonoBehaviour
     {
         enemyDamage = damage;
     }
+
+    [ContextMenu("DEBUG Trigger Attack")]
+    private void DebugTriggerAttack()
+    {
+        animate.SetTrigger("Attack");
+    }
 }
