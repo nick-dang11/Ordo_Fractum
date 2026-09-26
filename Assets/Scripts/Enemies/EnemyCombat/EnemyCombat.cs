@@ -5,10 +5,13 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource
     [SerializeField] public WeaponHitbox weaponHitbox;
     [SerializeField] private Animator animate;
     [SerializeField] private float enemyDamage = 1f;
+    [SerializeField] private float enemyAttackCooldown = 1.5f;
 
+    private float nextAttackTime;
     public bool wasAttacking = false;
     public bool isAttacking = false;
     public bool IsAttacking => isAttacking;
+    public bool CanAttack => !isAttacking && Time.time >= nextAttackTime;
 
     public void StartAttack()
     {
@@ -33,6 +36,33 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource
         //Debug.Log($"[Combat] EndAttack fired at {Time.time}");
     }
 
+    public bool TryAttack()
+    {
+        Debug.Log(
+            $"[EnemyCombat] TryAttack called. " +
+            $"CanAttack={CanAttack}, " +
+            $"isAttacking={isAttacking}, " +
+            $"Time={Time.time}, " +
+            $"nextAttackTime={nextAttackTime}"
+        );
+
+        if (!CanAttack)
+        {
+            Debug.Log("[EnemyCombat] TryAttack blocked.");
+            return false;
+        }
+
+        isAttacking = true;
+        nextAttackTime = Time.time + enemyAttackCooldown;
+
+        Debug.Log(
+            $"[EnemyCombat] Attack accepted. " +
+            $"Next attack allowed at {nextAttackTime}"
+        );
+
+        animate.SetTrigger("Attack");
+        return true;
+    }
 
     public void EnableWeaponHitbox()
     {
@@ -71,6 +101,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource
     [ContextMenu("DEBUG Trigger Attack")]
     private void DebugTriggerAttack()
     {
-        animate.SetTrigger("Attack");
+        TryAttack();
     }
+
 }
