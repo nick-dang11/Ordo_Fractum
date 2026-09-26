@@ -14,6 +14,8 @@ public class PlayerWeaponHitbox : WeaponHitbox
         if (enemyHealth == null) return;
 
         enemyHealth.TakeDamage(CurrentDamage);
+
+        SpawnBloodVFX(other);
     }
 
     [ContextMenu("DEBUG Enable Hitbox")]

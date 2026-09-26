@@ -1,3 +1,5 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,9 +23,11 @@ public class PlayerInputManager : MonoBehaviour
     public bool cursorInputForLook = true;
 
     [Header("Evade Input Tracking")]
+    [SerializeField] private float evadeDeadzone = 0.2f;
+    private bool evadeArmed = true;
     public bool IsEvadeRequested {  get; private set; }
     public Vector2 EvadeDirection { get; private set; }
-    private bool blockReleased = true;
+
 
     // input callbacks
     // link these in inspector: PlayerInput via "Invoke Unity Events"
@@ -132,17 +136,19 @@ public class PlayerInputManager : MonoBehaviour
 
     private void Update()
     {
-        if (!block)
+        bool hasMovement = move.sqrMagnitude > evadeDeadzone * evadeDeadzone;
+
+        if (!hasMovement)
         {
-            blockReleased = true;
+            evadeArmed = true;
             return;
         }
 
-        if(block && blockReleased && move.magnitude > 0.2f)
+        if(block && evadeArmed)
         {
             IsEvadeRequested = true;
             EvadeDirection = move.normalized;
-            blockReleased = false;
+            evadeArmed = false;
         }
     }
 

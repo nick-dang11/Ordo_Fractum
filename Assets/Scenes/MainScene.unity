@@ -1694,6 +1694,11 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: e6ea4be7b6895b9468c6faf624daee26, type: 2}
   m_BuildHeightMesh: 0
+--- !u!1 &945800247 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8533393107321753385, guid: 603362e02ce80b041b514c76a98bc745, type: 3}
+  m_PrefabInstance: {fileID: 8724638475811888022}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &975051733
 GameObject:
   m_ObjectHideFlags: 0
@@ -1979,6 +1984,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1080786937}
   m_CullTransparentMesh: 1
+--- !u!1 &1105079362 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3777553694953759769, guid: 603362e02ce80b041b514c76a98bc745, type: 3}
+  m_PrefabInstance: {fileID: 8724638475811888022}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1120111489
 GameObject:
   m_ObjectHideFlags: 0
@@ -2405,6 +2415,17 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!114 &1502295492 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5391989435848990772, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+  m_PrefabInstance: {fileID: 939421551388515701}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a197d49356d5c3b4ca7123bead37827f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponHitbox
 --- !u!1 &1538914757
 GameObject:
   m_ObjectHideFlags: 0
@@ -3179,6 +3200,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9208360456012289320, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: bloodVFXPrefab
+      value: 
+      objectReference: {fileID: 1105079362}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3549,6 +3574,10 @@ PrefabInstance:
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 330585546}
+    - target: {fileID: 5391989435848990772, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: bloodVFXPrefab
+      value: 
+      objectReference: {fileID: 945800247}
     - target: {fileID: 6212662419464609850, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
       propertyPath: postureSlider
       value: 
@@ -3569,6 +3598,10 @@ PrefabInstance:
       propertyPath: 'hearts.Array.data[3]'
       value: 
       objectReference: {fileID: 1080786939}
+    - target: {fileID: 6898766285396604641, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: weaponHitbox
+      value: 
+      objectReference: {fileID: 1502295492}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
