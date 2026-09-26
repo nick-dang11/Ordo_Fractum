@@ -13,6 +13,8 @@ public class EnemyWeaponHitbox : WeaponHitbox
         if (healthSystem == null) return;
 
         healthSystem.TakeDamage(Mathf.RoundToInt(CurrentDamage)); // rounding to prevent unforseen errors
+
+        SpawnBloodVFX(other);
     }
 
     [ContextMenu("DEBUG Enable Hitbox")]
