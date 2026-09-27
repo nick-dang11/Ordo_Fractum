@@ -213,7 +213,7 @@ public class BloodVFXTests
     }
 
     //[UnityTest]
-    [Ignore("BloodVFX tests are still WIP; skip until assembly/test framework issue is fixed.")]
+    //[Ignore("BloodVFX tests are still WIP; skip until assembly/test framework issue is fixed.")]
     public IEnumerator SpawnBloodVFX_SpawnsAtImpactPoint()
     {
         Vector3 expectedHitPoint =
