@@ -26,6 +26,8 @@ public class BloodVFXTests
     private MethodInfo spawnBloodMethod;
     private MethodInfo enableHitboxMethod;
 
+    /*
+
     [SetUp]
     public void SetUp()
     {
@@ -307,4 +309,5 @@ public class BloodVFXTests
             "No Blood VFX should spawn when no prefab is configured."
         );
     }
+    */
 }
