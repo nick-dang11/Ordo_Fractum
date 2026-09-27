@@ -6,6 +6,7 @@ public abstract class WeaponHitbox : MonoBehaviour
 {
     private Collider weaponCollider;
     private Renderer weaponRenderer;
+    [SerializeField] private GameObject PlayerObject;
 
     [Header("Debug Visualization")]
     [SerializeField] private bool showHitboxState = true;
@@ -89,6 +90,24 @@ public abstract class WeaponHitbox : MonoBehaviour
         weaponRenderer.material.color = color; // may need material.SetColor("_BaseColor", color) with URP/HDRP
     }
 
+    protected void SpawnBloodVFX(Collider target)
+    {
+        if (bloodVFXPrefab == null)
+        {
+            return;
+        }
+
+        Vector3 hitpoint = target.ClosestPoint(weaponCollider.bounds.center);
+
+        GameObject bloodVFX = Instantiate(
+            bloodVFXPrefab,
+            hitpoint,
+            Quaternion.identity
+        );
+
+        Destroy(bloodVFX, bloodVFXLifetime);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!isHitboxActive) return;
@@ -106,23 +125,7 @@ public abstract class WeaponHitbox : MonoBehaviour
         HandleHit(other);
     }
 
-    protected void SpawnBloodVFX(Collider target)
-    {
-        if(bloodVFXPrefab == null)
-        {
-            return;
-        }
 
-        Vector3 hitpoint = target.ClosestPoint(weaponCollider.bounds.center);
-
-        GameObject bloodVFX = Instantiate(
-            bloodVFXPrefab,
-            hitpoint,
-            Quaternion.identity
-        );
-
-        Destroy( bloodVFX, bloodVFXLifetime);
-    }
 
     protected abstract bool IsValidTarget(Collider other);
 
