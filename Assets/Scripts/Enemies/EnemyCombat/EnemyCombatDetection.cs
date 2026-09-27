@@ -5,7 +5,7 @@ public class EnemyCombatDetection : MonoBehaviour
     [SerializeField] private float detectionRadius = 10f;
     [SerializeField] private float attackRange = 2f;
 
-    [SerializeField] public LayerMask playerLayerMask;
+    [SerializeField] private LayerMask playerLayerMask;
     [SerializeField] private Animator animator;
 
     private Transform detectedPlayer;

@@ -74,6 +74,12 @@ public class AttackTimelineDriver : MonoBehaviour
 
             Debug.Log($"AttackTimelineDriver successfully disabled hitbox at {normalizedTime:F3}");
         }
+
+        Debug.Log(
+        $"EvaluateAttack Token={attackToken}, " +
+        $"NormalizedTime={normalizedTime:F3}, " +
+        $"HitboxActive={hitboxActive}"
+);
     }
 
     public void EndAttack(int attackToken)
