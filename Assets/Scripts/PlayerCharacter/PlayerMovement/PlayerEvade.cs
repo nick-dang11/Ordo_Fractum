@@ -5,6 +5,12 @@ public class PlayerEvade : MonoBehaviour
 {
     [SerializeField] private Animator animator;
     [SerializeField] private float safetyTimeout = 1.5f;
+
+    public float SafetyTimeout
+    {
+        get => safetyTimeout;
+        set => safetyTimeout = value;
+    }
     [SerializeField] private PlayerEvadeVFX evadeVFX;
 
     private int evadeLayerIndex;
