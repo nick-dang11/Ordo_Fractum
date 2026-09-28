@@ -6,10 +6,19 @@ public class Checkpoint : MonoBehaviour
     [SerializeField] private string checkpointId;
     [Header("Respawn")]
     [SerializeField] private Transform respawnPoint;
+    [Header("Feedback")]
+    [SerializeField] private CheckpointFeedback checkpointFeedback;
     [Header("Runtime State")]
     [SerializeField] private bool isActivated = false;
     public string CheckpointID => checkpointId;
     public bool IsActivated => isActivated;
+    private void Awake()
+    {
+        if (checkpointFeedback == null)
+        {
+            checkpointFeedback = GetComponent<CheckpointFeedback>();
+        }
+    }
     // Puts the player into the respawn position
     public Vector3 RespawnPosition
     {
@@ -33,11 +42,16 @@ public class Checkpoint : MonoBehaviour
     // When checkpoint is activated
     public void Activate()
     {
+        bool firstActivation = !isActivated;
         // Activated first time
-        if (!isActivated)
+        if (firstActivation)
         {
             isActivated = true;
             Debug.Log($"Checkpoint activated: {checkpointId}");
+            if (checkpointFeedback != null)
+            {
+                checkpointFeedback.PlayFirstActivation();
+            }
         }
         // Tells the manager that this checkpoint should now be the respawn
         if (CheckpointManager.Instance != null)
@@ -66,5 +80,27 @@ public class Checkpoint : MonoBehaviour
             return;
         Gizmos.DrawSphere(respawnPoint.position, 0.2f);
         Gizmos.DrawLine(respawnPoint.position, respawnPoint.position + respawnPoint.forward * 1.5f);
+    }
+    public void SetCurrent(bool isCurrent)
+    {
+        if (checkpointFeedback != null)
+        {
+            checkpointFeedback.SetCurrent(isCurrent);
+        }
+    }
+    public void PlayRespawnFeedback()
+    {
+        if (checkpointFeedback != null)
+        {
+            checkpointFeedback.PlayRespawn();
+        }
+    }
+    public void RestoreAsActivated()
+    {
+        isActivated = true;
+        if (checkpointFeedback != null)
+        {
+            checkpointFeedback.SetActivated(true);
+        }
     }
 }
