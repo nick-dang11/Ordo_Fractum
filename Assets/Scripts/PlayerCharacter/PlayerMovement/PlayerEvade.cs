@@ -5,6 +5,7 @@ public class PlayerEvade : MonoBehaviour
 {
     [SerializeField] private Animator animator;
     [SerializeField] private float safetyTimeout = 1.5f;
+    [SerializeField] private PlayerEvadeVFX evadeVFX;
 
     private int evadeLayerIndex;
 
@@ -33,6 +34,11 @@ public class PlayerEvade : MonoBehaviour
         animator.SetFloat(hashEvadeY, localDirection.y);
         animator.SetBool(hashIsEvading, true);
         animator.SetTrigger(hashEvade);
+        
+        if(evadeVFX != null)
+        {
+            evadeVFX.PlayEvadeStart();
+        }
     }
 
     public void UpdateEvade()
