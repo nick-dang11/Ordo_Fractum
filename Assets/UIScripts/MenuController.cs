@@ -21,6 +21,15 @@ public class MenuController : MonoBehaviour
     [Header("Toggle Settings")]
     [SerializeField] private Toggle invertYToggle = null;
 
+    [Header("Graphics Settings")]
+    [SerializeField] private Slider brightnessSlider = null;
+    [SerializeField] private TMP_Text brightnessTextValue = null;
+    [SerializeField] private float defaultBrightness = 1;
+
+    private int _qualityLevel;
+    private bool _isFullScreen;
+    private float _brightnessLevel;
+
     [Header("Confirmation")]
     [SerializeField] private GameObject confirmationPrompt = null;
 
@@ -87,6 +96,41 @@ public class MenuController : MonoBehaviour
         StartCoroutine(ConfirmationBox());
     }
 
+    public void SetBrightness(float brightness)
+    {
+        _brightnessLevel = brightness;
+        brightnessTextValue.text = brightness.ToString("0.0");
+    }
+
+    public void SetFullScreen(bool isFullscreen)
+    {
+        _isFullScreen = isFullscreen;
+    }
+
+    public void SetQuality(int qualityIndex)
+    {
+        _qualityLevel = qualityIndex;
+    }
+
+    public void GraphicsApply()
+    {
+        PlayerPrefs.SetFloat("masterBrightness", _brightnessLevel);
+
+        // Change brightness with post processing
+
+        PlayerPrefs.SetInt("masterQuality", _qualityLevel);
+        QualitySettings.SetQualityLevel(_qualityLevel);
+
+        PlayerPrefs.SetInt(
+            "masterFullscreen",
+            (_isFullScreen ? 1 : 0)
+        );
+
+        Screen.fullScreen = _isFullScreen;
+
+        StartCoroutine(ConfirmationBox());
+    }
+
     public void ResetButton(string MenuType)
     {
         if (MenuType == "Audio")
@@ -110,7 +154,9 @@ public class MenuController : MonoBehaviour
     public IEnumerator ConfirmationBox()
     {
         confirmationPrompt.SetActive(true);
+
         yield return new WaitForSeconds(2);
+
         confirmationPrompt.SetActive(false);
     }
 }
