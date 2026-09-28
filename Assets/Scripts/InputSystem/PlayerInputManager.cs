@@ -24,7 +24,7 @@ public class PlayerInputManager : MonoBehaviour
 
     [Header("Evade Input Tracking")]
     [SerializeField] private float evadeDeadzone = 0.2f;
-    private bool evadeArmed = true;
+    private bool evadeArmed = false;
     public bool IsEvadeRequested {  get; private set; }
     public Vector2 EvadeDirection { get; private set; }
 
@@ -142,6 +142,12 @@ public class PlayerInputManager : MonoBehaviour
     public void CheckEvadeRequest()
     {
         bool hasMovement = move.sqrMagnitude > evadeDeadzone * evadeDeadzone;
+        if (!block)
+        {
+            evadeArmed = false;
+            return;
+        }
+
 
         if (!hasMovement)
         {
@@ -149,7 +155,7 @@ public class PlayerInputManager : MonoBehaviour
             return;
         }
 
-        if (block && evadeArmed)
+        if (evadeArmed)
         {
             IsEvadeRequested = true;
             EvadeDirection = move.normalized;
