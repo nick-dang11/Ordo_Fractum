@@ -90,5 +90,21 @@ public class HealingAnimation : MonoBehaviour
         healingTimer = 0f;
         Debug.Log("Healing finished.");
     }
+
+    public void ResetForRespawn()
+    {
+        isHealing = false;
+        healingAlreadyApplied = false;
+        healingTimer = 0f;
+        if (playerInputManager != null)
+        {
+            playerInputManager.self_heal = false;
+        }
+        if (playerAnimator != null)
+        {
+            playerAnimator.ResetTrigger(HealTrigger);
+        }
+        Debug.Log("[HealingAnimation] Reset for respawn.");
+    }
   
 }

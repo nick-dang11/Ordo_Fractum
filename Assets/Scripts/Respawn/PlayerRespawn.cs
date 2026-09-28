@@ -2,9 +2,21 @@ using UnityEngine;
 
 public class PlayerRespawn : MonoBehaviour
 {
-    public Transform respawnPoint;
+    [SerializeField] private CheckpointRespawn checkpointRespawn;
+    private void Awake()
+    {
+        if (checkpointRespawn == null)
+        {
+            checkpointRespawn = GetComponent<CheckpointRespawn>();
+        }
+    }
     public void Respawn()
     {
-        transform.position = respawnPoint.position;
+        if (checkpointRespawn == null)
+        {
+            Debug.LogError("[PlayerRespawn] CheckpointRespawn could not be found.", this);
+            return;
+        }
+        checkpointRespawn.RespawnAtCurrentCheckpoint();
     }
 }

@@ -231,4 +231,16 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource
     {
         return pendingDamage;
     }
+
+    public void ResetForRespawn()
+    {
+        ForceStopBlocking();
+        isAttacking = false;
+        canCombo = false;
+        if (weaponHitbox != null)
+        {
+            weaponHitbox.DisableHitbox();
+        }
+        Debug.Log("[PlayerCombat] Reset for respawn.");
+    }
 }
