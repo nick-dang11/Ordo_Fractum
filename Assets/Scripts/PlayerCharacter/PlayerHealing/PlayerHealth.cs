@@ -30,9 +30,7 @@ public class HealthSystem : MonoBehaviour
 
         if(health <= 0)
         {
-            health = 0;
-            Debug.Log("Player is dead. Destroy player");
-            playerRespawn.Respawn();
+            HandleDeath();
         }
     }
 
@@ -53,5 +51,29 @@ public class HealthSystem : MonoBehaviour
             Debug.Log("Player is at max health");
             return;
         }
+    }
+
+    public void RestoreForRespawn()
+    {
+        health = maxHealth;
+        Debug.Log("Player health restored for respawn. Current Health: " + health);
+    }
+
+    private void HandleDeath()
+    {
+        health = 0;
+        Debug.Log("Player is dead.");
+        if (playerRespawn != null)
+        {
+            playerRespawn.Respawn();
+        } else
+        {
+            Debug.LogError("[HealthSystem] PlayerRespawn could not be found.", this);
+        }
+    }
+    [ContextMenu("Test - Kill Player")]
+    private void TestKillPlayer()
+    {
+        TakeDamage(maxHealth);
     }
 }
