@@ -136,6 +136,11 @@ public class PlayerInputManager : MonoBehaviour
 
     private void Update()
     {
+        CheckEvadeRequest();
+    }
+
+    public void CheckEvadeRequest()
+    {
         bool hasMovement = move.sqrMagnitude > evadeDeadzone * evadeDeadzone;
 
         if (!hasMovement)
@@ -144,13 +149,12 @@ public class PlayerInputManager : MonoBehaviour
             return;
         }
 
-        if(block && evadeArmed)
+        if (block && evadeArmed)
         {
             IsEvadeRequested = true;
             EvadeDirection = move.normalized;
             evadeArmed = false;
         }
     }
-
     public void ConsumeEvadeRequest() => IsEvadeRequested = false;
 }
