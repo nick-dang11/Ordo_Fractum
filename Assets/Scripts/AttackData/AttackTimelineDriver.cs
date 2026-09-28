@@ -40,13 +40,13 @@ public class AttackTimelineDriver : MonoBehaviour
             Debug.LogWarning($"{name}: No IAttackDamageSource found.");
         }
 
-            Debug.Log(
-                $"AttackTimelineDriver beginning {currentAttackData.name}. " +
-                $"Start = {currentAttackData.StartNormalized:F3}, " +
-                $"End = {currentAttackData.EndNormalized:F3}, " +
-                $"Token = {currentAttackToken}, " +
-                $"Damage = {currentDamage}."
-                );
+            //Debug.Log(
+            //    $"AttackTimelineDriver beginning {currentAttackData.name}. " +
+            //    $"Start = {currentAttackData.StartNormalized:F3}, " +
+            //    $"End = {currentAttackData.EndNormalized:F3}, " +
+            //    $"Token = {currentAttackToken}, " +
+            //    $"Damage = {currentDamage}."
+            //    );
 
         return currentAttackToken;
     }
@@ -75,11 +75,11 @@ public class AttackTimelineDriver : MonoBehaviour
             Debug.Log($"AttackTimelineDriver successfully disabled hitbox at {normalizedTime:F3}");
         }
 
-        Debug.Log(
-        $"EvaluateAttack Token={attackToken}, " +
-        $"NormalizedTime={normalizedTime:F3}, " +
-        $"HitboxActive={hitboxActive}"
-);
+        //Debug.Log(
+        //$"EvaluateAttack Token={attackToken}, " +
+        //$"NormalizedTime={normalizedTime:F3}, " +
+        //$"HitboxActive={hitboxActive}"
+        //);
     }
 
     public void EndAttack(int attackToken)

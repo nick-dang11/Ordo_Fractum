@@ -503,7 +503,6 @@ GameObject:
   - component: {fileID: 6394381186914963047}
   - component: {fileID: 4727365448537288004}
   - component: {fileID: 2553297122332229277}
-  - component: {fileID: 944794368688548140}
   - component: {fileID: 1238099486713571838}
   - component: {fileID: 1114930181194133213}
   m_Layer: 8
@@ -683,20 +682,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LockOnTarget
   aimPoint: {fileID: 3030091251651716510}
   IsLockable: 1
---- !u!114 &944794368688548140
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5043930547961259473}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0324517e1d4a6084582df2a28a35d6a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
-  Target: {fileID: 0}
-  updateSpeed: 0.1
 --- !u!195 &1238099486713571838
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ public class EnemyCombatDetection : MonoBehaviour
     [SerializeField] private LayerMask playerLayerMask;
     [SerializeField] private Animator animator;
 
-    private Transform detectedPlayer;
+    public Transform detectedPlayer;
 
     public bool isPlayerNearby { get; private set; }
     public bool isPlayerInAttackRange { get; private set; }
