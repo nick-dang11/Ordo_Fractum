@@ -18,12 +18,12 @@ public class EvasionTest
     private PropertyInfo isEvadeRequestedProperty;
     private PropertyInfo evadeDirectionProperty;
 
+
     [SetUp]
     public void SetUp()
     {
         testPlayer = new GameObject("Test Player");
 
-        // Find PlayerInputManager inside Assembly-CSharp.
         inputManagerType =
             Type.GetType("PlayerInputManager, Assembly-CSharp");
 
@@ -32,13 +32,11 @@ public class EvasionTest
             "Could not find PlayerInputManager in Assembly-CSharp."
         );
 
-        // Add PlayerInputManager to our temporary test object.
         inputManager =
             testPlayer.AddComponent(inputManagerType);
 
         Assert.IsNotNull(inputManager);
 
-        // Get methods.
         moveInputMethod =
             inputManagerType.GetMethod("MoveInput");
 
@@ -51,7 +49,6 @@ public class EvasionTest
         consumeEvadeRequestMethod =
             inputManagerType.GetMethod("ConsumeEvadeRequest");
 
-        // Get properties.
         isEvadeRequestedProperty =
             inputManagerType.GetProperty("IsEvadeRequested");
 
@@ -67,6 +64,7 @@ public class EvasionTest
         Assert.IsNotNull(evadeDirectionProperty);
     }
 
+
     [TearDown]
     public void TearDown()
     {
@@ -76,16 +74,60 @@ public class EvasionTest
         }
     }
 
-    [Test]
-    public void MovementAndBlock_CreatesEvadeRequest()
-    {
-        Move(Vector2.up);
-        Block(true);
 
+    // ---------------------------------------------------------
+    // Initial block behavior
+    // ---------------------------------------------------------
+
+    [Test]
+    public void WalkingThenBlocking_DoesNotCreateEvadeRequest()
+    {
+        // Player is already walking.
+        Move(Vector2.up);
         CheckEvade();
 
-        Assert.IsTrue(IsEvadeRequested());
+        // Player presses block while movement is still held.
+        Block(true);
+        CheckEvade();
+
+        Assert.IsFalse(
+            IsEvadeRequested(),
+            "Pressing block while already moving should block, not evade."
+        );
     }
+
+
+    [Test]
+    public void MovementReinputWhileBlocking_CreatesEvadeRequest()
+    {
+        // Already walking.
+        Move(Vector2.up);
+        CheckEvade();
+
+        // Initial block should NOT evade.
+        Block(true);
+        CheckEvade();
+
+        Assert.IsFalse(IsEvadeRequested());
+
+        // Release movement while continuing to block.
+        Move(Vector2.zero);
+        CheckEvade();
+
+        // Re-enter movement.
+        Move(Vector2.up);
+        CheckEvade();
+
+        Assert.IsTrue(
+            IsEvadeRequested(),
+            "Movement reinput while blocking should create an evade request."
+        );
+    }
+
+
+    // ---------------------------------------------------------
+    // Direction
+    // ---------------------------------------------------------
 
     [Test]
     public void EvadeDirection_IsNormalized()
@@ -93,9 +135,15 @@ public class EvasionTest
         Vector2 inputDirection =
             new Vector2(1f, 1f);
 
-        Move(inputDirection);
+        // Begin blocking.
         Block(true);
 
+        // Neutral movement arms the evade.
+        Move(Vector2.zero);
+        CheckEvade();
+
+        // Enter diagonal movement.
+        Move(inputDirection);
         CheckEvade();
 
         Vector2 expected =
@@ -117,13 +165,15 @@ public class EvasionTest
         );
     }
 
+
+    // ---------------------------------------------------------
+    // Request consumption
+    // ---------------------------------------------------------
+
     [Test]
     public void ConsumeEvadeRequest_ClearsRequest()
     {
-        Move(Vector2.up);
-        Block(true);
-
-        CheckEvade();
+        ArmAndRequestEvade(Vector2.up);
 
         Assert.IsTrue(IsEvadeRequested());
 
@@ -131,15 +181,16 @@ public class EvasionTest
 
         Assert.IsFalse(IsEvadeRequested());
     }
+
+
+    // ---------------------------------------------------------
+    // Repeated movement behavior
+    // ---------------------------------------------------------
 
     [Test]
     public void ContinuedMovement_DoesNotRequestSecondEvade()
     {
-        Move(Vector2.up);
-        Block(true);
-
-        // First request.
-        CheckEvade();
+        ArmAndRequestEvade(Vector2.up);
 
         Assert.IsTrue(IsEvadeRequested());
 
@@ -147,54 +198,65 @@ public class EvasionTest
 
         Assert.IsFalse(IsEvadeRequested());
 
-        // Still moving and still blocking.
+        // Movement is still held.
         CheckEvade();
 
-        Assert.IsFalse(IsEvadeRequested());
+        Assert.IsFalse(
+            IsEvadeRequested(),
+            "Continued movement should not repeatedly request evades."
+        );
     }
+
 
     [Test]
     public void ReturningMovementToNeutral_RearmsEvade()
     {
-        Move(Vector2.up);
-        Block(true);
+        ArmAndRequestEvade(Vector2.up);
 
-        // First evade.
-        CheckEvade();
         ConsumeEvade();
 
-        // Return movement to neutral.
+        // Return movement to neutral while still blocking.
         Move(Vector2.zero);
         CheckEvade();
 
-        // Start moving again.
+        // Re-enter movement.
         Move(Vector2.up);
         CheckEvade();
 
-        Assert.IsTrue(IsEvadeRequested());
+        Assert.IsTrue(
+            IsEvadeRequested(),
+            "Returning movement to neutral while blocking should rearm evade."
+        );
     }
+
+
+    // ---------------------------------------------------------
+    // Deadzone / invalid input
+    // ---------------------------------------------------------
 
     [Test]
     public void MovementBelowDeadzone_DoesNotRequestEvade()
     {
-        Move(new Vector2(0.1f, 0f));
         Block(true);
 
+        Move(new Vector2(0.1f, 0f));
         CheckEvade();
 
         Assert.IsFalse(IsEvadeRequested());
     }
+
 
     [Test]
     public void NoMovement_DoesNotRequestEvade()
     {
-        Move(Vector2.zero);
         Block(true);
 
+        Move(Vector2.zero);
         CheckEvade();
 
         Assert.IsFalse(IsEvadeRequested());
     }
+
 
     [Test]
     public void MovementWithoutBlock_DoesNotRequestEvade()
@@ -208,8 +270,50 @@ public class EvasionTest
     }
 
 
+    [Test]
+    public void ReleasingBlock_DisarmsEvade()
+    {
+        // Block + neutral movement arms evade.
+        Block(true);
+        Move(Vector2.zero);
+        CheckEvade();
+
+        // Release block before movement.
+        Block(false);
+        CheckEvade();
+
+        // Start moving.
+        Move(Vector2.up);
+        CheckEvade();
+
+        Assert.IsFalse(
+            IsEvadeRequested(),
+            "Movement should not evade after block has been released."
+        );
+    }
+
+
     // ---------------------------------------------------------
-    // Helper methods
+    // Test setup helper
+    // ---------------------------------------------------------
+
+    private void ArmAndRequestEvade(Vector2 direction)
+    {
+        // Start blocking.
+        Block(true);
+
+        // Movement must first return to neutral.
+        Move(Vector2.zero);
+        CheckEvade();
+
+        // Directional input now produces evade.
+        Move(direction);
+        CheckEvade();
+    }
+
+
+    // ---------------------------------------------------------
+    // Reflection helper methods
     // ---------------------------------------------------------
 
     private void Move(Vector2 direction)
@@ -220,6 +324,7 @@ public class EvasionTest
         );
     }
 
+
     private void Block(bool value)
     {
         blockInputMethod.Invoke(
@@ -227,6 +332,7 @@ public class EvasionTest
             new object[] { value }
         );
     }
+
 
     private void CheckEvade()
     {
@@ -236,6 +342,7 @@ public class EvasionTest
         );
     }
 
+
     private void ConsumeEvade()
     {
         consumeEvadeRequestMethod.Invoke(
@@ -244,6 +351,7 @@ public class EvasionTest
         );
     }
 
+
     private bool IsEvadeRequested()
     {
         return (bool)
@@ -251,6 +359,7 @@ public class EvasionTest
                 inputManager
             );
     }
+
 
     private Vector2 GetEvadeDirection()
     {
