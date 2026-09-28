@@ -57,6 +57,12 @@ public class CheckpointRespawn : MonoBehaviour
         {
             healthSystem.RestoreForRespawn();
         }
+        // Respawn Feedback
+        Checkpoint currentCheckpoint = CheckpointManager.Instance.CurrentCheckpoint;
+        if (currentCheckpoint != null)
+        {
+            currentCheckpoint.PlayRespawnFeedback();
+        }
         if (logRespawns)
         {
             Debug.Log($"[CheckpointRespawn] Player respawned at " + $"{respawnPosition}");
