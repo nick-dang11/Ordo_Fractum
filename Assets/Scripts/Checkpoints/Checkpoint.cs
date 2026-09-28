@@ -33,10 +33,20 @@ public class Checkpoint : MonoBehaviour
     // When checkpoint is activated
     public void Activate()
     {
-        if (isActivated)
-            return;
-        isActivated = true;
-        Debug.Log($"Checkpoint Activated {checkpointId}");
+        // Activated first time
+        if (!isActivated)
+        {
+            isActivated = true;
+            Debug.Log($"Checkpoint activated: {checkpointId}");
+        }
+        // Tells the manager that this checkpoint should now be the respawn
+        if (CheckpointManager.Instance != null)
+        {
+            CheckpointManager.Instance.SetCheckpoint(this);
+        } else
+        {
+            Debug.LogWarning($"Checkpoint '{checkpointId}' activated, " + $"but no Checkpoint manager exists.", this);
+        }
     }
     // Validation to see if the checkpoint works
     private void OnValidate()
