@@ -4,6 +4,8 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource
 {
     [SerializeField] public WeaponHitbox weaponHitbox;
     [SerializeField] private Animator animate;
+    [SerializeField] private EnemyCombatDetection enemyCombatDetection;
+
     [SerializeField] private float enemyDamage = 1f;
     [SerializeField] private float enemyAttackCooldown = 1.5f;
 
@@ -13,27 +15,12 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource
     public bool IsAttacking => isAttacking;
     public bool CanAttack => !isAttacking && Time.time >= nextAttackTime;
 
-    public void StartAttack()
+    private void Update()
     {
-        isAttacking = true;
-
-        Debug.Log(
-            $"[EnemyCombat] StartAttack called on {name}. " +
-            $"isAttacking = {isAttacking}"
-        );
-    }
-
-    public void EndAttack()
-    {
-        isAttacking = false;
-
-        Debug.Log(
-            $"[EnemyCombat] EndAttack called on {name}. " +
-            $"isAttacking = {isAttacking}, Time = {Time.time}"
-        );
-
-        animate.ResetTrigger("Attack");
-        //Debug.Log($"[Combat] EndAttack fired at {Time.time}");
+        if(enemyCombatDetection.isPlayerInAttackRange && CanAttack)
+        {
+            TryAttack();
+        }    
     }
 
     public bool TryAttack()
@@ -60,23 +47,21 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource
             $"Next attack allowed at {nextAttackTime}"
         );
 
+        FacePlayerTarget();
         animate.SetTrigger("Attack");
         return true;
     }
-
-    public void EnableWeaponHitbox()
+    public void EndAttack()
     {
+        isAttacking = false;
+
         Debug.Log(
-           $"[EnemyCombat] Legacy EnableWeaponHitbox called. " +
-           $"Damage = {enemyDamage}"
+            $"[EnemyCombat] EndAttack called on {name}. " +
+            $"isAttacking = {isAttacking}, Time = {Time.time}"
         );
-        weaponHitbox.EnableHitbox(enemyDamage);
-    }
 
-    public void DisableWeaponHitbox()
-    {
-        Debug.Log("[EnemyCombat] Legacy DisableWeaponHitbox called.");
-        weaponHitbox.DisableHitbox();
+        animate.ResetTrigger("Attack");
+        //Debug.Log($"[Combat] EndAttack fired at {Time.time}");
     }
 
     public void SetEnemyDamage(float damage)
@@ -104,4 +89,20 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource
         TryAttack();
     }
 
+    public void StartAttack()
+    {
+        //  suppresses console errors for Animator Events until we determine what to remove
+    }
+
+    public void FacePlayerTarget()
+    {
+        Vector3 direction = enemyCombatDetection.detectedPlayer.position - transform.position;
+        direction.y = 0f;
+
+        if (direction != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(direction);
+        }
+    }
 }
+
