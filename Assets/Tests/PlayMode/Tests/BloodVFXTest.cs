@@ -1,11 +1,10 @@
 using System;
 using System.Collections;
 using System.Reflection;
-//using NUnit.Framework;
+using NUnit.Framework;
 using UnityEngine;
-//using UnityEngine.TestTools;
+using UnityEngine.TestTools;
 
-//[Ignore("BloodVFX tests are still WIP; skip until assembly/test framework issue is fixed.")]
 public class BloodVFXTests
 {
     private GameObject weaponObject;
@@ -25,8 +24,6 @@ public class BloodVFXTests
 
     private MethodInfo spawnBloodMethod;
     private MethodInfo enableHitboxMethod;
-
-    /*
 
     [SetUp]
     public void SetUp()
@@ -191,8 +188,7 @@ public class BloodVFXTests
         }
     }
 
-    //[UnityTest]
-    //[Ignore("BloodVFX tests are still WIP; skip until assembly/test framework issue is fixed.")]
+    [UnityTest]
     public IEnumerator SpawnBloodVFX_CreatesBloodObject()
     {
         spawnBloodMethod.Invoke(
@@ -214,8 +210,7 @@ public class BloodVFXTests
         );
     }
 
-    //[UnityTest]
-    //[Ignore("BloodVFX tests are still WIP; skip until assembly/test framework issue is fixed.")]
+    [UnityTest]
     public IEnumerator SpawnBloodVFX_SpawnsAtImpactPoint()
     {
         Vector3 expectedHitPoint =
@@ -247,8 +242,7 @@ public class BloodVFXTests
         );
     }
 
-    //[UnityTest]
-    //[Ignore("BloodVFX tests are still WIP; skip until assembly/test framework issue is fixed.")]
+    [UnityTest]
     public IEnumerator SpawnBloodVFX_IsDestroyedAfterLifetime()
     {
         spawnBloodMethod.Invoke(
@@ -283,8 +277,7 @@ public class BloodVFXTests
         );
     }
 
-    //[UnityTest]
-    //[Ignore("BloodVFX tests are still WIP; skip until assembly/test framework issue is fixed.")]
+    [UnityTest]
     public IEnumerator SpawnBloodVFX_WithNoPrefab_DoesNothing()
     {
         bloodPrefabField.SetValue(
@@ -309,5 +302,4 @@ public class BloodVFXTests
             "No Blood VFX should spawn when no prefab is configured."
         );
     }
-    */
 }
