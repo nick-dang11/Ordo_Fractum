@@ -59,6 +59,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Set Build Metadata
+        id: build_metadata
+        shell: bash
+        run: echo "short_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
       - name: Build Windows Game
         id: build
         uses: game-ci/unity-builder@v4
@@ -70,11 +75,11 @@ jobs:
           targetPlatform: StandaloneWindows64
           buildName: OrdoFractum
           versioning: Custom
-          version: 0.2.${{ github.run_number }}
+          version: 0.2.${{ github.run_number }}-${{ steps.build_metadata.outputs.short_sha }}
 
       - name: Upload Windows Build
         uses: actions/upload-artifact@v4
         with:
-          name: OrdoFractum-0.2.${{ github.run_number }}
+          name: OrdoFractum-0.2.${{ github.run_number }}-${{ steps.build_metadata.outputs.short_sha }}
           path: build
           retention-days: 30
