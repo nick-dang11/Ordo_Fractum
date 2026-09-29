@@ -4,7 +4,7 @@ using UnityEngine.AI;
 public class EnemyMovement : MonoBehaviour
 {
     private NavMeshAgent agent;
-    private EnemyController controller; // Connects to the EnemyController script to access the player transform
+    private EnemyAIController controller; // Connects to the EnemyController script to access the player transform
     // Access the public property from EnemyController
     [SerializeField] 
     private Transform[] patrolPoints; // Array of patrol points for the enemy to move between
@@ -14,7 +14,7 @@ public class EnemyMovement : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        controller = GetComponent<EnemyController>();
+        controller = GetComponent<EnemyAIController>();
     }
 
     public void MoveTo(Vector3 location){

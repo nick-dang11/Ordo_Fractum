@@ -1,14 +1,13 @@
-
 using UnityEngine;
-//using UnityEngine.AI;
 
-public class EnemyController : MonoBehaviour
+public class EnemyAIController : MonoBehaviour
 {
     [SerializeField]
     private Transform player;
 
     private EnemyMovement movement;
-    public Transform Player => player; // postions,rotaion,scale
+
+    public Transform Player => player;
 
     private void Awake()
     {
