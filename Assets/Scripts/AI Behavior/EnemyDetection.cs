@@ -1,41 +1,46 @@
-
 using UnityEngine;
 
 public class EnemyDetection : MonoBehaviour
 {
-    private EnemyController controller;
+    private EnemyAIController controller;
 
     [SerializeField]
     private float detectionDistance = 8f;
-    
-    [SerializeField]
-    private float fieldOfViewAngle = 90f; // can see 90 degrees cone
 
-     //there a clear path between me and the player
-    //layermask to know what layers it is allowed to hit
+    [SerializeField]
+    private float fieldOfViewAngle = 90f;
+
     [SerializeField]
     private LayerMask lineOfSightMask;
 
     private void Awake()
     {
-       controller = GetComponent<EnemyController>();
+        controller = GetComponent<EnemyAIController>();
     }
 
     public float DistanceToPlayer()
     {
-        //calculates the distance between two postions
+        if (controller == null || controller.Player == null)
+        {
+            return Mathf.Infinity;
+        }
+
         return Vector3.Distance(
             transform.position,
             controller.Player.position
         );
-        
     }
 
     public Vector3 DirectionToPlayer()
     {
-        return (controller.Player.position - transform.position).normalized; //player position minus enemy position
-        // gives us a direction vector pointing from the enemy toward the player 
-        //.normalized keepts it direction but changes its legnth to 1
+        if (controller == null || controller.Player == null)
+        {
+            return Vector3.zero;
+        }
+
+        return (
+            controller.Player.position - transform.position
+        ).normalized;
     }
 
     public bool IsPlayerDetected()
@@ -45,11 +50,14 @@ public class EnemyDetection : MonoBehaviour
 
     public bool IsPlayerInFieldOfView()
     {
-        //DirectionToPlayer: the direction the enemy is currently facing 
+        if (controller == null || controller.Player == null)
+        {
+            return false;
+        }
+
         float angleToPlayer = Vector3.Angle(
             transform.forward,
             DirectionToPlayer()
-
         );
 
         return angleToPlayer <= fieldOfViewAngle / 2f;
@@ -57,11 +65,16 @@ public class EnemyDetection : MonoBehaviour
 
     public bool HasLineOfSight()
     {
+        if (controller == null || controller.Player == null)
+        {
+            return false;
+        }
+
         Vector3 direction = DirectionToPlayer();
 
         RaycastHit hit;
 
-        if(Physics.Raycast(
+        if (Physics.Raycast(
             transform.position,
             direction,
             out hit,
@@ -76,6 +89,8 @@ public class EnemyDetection : MonoBehaviour
 
     public bool CanSeePlayer()
     {
-        return IsPlayerDetected() && IsPlayerInFieldOfView() && HasLineOfSight();
+        return IsPlayerDetected()
+            && IsPlayerInFieldOfView()
+            && HasLineOfSight();
     }
 }
