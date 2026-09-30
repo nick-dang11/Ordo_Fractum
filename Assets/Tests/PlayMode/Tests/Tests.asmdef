@@ -1,6 +1,19 @@
 {
-    "name": "Tests",
-    "optionalUnityReferences": [
-        "TestAssemblies"
-    ]
+  "name": "Tests",
+  "references": [
+    "UnityEngine.TestRunner"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false
 }
