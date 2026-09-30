@@ -21,8 +21,7 @@ public class AttackStateBehaviour : StateMachineBehaviour
 
         if (attackData == null)
         {
-            Debug.LogWarning($"AttackStateBehavior on {animator.name} has no AttackData assigned." +
-                $"AttackStateBehaviour on {animator.name} has no AttackData assigned.");
+            Debug.LogWarning($"AttackStateBehavior on {animator.name} has no AttackData assigned.");
             return;
         }
 
@@ -39,7 +38,14 @@ public class AttackStateBehaviour : StateMachineBehaviour
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (timelineDriver == null) return;
-        timelineDriver.EndAttack(attackToken);
+        if (timelineDriver != null)
+        {
+            timelineDriver.EndAttack(attackToken);
+        }
+
+        IAttackLifecycle lifecycle =
+            animator.GetComponent<IAttackLifecycle>();
+
+        lifecycle?.OnAttackEnded();
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyCombat : MonoBehaviour, IAttackDamageSource
+public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 {
     [SerializeField] public WeaponHitbox weaponHitbox;
     [SerializeField] private Animator animate;
@@ -62,6 +62,11 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource
 
         animate.ResetTrigger("Attack");
         //Debug.Log($"[Combat] EndAttack fired at {Time.time}");
+    }
+
+    public void OnAttackEnded()
+    {
+        EndAttack();
     }
 
     public void SetEnemyDamage(float damage)

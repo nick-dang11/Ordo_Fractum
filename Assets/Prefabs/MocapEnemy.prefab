@@ -420,7 +420,7 @@ GameObject:
   - component: {fileID: 1635731429984112327}
   - component: {fileID: 8937205026060797890}
   - component: {fileID: 6291261830347497589}
-  - component: {fileID: 3307104090667302471}
+  - component: {fileID: 8325864871925291311}
   - component: {fileID: 3707159666292891715}
   - component: {fileID: 6230063808028939835}
   - component: {fileID: 2249948433049224511}
@@ -463,7 +463,7 @@ Animator:
   m_GameObject: {fileID: 3047151988590228466}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 9024b90c2d1d72c4a9e422f5fdce7b6d, type: 3}
-  m_Controller: {fileID: 9100000, guid: 941eb97b60bd8f142beea650046af952, type: 2}
+  m_Controller: {fileID: 9100000, guid: 10bea47aa5214b4438769656a2b7f7f4, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -500,30 +500,25 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.85, z: 0}
---- !u!114 &3307104090667302471
+--- !u!114 &8325864871925291311
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3047151988590228466}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 252dd4a2243048b4e9b8bcaae049e546, type: 3}
+  m_Script: {fileID: 11500000, guid: 8469e4427ab9ec845a49197bf26f0202, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CombatDetection
-  detectionRadius: 7
-  enemyLayerMask:
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyCombatDetection
+  detectionRadius: 10
+  attackRange: 2
+  playerLayerMask:
     serializedVersion: 2
     m_Bits: 512
-  _Animator: {fileID: 8937205026060797890}
-  isEnemyNearby: 0
-  detectedEnemy:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  animator: {fileID: 8937205026060797890}
+  detectedPlayer: {fileID: 0}
 --- !u!114 &3707159666292891715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -582,7 +577,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCombat
   weaponHitbox: {fileID: 9208360456012289320}
   animate: {fileID: 8937205026060797890}
+  enemyCombatDetection: {fileID: 8325864871925291311}
   enemyDamage: 1
+  enemyAttackCooldown: 1.5
   wasAttacking: 0
   isAttacking: 0
 --- !u!114 &7124248941740884681
@@ -1449,6 +1446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4984127024601954c8280760a4a239d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWeaponHitbox
+  PlayerObject: {fileID: 0}
   showHitboxState: 1
   activeColor: {r: 1, g: 0, b: 0, a: 1}
   inactiveColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}

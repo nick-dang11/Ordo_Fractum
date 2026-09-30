@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerCombat : MonoBehaviour, IAttackDamageSource
+public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 {
     [SerializeField] public PlayerInputManager input;
     [SerializeField] public WeaponHitbox weaponHitbox;
@@ -151,6 +151,11 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource
         animate.ResetTrigger("ComboLight");
         animate.ResetTrigger("ComboHeavy");
         Debug.Log($"[Combat] EndAttack fired at {Time.time}");
+    }
+
+    public void OnAttackEnded()
+    {
+        EndAttack();
     }
 
     public void EnableCombo()
