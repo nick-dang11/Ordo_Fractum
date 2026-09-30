@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
@@ -7,8 +8,11 @@ public class EnemyDetectionTests
     private GameObject enemyObject;
     private GameObject playerObject;
 
-    private EnemyAIController controller;
-    private EnemyDetection detection;
+    private Component controller;
+    private Component detection;
+
+    private Type controllerType;
+    private Type detectionType;
 
     private FieldInfo detectionDistanceField;
     private FieldInfo fieldOfViewAngleField;
@@ -17,11 +21,32 @@ public class EnemyDetectionTests
     [SetUp]
     public void SetUp()
     {
+        // Resolve runtime types from Assembly-CSharp without creating
+        // a compile-time dependency from PlayModeTests -> Assembly-CSharp.
+        controllerType =
+            Type.GetType("EnemyAIController, Assembly-CSharp");
+
+        detectionType =
+            Type.GetType("EnemyDetection, Assembly-CSharp");
+
+        Assert.IsNotNull(
+            controllerType,
+            "EnemyAIController could not be found in Assembly-CSharp."
+        );
+
+        Assert.IsNotNull(
+            detectionType,
+            "EnemyDetection could not be found in Assembly-CSharp."
+        );
+
         enemyObject = new GameObject("Test Enemy");
         playerObject = new GameObject("Test Player");
 
-        controller = enemyObject.AddComponent<EnemyAIController>();
-        detection = enemyObject.AddComponent<EnemyDetection>();
+        controller =
+            enemyObject.AddComponent(controllerType);
+
+        detection =
+            enemyObject.AddComponent(detectionType);
 
         Assert.IsNotNull(controller);
         Assert.IsNotNull(detection);
@@ -29,26 +54,40 @@ public class EnemyDetectionTests
         SetPlayerReference(playerObject.transform);
 
         detectionDistanceField =
-            typeof(EnemyDetection).GetField(
+            detectionType.GetField(
                 "detectionDistance",
-                BindingFlags.NonPublic | BindingFlags.Instance
+                BindingFlags.NonPublic |
+                BindingFlags.Instance
             );
 
         fieldOfViewAngleField =
-            typeof(EnemyDetection).GetField(
+            detectionType.GetField(
                 "fieldOfViewAngle",
-                BindingFlags.NonPublic | BindingFlags.Instance
+                BindingFlags.NonPublic |
+                BindingFlags.Instance
             );
 
         lineOfSightMaskField =
-            typeof(EnemyDetection).GetField(
+            detectionType.GetField(
                 "lineOfSightMask",
-                BindingFlags.NonPublic | BindingFlags.Instance
+                BindingFlags.NonPublic |
+                BindingFlags.Instance
             );
 
-        Assert.IsNotNull(detectionDistanceField);
-        Assert.IsNotNull(fieldOfViewAngleField);
-        Assert.IsNotNull(lineOfSightMaskField);
+        Assert.IsNotNull(
+            detectionDistanceField,
+            "EnemyDetection.detectionDistance could not be found."
+        );
+
+        Assert.IsNotNull(
+            fieldOfViewAngleField,
+            "EnemyDetection.fieldOfViewAngle could not be found."
+        );
+
+        Assert.IsNotNull(
+            lineOfSightMaskField,
+            "EnemyDetection.lineOfSightMask could not be found."
+        );
 
         SetDetectionDistance(8f);
         SetFieldOfViewAngle(90f);
@@ -62,12 +101,12 @@ public class EnemyDetectionTests
     {
         if (enemyObject != null)
         {
-            Object.DestroyImmediate(enemyObject);
+            UnityEngine.Object.DestroyImmediate(enemyObject);
         }
 
         if (playerObject != null)
         {
-            Object.DestroyImmediate(playerObject);
+            UnityEngine.Object.DestroyImmediate(playerObject);
         }
     }
 
@@ -82,7 +121,7 @@ public class EnemyDetectionTests
             new Vector3(0f, 0f, 5f);
 
         float actual =
-            detection.DistanceToPlayer();
+            InvokeDetection<float>("DistanceToPlayer");
 
         Assert.AreEqual(
             5f,
@@ -98,7 +137,7 @@ public class EnemyDetectionTests
             new Vector3(0f, 0f, 5f);
 
         Assert.IsTrue(
-            detection.IsPlayerDetected()
+            InvokeDetection<bool>("IsPlayerDetected")
         );
     }
 
@@ -109,7 +148,7 @@ public class EnemyDetectionTests
             new Vector3(0f, 0f, 10f);
 
         Assert.IsFalse(
-            detection.IsPlayerDetected()
+            InvokeDetection<bool>("IsPlayerDetected")
         );
     }
 
@@ -120,7 +159,7 @@ public class EnemyDetectionTests
             new Vector3(0f, 0f, 8f);
 
         Assert.IsTrue(
-            detection.IsPlayerDetected()
+            InvokeDetection<bool>("IsPlayerDetected")
         );
     }
 
@@ -131,7 +170,7 @@ public class EnemyDetectionTests
             new Vector3(0f, 0f, 8.01f);
 
         Assert.IsFalse(
-            detection.IsPlayerDetected()
+            InvokeDetection<bool>("IsPlayerDetected")
         );
     }
 
@@ -146,7 +185,7 @@ public class EnemyDetectionTests
             new Vector3(3f, 0f, 4f);
 
         Vector3 direction =
-            detection.DirectionToPlayer();
+            InvokeDetection<Vector3>("DirectionToPlayer");
 
         Assert.AreEqual(
             1f,
@@ -162,7 +201,7 @@ public class EnemyDetectionTests
             new Vector3(0f, 0f, 5f);
 
         Vector3 direction =
-            detection.DirectionToPlayer();
+            InvokeDetection<Vector3>("DirectionToPlayer");
 
         Assert.AreEqual(
             Vector3.forward.x,
@@ -188,7 +227,7 @@ public class EnemyDetectionTests
             new Vector3(0f, 0f, 5f);
 
         Assert.IsTrue(
-            detection.IsPlayerInFieldOfView()
+            InvokeDetection<bool>("IsPlayerInFieldOfView")
         );
     }
 
@@ -199,7 +238,7 @@ public class EnemyDetectionTests
             new Vector3(0f, 0f, -5f);
 
         Assert.IsFalse(
-            detection.IsPlayerInFieldOfView()
+            InvokeDetection<bool>("IsPlayerInFieldOfView")
         );
     }
 
@@ -210,7 +249,7 @@ public class EnemyDetectionTests
             new Vector3(2f, 0f, 5f);
 
         Assert.IsTrue(
-            detection.IsPlayerInFieldOfView()
+            InvokeDetection<bool>("IsPlayerInFieldOfView")
         );
     }
 
@@ -221,7 +260,7 @@ public class EnemyDetectionTests
             new Vector3(-2f, 0f, 5f);
 
         Assert.IsTrue(
-            detection.IsPlayerInFieldOfView()
+            InvokeDetection<bool>("IsPlayerInFieldOfView")
         );
     }
 
@@ -232,7 +271,7 @@ public class EnemyDetectionTests
             new Vector3(5f, 0f, 2f);
 
         Assert.IsFalse(
-            detection.IsPlayerInFieldOfView()
+            InvokeDetection<bool>("IsPlayerInFieldOfView")
         );
     }
 
@@ -245,7 +284,7 @@ public class EnemyDetectionTests
             new Vector3(2f, 0f, 5f);
 
         Assert.IsFalse(
-            detection.IsPlayerInFieldOfView()
+            InvokeDetection<bool>("IsPlayerInFieldOfView")
         );
     }
 
@@ -260,15 +299,15 @@ public class EnemyDetectionTests
             new Vector3(0f, 0f, -5f);
 
         Assert.IsTrue(
-            detection.IsPlayerDetected()
+            InvokeDetection<bool>("IsPlayerDetected")
         );
 
         Assert.IsFalse(
-            detection.IsPlayerInFieldOfView()
+            InvokeDetection<bool>("IsPlayerInFieldOfView")
         );
 
         Assert.IsFalse(
-            detection.CanSeePlayer()
+            InvokeDetection<bool>("CanSeePlayer")
         );
     }
 
@@ -279,15 +318,15 @@ public class EnemyDetectionTests
             new Vector3(0f, 0f, 10f);
 
         Assert.IsFalse(
-            detection.IsPlayerDetected()
+            InvokeDetection<bool>("IsPlayerDetected")
         );
 
         Assert.IsTrue(
-            detection.IsPlayerInFieldOfView()
+            InvokeDetection<bool>("IsPlayerInFieldOfView")
         );
 
         Assert.IsFalse(
-            detection.CanSeePlayer()
+            InvokeDetection<bool>("CanSeePlayer")
         );
     }
 
@@ -310,7 +349,7 @@ public class EnemyDetectionTests
         Physics.SyncTransforms();
 
         Assert.IsTrue(
-            detection.HasLineOfSight()
+            InvokeDetection<bool>("HasLineOfSight")
         );
     }
 
@@ -339,9 +378,9 @@ public class EnemyDetectionTests
         Physics.SyncTransforms();
 
         bool hasLineOfSight =
-            detection.HasLineOfSight();
+            InvokeDetection<bool>("HasLineOfSight");
 
-        Object.DestroyImmediate(obstacle);
+        UnityEngine.Object.DestroyImmediate(obstacle);
 
         Assert.IsFalse(
             hasLineOfSight,
@@ -374,9 +413,9 @@ public class EnemyDetectionTests
         Physics.SyncTransforms();
 
         bool canSeePlayer =
-            detection.CanSeePlayer();
+            InvokeDetection<bool>("CanSeePlayer");
 
-        Object.DestroyImmediate(obstacle);
+        UnityEngine.Object.DestroyImmediate(obstacle);
 
         Assert.IsFalse(
             canSeePlayer,
@@ -395,13 +434,13 @@ public class EnemyDetectionTests
             new Vector3(0f, 0f, 12f);
 
         Assert.IsFalse(
-            detection.IsPlayerDetected()
+            InvokeDetection<bool>("IsPlayerDetected")
         );
 
         SetDetectionDistance(15f);
 
         Assert.IsTrue(
-            detection.IsPlayerDetected()
+            InvokeDetection<bool>("IsPlayerDetected")
         );
     }
 
@@ -412,19 +451,43 @@ public class EnemyDetectionTests
             new Vector3(0f, 0f, 5f);
 
         Assert.IsTrue(
-            detection.IsPlayerDetected()
+            InvokeDetection<bool>("IsPlayerDetected")
         );
 
         SetDetectionDistance(4f);
 
         Assert.IsFalse(
-            detection.IsPlayerDetected()
+            InvokeDetection<bool>("IsPlayerDetected")
         );
     }
 
     // ---------------------------------------------------------
-    // Reflection helper methods
+    // Reflection helpers
     // ---------------------------------------------------------
+
+    private T InvokeDetection<T>(string methodName)
+    {
+        MethodInfo method =
+            detectionType.GetMethod(
+                methodName,
+                BindingFlags.Public |
+                BindingFlags.NonPublic |
+                BindingFlags.Instance
+            );
+
+        Assert.IsNotNull(
+            method,
+            $"EnemyDetection.{methodName} could not be found."
+        );
+
+        object result =
+            method.Invoke(
+                detection,
+                null
+            );
+
+        return (T)result;
+    }
 
     private void SetDetectionDistance(float value)
     {
@@ -453,7 +516,7 @@ public class EnemyDetectionTests
     private void SetPlayerReference(Transform player)
     {
         PropertyInfo playerProperty =
-            typeof(EnemyAIController).GetProperty(
+            controllerType.GetProperty(
                 "Player",
                 BindingFlags.Public |
                 BindingFlags.NonPublic |
@@ -472,7 +535,7 @@ public class EnemyDetectionTests
         }
 
         FieldInfo playerField =
-            typeof(EnemyAIController).GetField(
+            controllerType.GetField(
                 "player",
                 BindingFlags.Public |
                 BindingFlags.NonPublic |
