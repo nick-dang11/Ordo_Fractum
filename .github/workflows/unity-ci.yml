@@ -13,32 +13,28 @@ permissions:
   contents: read
   checks: write
 
+# New commits to the same PR cancel obsolete PR validation runs.
+# Builds already running on main are preserved.
 concurrency:
   group: unity-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  validate:
-    name: Unity Tests + Windows Build
+  tests:
+    name: Unity Tests
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Cache Unity Library
+      - name: Cache Unity Test Library
         uses: actions/cache@v4
         with:
           path: Library
-          key: Library-${{ runner.os }}-StandaloneWindows64-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          key: Library-tests-${{ runner.os }}-${{ hashFiles('Packages/manifest.json', 'Packages/packages-lock.json', 'ProjectSettings/ProjectVersion.txt') }}
           restore-keys: |
-            Library-${{ runner.os }}-StandaloneWindows64-
-            Library-${{ runner.os }}-
-
-      - name: Set Build Metadata
-        id: build_metadata
-        shell: bash
-        run: echo "short_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+            Library-tests-${{ runner.os }}-
 
       - name: Run Unity Tests
         id: tests
@@ -49,6 +45,36 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Unity-Test-Results-${{ github.run_number }}
+          path: ${{ steps.tests.outputs.artifactsPath }}
+          retention-days: 14
+
+  build:
+    name: Windows Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Cache Unity Build Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-build-${{ runner.os }}-StandaloneWindows64-${{ hashFiles('Packages/manifest.json', 'Packages/packages-lock.json', 'ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: |
+            Library-build-${{ runner.os }}-StandaloneWindows64-
+            Library-build-${{ runner.os }}-
+
+      - name: Set Build Metadata
+        id: build_metadata
+        shell: bash
+        run: echo "short_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
 
       - name: Build Windows Game
         id: build
@@ -62,14 +88,6 @@ jobs:
           buildName: OrdoFractum
           versioning: Custom
           version: 0.2.${{ github.run_number }}-${{ steps.build_metadata.outputs.short_sha }}
-
-      - name: Upload Test Results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: Unity-Test-Results-${{ github.run_number }}
-          path: ${{ steps.tests.outputs.artifactsPath }}
-          retention-days: 14
 
       - name: Upload Windows Build
         if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
