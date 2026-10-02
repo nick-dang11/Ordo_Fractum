@@ -182,7 +182,7 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         shell: bash
         run: |
-          rm -rf build/StandaloneWindows64/Ordo_Fractum_BurstDebugInformation_DoNotShip
+          sudo rm -rf build/StandaloneWindows64/Ordo_Fractum_BurstDebugInformation_DoNotShip
 
       - name: Upload Windows Build
         if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
