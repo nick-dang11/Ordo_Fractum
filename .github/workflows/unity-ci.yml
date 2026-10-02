@@ -89,10 +89,105 @@ jobs:
           versioning: Custom
           version: 0.2.${{ github.run_number }}-${{ steps.build_metadata.outputs.short_sha }}
 
+      - name: Hash Windows Executable
+        shell: bash
+        run: |
+          echo "=== OrdoFractum.exe SHA256 ==="
+          sha256sum build/StandaloneWindows64/OrdoFractum.exe
+
+      - name: Submit Windows Executable to VirusTotal
+        id: virustotal_upload
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        shell: bash
+        env:
+          VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
+        run: |
+          set -euo pipefail
+
+          RESPONSE=$(curl \
+            --fail \
+            --silent \
+            --show-error \
+            --request POST \
+            --url "https://www.virustotal.com/api/v3/files" \
+            --header "x-apikey: ${VIRUSTOTAL_API_KEY}" \
+            --form "file=@build/StandaloneWindows64/OrdoFractum.exe")
+
+          ANALYSIS_ID=$(echo "$RESPONSE" | jq -r '.data.id')
+
+          if [ -z "$ANALYSIS_ID" ] || [ "$ANALYSIS_ID" = "null" ]; then
+            echo "VirusTotal did not return an analysis ID."
+            echo "$RESPONSE"
+            exit 1
+          fi
+
+          echo "VirusTotal submission accepted."
+          echo "analysis_id=$ANALYSIS_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for VirusTotal Analysis
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        shell: bash
+        env:
+          VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
+          ANALYSIS_ID: ${{ steps.virustotal_upload.outputs.analysis_id }}
+        run: |
+          set -euo pipefail
+
+          # Public API limit is 4 requests/minute.
+          # Poll every 30 seconds to remain comfortably within that limit.
+          for ATTEMPT in {1..10}; do
+            echo "Waiting for VirusTotal analysis... attempt ${ATTEMPT}/10"
+            sleep 30
+
+            RESPONSE=$(curl \
+              --fail \
+              --silent \
+              --show-error \
+              --request GET \
+              --url "https://www.virustotal.com/api/v3/analyses/${ANALYSIS_ID}" \
+              --header "x-apikey: ${VIRUSTOTAL_API_KEY}")
+
+            STATUS=$(echo "$RESPONSE" | jq -r '.data.attributes.status')
+
+            if [ "$STATUS" = "completed" ]; then
+              MALICIOUS=$(echo "$RESPONSE" | jq -r '.data.attributes.stats.malicious // 0')
+              SUSPICIOUS=$(echo "$RESPONSE" | jq -r '.data.attributes.stats.suspicious // 0')
+              UNDETECTED=$(echo "$RESPONSE" | jq -r '.data.attributes.stats.undetected // 0')
+              HARMLESS=$(echo "$RESPONSE" | jq -r '.data.attributes.stats.harmless // 0')
+
+              echo "=== VirusTotal Results ==="
+              echo "Malicious:  $MALICIOUS"
+              echo "Suspicious: $SUSPICIOUS"
+              echo "Undetected: $UNDETECTED"
+              echo "Harmless:   $HARMLESS"
+
+              if [ "$MALICIOUS" -gt 0 ]; then
+                echo "::error::VirusTotal reported ${MALICIOUS} malicious detection(s). Windows artifact will NOT be uploaded."
+                exit 1
+              fi
+
+              if [ "$SUSPICIOUS" -gt 0 ]; then
+                echo "::warning::VirusTotal reported ${SUSPICIOUS} suspicious detection(s). Review before distribution."
+              fi
+
+              echo "VirusTotal reported no malicious detections."
+              exit 0
+            fi
+          done
+
+          echo "::error::VirusTotal analysis did not complete within the polling window."
+          exit 1
+          
+      - name: Remove Non-Shipping Debug Files
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          rm -rf build/StandaloneWindows64/Ordo_Fractum_BurstDebugInformation_DoNotShip
+
       - name: Upload Windows Build
         if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v4
         with:
           name: OrdoFractum-0.2.${{ github.run_number }}-${{ steps.build_metadata.outputs.short_sha }}
-          path: build
+          path: build/StandaloneWindows64
           retention-days: 30
