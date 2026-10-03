@@ -191,3 +191,31 @@ jobs:
           name: OrdoFractum-0.2.${{ github.run_number }}-${{ steps.build_metadata.outputs.short_sha }}
           path: build/StandaloneWindows64
           retention-days: 30
+
+      - name: Install itch.io Butler
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          curl --fail --location --silent --show-error \
+            https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default \
+            -o butler.zip
+
+          unzip -q butler.zip -d butler
+          chmod +x butler/butler
+
+          ./butler/butler -V
+
+      - name: Deploy Windows Build to itch.io
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        shell: bash
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: |
+          set -euo pipefail
+
+          ./butler/butler push \
+            build/StandaloneWindows64 \
+            greene11/ordo-fractum:windows \
+            --userversion "0.2.${{ github.run_number }}-${{ steps.build_metadata.outputs.short_sha }}"
