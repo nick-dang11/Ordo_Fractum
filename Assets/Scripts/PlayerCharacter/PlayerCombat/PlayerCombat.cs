@@ -136,9 +136,8 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 
     public void StartAttack()
     {
+        ForceStopBlocking();
         isAttacking = true;
-        isBlocking = false;
-        animate.SetBool("Block", false);
     }
 
     public void EndAttack()
@@ -201,6 +200,7 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     }
     public void BeginBlock()
     {
+        Debug.Log($"[Block DEBUG] BeginBlock called. " + $"input.block={input?.block}, " + $"isAttacking={isAttacking}, " + $"blockZoneAssigned={blockZone != null}");
         if (input == null)
             return;
 
@@ -216,6 +216,10 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         if (blockZone != null)
         {
             blockZone.SetActive(true);
+        }
+        else
+        {
+            Debug.LogError("[PlayerCombat] BlockZone reference is missing.", this);
         }
 
         Debug.Log($"[Block] Block started at {lastBlockTime}");

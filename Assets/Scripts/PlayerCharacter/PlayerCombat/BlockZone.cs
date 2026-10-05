@@ -39,8 +39,12 @@ public class BlockZone : MonoBehaviour
     public void SetActive(bool active)
     {
         if (zoneCollider == null)
+        {
+            Debug.LogWarning("[Blockzone] CapsuleCollidor is missing.", this);
             return;
+        }
 
         zoneCollider.enabled = active;
+        Debug.Log($"[BlockZone] Collider active = {active}");
     }
 }
