@@ -71,7 +71,7 @@ public class Checkpoint : MonoBehaviour
         }
         if (respawnPoint == null)
         {
-            Debug.LogWarning($"Checkpoint '{gameObject.name}' does not have a Respawn point addigned.", this);
+            Debug.LogWarning($"Checkpoint '{gameObject.name}' does not have a Respawn point assigned.", this);
         }
     }
     private void OnDrawGizmos()
