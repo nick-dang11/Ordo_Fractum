@@ -16,12 +16,15 @@ public abstract class WeaponHitbox : MonoBehaviour
     [Header("Hit VFX")]
     [SerializeField] private GameObject bloodVFXPrefab;
     [SerializeField] private float bloodVFXLifetime = 2f;
+    [SerializeField] private bool logHitRegistration = false;
 
     private bool isHitboxActive = false;
     private float currentDamage;
 
     private readonly HashSet<GameObject> hitTargets = new HashSet<GameObject>();
-    // now tracking GameObjects rather than colliders as a single enemy may have multiple colliders
+    // Track root GameObjects instead of individual colliders.
+    // One combat target may contain multiple colliders, but should only
+    // resolve one hit per hitbox activation window.
 
     protected float CurrentDamage => currentDamage;
     protected bool IsHitboxActive => isHitboxActive;
@@ -33,7 +36,7 @@ public abstract class WeaponHitbox : MonoBehaviour
         if (!weaponCollider.isTrigger)
         {
             Debug.LogWarning($"{name} WeaponHitbox collider does not have is Trigger toggled on. Setting isTrigger to true", this);
-            
+
             weaponCollider.isTrigger = true;
         }
 
@@ -41,7 +44,7 @@ public abstract class WeaponHitbox : MonoBehaviour
 
         weaponRenderer = GetComponent<Renderer>();
 
-        if(weaponRenderer == null)
+        if (weaponRenderer == null)
         {
             weaponRenderer = GetComponentInChildren<Renderer>();
         }
@@ -117,11 +120,20 @@ public abstract class WeaponHitbox : MonoBehaviour
 
         if (targetRoot == transform.root.gameObject) return; // prevent self damage for weapon owner
 
-        if(hitTargets.Contains(targetRoot)) return; // prevent multiple instances of damage during one hitbox window
-
+        if (hitTargets.Contains(targetRoot))
+        {
+            if (logHitRegistration)
+            {
+                Debug.Log($"[WeaponHitbox] Duplicate contact ignored for " + $"target '{targetRoot.name}' from collider '{other.name}'.", this);
+            }
+            return;
+        }
         if (!IsValidTarget(other)) return;
-
         hitTargets.Add(targetRoot);
+        if (logHitRegistration)
+        {
+            Debug.Log($"[WeaponHitbox] Registered target " + $"'{targetRoot.name}' from collider '{other.name}'.", this);
+        }
         HandleHit(other);
     }
 
