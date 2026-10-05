@@ -77,3 +77,6 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 Ordo_Fractum.slnx
 *.slnx
+
+# Purchased MoCapCentral animation assets
+/[Aa]ssets/MoCapCentral/
