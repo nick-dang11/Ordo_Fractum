@@ -10,17 +10,24 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     [SerializeField] private float enemyAttackCooldown = 1.5f;
 
     private float nextAttackTime;
+
     public bool wasAttacking = false;
     public bool isAttacking = false;
+
     public bool IsAttacking => isAttacking;
-    public bool CanAttack => !isAttacking && Time.time >= nextAttackTime;
+
+    public bool CanAttack =>
+        !isAttacking && Time.time >= nextAttackTime;
 
     private void Update()
     {
-        if(enemyCombatDetection.isPlayerInAttackRange && CanAttack)
+        if (enemyCombatDetection == null)
+            return;
+
+        if (enemyCombatDetection.isPlayerInAttackRange && CanAttack)
         {
             TryAttack();
-        }    
+        }
     }
 
     public bool TryAttack()
@@ -48,20 +55,34 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         );
 
         FacePlayerTarget();
-        animate.SetTrigger("Attack");
+
+        if (animate != null)
+        {
+            animate.SetTrigger("Attack");
+        }
+
         return true;
     }
+
+    public void StartAttack()
+    {
+        // Kept for Animator Events / state machine compatibility.
+        // Actual attack is currently started through TryAttack().
+    }
+
     public void EndAttack()
     {
         isAttacking = false;
 
+        if (animate != null)
+        {
+            animate.ResetTrigger("Attack");
+        }
+
         Debug.Log(
             $"[EnemyCombat] EndAttack called on {name}. " +
-            $"isAttacking = {isAttacking}, Time = {Time.time}"
+            $"isAttacking={isAttacking}, Time={Time.time}"
         );
-
-        animate.ResetTrigger("Attack");
-        //Debug.Log($"[Combat] EndAttack fired at {Time.time}");
     }
 
     public void OnAttackEnded()
@@ -69,9 +90,26 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         EndAttack();
     }
 
+    public void EnableWeaponHitbox()
+    {
+        if (weaponHitbox != null)
+        {
+            weaponHitbox.EnableHitbox(enemyDamage);
+        }
+    }
+
+    public void DisableWeaponHitbox()
+    {
+        if (weaponHitbox != null)
+        {
+            weaponHitbox.DisableHitbox();
+        }
+    }
+
     public void SetEnemyDamage(float damage)
     {
         enemyDamage = damage;
+
         Debug.Log(
             $"[EnemyCombat] Enemy damage changed to {enemyDamage}."
         );
@@ -81,11 +119,32 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     {
         Debug.Log(
             $"[EnemyCombat] GetAttackDamage called. " +
-            $"AttackData = {(attackData != null ? attackData.name : "NULL")}, " +
-            $"Damage returned = {enemyDamage}"
+            $"AttackData={(attackData != null ? attackData.name : "NULL")}, " +
+            $"Damage returned={enemyDamage}"
         );
 
         return enemyDamage;
+    }
+
+    public void FacePlayerTarget()
+    {
+        if (enemyCombatDetection == null ||
+            enemyCombatDetection.detectedPlayer == null)
+        {
+            return;
+        }
+
+        Vector3 direction =
+            enemyCombatDetection.detectedPlayer.position
+            - transform.position;
+
+        direction.y = 0f;
+
+        if (direction != Vector3.zero)
+        {
+            transform.rotation =
+                Quaternion.LookRotation(direction);
+        }
     }
 
     [ContextMenu("DEBUG Trigger Attack")]
@@ -93,21 +152,4 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     {
         TryAttack();
     }
-
-    public void StartAttack()
-    {
-        //  suppresses console errors for Animator Events until we determine what to remove
-    }
-
-    public void FacePlayerTarget()
-    {
-        Vector3 direction = enemyCombatDetection.detectedPlayer.position - transform.position;
-        direction.y = 0f;
-
-        if (direction != Vector3.zero)
-        {
-            transform.rotation = Quaternion.LookRotation(direction);
-        }
-    }
 }
-
