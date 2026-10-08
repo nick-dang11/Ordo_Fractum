@@ -69,7 +69,7 @@ public class EnemyCombatTests
             enemyCombatType.GetField(
                 "isAttacking",
                 BindingFlags.Instance |
-                BindingFlags.Public
+                BindingFlags.NonPublic
             );
 
         Assert.IsNotNull(getAttackDamageMethod);

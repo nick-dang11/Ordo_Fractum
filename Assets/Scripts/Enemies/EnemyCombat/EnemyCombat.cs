@@ -2,27 +2,22 @@ using UnityEngine;
 
 public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 {
-    [SerializeField] public WeaponHitbox weaponHitbox;
+    [SerializeField] private WeaponHitbox weaponHitbox;
     [SerializeField] private Animator animate;
     [SerializeField] private EnemyCombatDetection enemyCombatDetection;
 
-    [SerializeField] private float enemyDamage = 1f;
-    [SerializeField] private float enemyAttackCooldown = 1.5f;
+    [SerializeField, Min(0f)] private float enemyDamage = 1f;
+    [SerializeField, Min(0f)] private float enemyAttackCooldown = 1.5f;
+    [SerializeField, Min(0f)] private float faceTargetSpeed = 8f;
 
     private float nextAttackTime;
-
-    public bool wasAttacking = false;
-    public bool isAttacking = false;
-
+    private bool isAttacking = false;
     public bool IsAttacking => isAttacking;
-
-    public bool CanAttack =>
-        !isAttacking && Time.time >= nextAttackTime;
+    public bool CanAttack => !isAttacking && Time.time >= nextAttackTime;
 
     private void Update()
     {
-        if (enemyCombatDetection == null)
-            return;
+        if (enemyCombatDetection == null) return;
 
         if (enemyCombatDetection.isPlayerInAttackRange && CanAttack)
         {
@@ -46,6 +41,24 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
             return false;
         }
 
+        if(enemyCombatDetection == null)
+        {
+            Debug.LogWarning($"EnemyCombatDetection is not assigned.");
+            return false;
+        }
+
+        if (enemyCombatDetection.detectedPlayer == null)
+        {
+            Debug.LogWarning("No detected player target.");
+            return false;
+        }
+
+        if (animate == null)
+        {
+            Debug.LogWarning("Animator is not assigned.");
+            return false;
+        }
+
         isAttacking = true;
         nextAttackTime = Time.time + enemyAttackCooldown;
 
@@ -55,34 +68,23 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         );
 
         FacePlayerTarget();
-
-        if (animate != null)
-        {
-            animate.SetTrigger("Attack");
-        }
-
+        animate.SetTrigger("Attack");
         return true;
     }
-
-    public void StartAttack()
-    {
-        // Kept for Animator Events / state machine compatibility.
-        // Actual attack is currently started through TryAttack().
-    }
-
     public void EndAttack()
     {
         isAttacking = false;
 
-        if (animate != null)
+        Debug.Log(
+            $"[EnemyCombat] EndAttack called on {name}. " +
+            $"isAttacking = {isAttacking}, Time = {Time.time}"
+        );
+
+        if(animate != null)
         {
             animate.ResetTrigger("Attack");
         }
-
-        Debug.Log(
-            $"[EnemyCombat] EndAttack called on {name}. " +
-            $"isAttacking={isAttacking}, Time={Time.time}"
-        );
+        //Debug.Log($"[Combat] EndAttack fired at {Time.time}");
     }
 
     public void OnAttackEnded()
@@ -90,26 +92,9 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         EndAttack();
     }
 
-    public void EnableWeaponHitbox()
-    {
-        if (weaponHitbox != null)
-        {
-            weaponHitbox.EnableHitbox(enemyDamage);
-        }
-    }
-
-    public void DisableWeaponHitbox()
-    {
-        if (weaponHitbox != null)
-        {
-            weaponHitbox.DisableHitbox();
-        }
-    }
-
     public void SetEnemyDamage(float damage)
     {
-        enemyDamage = damage;
-
+        enemyDamage = Mathf.Max(0f, damage);
         Debug.Log(
             $"[EnemyCombat] Enemy damage changed to {enemyDamage}."
         );
@@ -119,37 +104,48 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     {
         Debug.Log(
             $"[EnemyCombat] GetAttackDamage called. " +
-            $"AttackData={(attackData != null ? attackData.name : "NULL")}, " +
-            $"Damage returned={enemyDamage}"
+            $"AttackData = {(attackData != null ? attackData.name : "NULL")}, " +
+            $"Damage returned = {enemyDamage}"
         );
 
         return enemyDamage;
-    }
-
-    public void FacePlayerTarget()
-    {
-        if (enemyCombatDetection == null ||
-            enemyCombatDetection.detectedPlayer == null)
-        {
-            return;
-        }
-
-        Vector3 direction =
-            enemyCombatDetection.detectedPlayer.position
-            - transform.position;
-
-        direction.y = 0f;
-
-        if (direction != Vector3.zero)
-        {
-            transform.rotation =
-                Quaternion.LookRotation(direction);
-        }
     }
 
     [ContextMenu("DEBUG Trigger Attack")]
     private void DebugTriggerAttack()
     {
         TryAttack();
+    }
+
+    public void FacePlayerTarget()
+    {
+        if(enemyCombatDetection == null)
+        {
+            Debug.LogWarning("EnemyCombatDetection is not assigned.");
+            return;
+        }
+
+        Transform target = enemyCombatDetection.detectedPlayer;
+        if(target == null)
+        {
+            Debug.LogWarning("No detected player.");
+            return;
+        }
+
+        Vector3 direction = target.position - transform.position;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude <= 0.001f)
+        {
+            return;
+        }
+
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            targetRotation,
+            faceTargetSpeed * Time.deltaTime
+        );
     }
 }
