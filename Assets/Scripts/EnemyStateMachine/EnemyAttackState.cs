@@ -19,7 +19,7 @@ public class EnemyAttackState : EnemyBaseState
 
         if (context.combat != null)
         {
-            context.combat.StartAttack();
+            //context.combat.StartAttack();
         }
 
         if (context.animator != null)
