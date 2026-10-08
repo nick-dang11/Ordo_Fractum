@@ -15,7 +15,7 @@ public class EnemyStunnedState : EnemyBaseState
 
         if (context.combat != null)
         {
-            context.combat.DisableWeaponHitbox();
+            //context.combat.DisableWeaponHitbox();
         }
 
         if (context.animator != null)

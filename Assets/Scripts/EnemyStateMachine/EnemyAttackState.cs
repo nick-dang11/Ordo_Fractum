@@ -77,7 +77,7 @@ public class EnemyAttackState : EnemyBaseState
     {
         if (context.combat != null)
         {
-            context.combat.DisableWeaponHitbox();
+            //context.combat.DisableWeaponHitbox();
         }
     }
 }
