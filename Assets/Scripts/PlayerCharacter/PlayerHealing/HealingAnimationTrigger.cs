@@ -6,11 +6,18 @@ public class HealingAnimation : MonoBehaviour
     [SerializeField] private PlayerInputManager playerInputManager;
     [SerializeField] private HealthSystem healthSystem;
     [SerializeField] private Animator playerAnimator;
+    [SerializeField] private PlayerWill playerWill;
+
 
     [Header("Timing for Heal Animation")]
     [SerializeField] private float applyHealAfter = 0.8f;
     [SerializeField] private float healingDuration = 1.8f;
-    
+
+    [Header("Healing Cost")]
+    [SerializeField] private float healWillCost = 25f;
+
+
+
     //Represnets whether the player is currently healing or not
     private bool isHealing; // Represents whether the player is currently healing or not
     private bool healingAlreadyApplied; // Represents whether the healing effect has already been applied during the current healing process
@@ -56,17 +63,30 @@ public class HealingAnimation : MonoBehaviour
             return;
         }
 
-        if(healthSystem.health >= healthSystem.maxHealth)
+        if (healthSystem.health >= healthSystem.maxHealth)
         {
             Debug.Log("Cannot heal: Health is already full.");
             return;
         }
 
-        //Reseting the healing state and timer when starting a new healing process
+        if (playerWill == null)
+        {
+            Debug.LogWarning("Cannot heal: PlayerWill reference is missing.");
+            return;
+        }
+
+        if (!playerWill.HasWill(healWillCost))
+        {
+            Debug.Log("Cannot heal: Not enough Will.");
+            return;
+        }
+
         isHealing = true;
         healingAlreadyApplied = false;
         healingTimer = 0f;
-        playerAnimator.SetTrigger(HealTrigger); //Trigger the healing animation in the animator
+
+        playerAnimator.SetTrigger(HealTrigger);
+
         Debug.Log("Healing started.");
     }
 
@@ -78,9 +98,20 @@ public class HealingAnimation : MonoBehaviour
             return;
         }
 
+        if (!playerWill.SpendWill(healWillCost))
+        {
+            Debug.Log("Healing cancelled: Not enough Will.");
+            FinishHealing();
+            return;
+        }
+
         healingAlreadyApplied = true;
+
         healthSystem.Heal(healthSystem.heal_Amount);
-        Debug.Log("Healing applied");
+
+        Debug.Log(
+            $"Healing applied. Will cost: {healWillCost}"
+        );
     }
     public void FinishHealing()
     {
