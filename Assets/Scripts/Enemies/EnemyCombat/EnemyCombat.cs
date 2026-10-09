@@ -13,7 +13,11 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     private float nextAttackTime;
     private bool isAttacking = false;
     public bool IsAttacking => isAttacking;
-    public bool CanAttack => !isAttacking && Time.time >= nextAttackTime;
+    private bool isBlocking = false;
+    public bool IsBlocking => isBlocking;
+
+    public bool CanAttack => !isAttacking && !isBlocking && Time.time >= nextAttackTime;
+    public bool CanBlock => !isAttacking && !isBlocking;
 
     private void Update()
     {
@@ -29,7 +33,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     {
         Debug.Log(
             $"[EnemyCombat] TryAttack called. " +
-            $"CanAttack={CanAttack}, " +
+            $"CanAttack={CanAttack}, " +    
             $"isAttacking={isAttacking}, " +
             $"Time={Time.time}, " +
             $"nextAttackTime={nextAttackTime}"
@@ -98,6 +102,31 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         Debug.Log(
             $"[EnemyCombat] Enemy damage changed to {enemyDamage}."
         );
+    }
+
+    public bool StartBlock()
+    {
+        if (!CanBlock)
+        {
+            Debug.Log("EnemyCombat rejected block.");
+            return false;
+        }
+
+        isBlocking = true;
+        if(animate != null) animate.SetBool("Blocking", true);
+        Debug.Log($"EnemyCombat started block on {name}.");
+
+        return true;
+    }
+
+    public void EndBlock()
+    {
+        if (!isBlocking) return;
+
+        isBlocking = false;
+        if (animate != null) animate.SetBool("Blocking", false);
+
+        Debug.Log($"EnemyCombat ended block on {name}.");
     }
 
     public float GetAttackDamage(AttackData attackData)
