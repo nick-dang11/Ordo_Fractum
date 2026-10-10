@@ -16,8 +16,11 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     private bool isBlocking = false;
     public bool IsBlocking => isBlocking;
 
-    public bool CanAttack => !isAttacking && !isBlocking && Time.time >= nextAttackTime;
-    public bool CanBlock => !isAttacking && !isBlocking;
+    private bool isStunned;
+    public bool IsStunned => isStunned;
+
+    public bool CanAttack => !isAttacking && !isBlocking && !isStunned && Time.time >= nextAttackTime;
+    public bool CanBlock => !isAttacking && !isBlocking && !isStunned;
 
     private void Update()
     {
@@ -127,6 +130,27 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         if (animate != null) animate.SetBool("Blocking", false);
 
         Debug.Log($"EnemyCombat ended block on {name}.");
+    }
+
+    public void StartStun()
+    {
+        EndBlock();
+        isStunned = true;
+
+        if(animate != null)
+        {
+            animate.SetBool("Stunned", true);
+        }
+    }
+
+    public void EndStun()
+    {
+        isStunned=false;
+
+        if (animate != null)
+        {
+            animate.SetBool("Stunned", false);
+        }
     }
 
     public float GetAttackDamage(AttackData attackData)

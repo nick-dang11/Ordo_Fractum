@@ -61,7 +61,10 @@ public class EnemyHealth : MonoBehaviour
                 enemyPosture.ApplyPostureDamage(damage);
             }
 
-            enemyCombat.PlayBlockFeedback();
+            if (!enemyPosture.IsPostureBroken)
+            {
+                enemyCombat.PlayBlockFeedback();
+            }
             return;
         }
 
