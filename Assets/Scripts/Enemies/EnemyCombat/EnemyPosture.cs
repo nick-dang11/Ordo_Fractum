@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EnemyPostureMeter : MonoBehaviour
+public class EnemyPosture : MonoBehaviour
 {
     [Header("Posture")]
     [SerializeField, Min(1f)]

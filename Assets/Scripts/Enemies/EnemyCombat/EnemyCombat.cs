@@ -177,4 +177,11 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
             faceTargetSpeed * Time.deltaTime
         );
     }
+
+    public void PlayBlockFeedback()
+    {
+        if (animate == null) return;
+
+        animate.SetTrigger("BlockHit");
+    }
 }

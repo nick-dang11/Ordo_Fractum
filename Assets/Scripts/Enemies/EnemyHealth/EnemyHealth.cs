@@ -2,12 +2,20 @@ using UnityEngine;
 using UnityEngine.UI;
 public class EnemyHealth : MonoBehaviour
 {
+    [SerializeField] private EnemyCombat enemyCombat;
+    [SerializeField] private EnemyPosture enemyPosture;
 
     public Slider healthbarSlider;
     public Slider easeHealthbarSlider;
     public float maxHealth = 100f;
     public float health;
     private float lerpSpeed = 2f;
+
+    private void Awake()
+    {
+        if (enemyCombat == null) enemyCombat = GetComponent <EnemyCombat>();
+        if (enemyPosture == null) enemyPosture = GetComponent<EnemyPosture>();
+    }
 
     void Start()
     {
@@ -42,16 +50,29 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        if (damage <= 0f) return;
+
+        if(enemyCombat != null && enemyCombat.IsBlocking)
+        {
+            Debug.Log($"Enemy {name} blocked {damage} damage.");
+
+            if(enemyPosture != null)
+            {
+                enemyPosture.ApplyPostureDamage(damage);
+            }
+
+            enemyCombat.PlayBlockFeedback();
+            return;
+        }
+
         health -= damage; 
         health = Mathf.Clamp(health, 0, maxHealth);// (value,min,max)
         Debug.Log("Enemy took damage: " + damage);
 
-        if(health <= 0)
+        if (health <= 0f)
         {
             Debug.Log("Enemy is Dead");
             Destroy(gameObject);
-            return;
         }
-    
     }
 }
