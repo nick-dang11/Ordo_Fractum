@@ -90,10 +90,15 @@ jobs:
           version: 0.2.${{ github.run_number }}-${{ steps.build_metadata.outputs.short_sha }}
 
       - name: Hash Windows Executable
+        id: executable_hash
         shell: bash
         run: |
+          SHA256=$(sha256sum build/StandaloneWindows64/OrdoFractum.exe | awk '{print $1}')
+
           echo "=== OrdoFractum.exe SHA256 ==="
-          sha256sum build/StandaloneWindows64/OrdoFractum.exe
+          echo "$SHA256"
+
+          echo "sha256=$SHA256" >> "$GITHUB_OUTPUT"
 
       - name: Submit Windows Executable to VirusTotal
         id: virustotal_upload
@@ -130,8 +135,11 @@ jobs:
         env:
           VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
           ANALYSIS_ID: ${{ steps.virustotal_upload.outputs.analysis_id }}
+          EXECUTABLE_SHA256: ${{ steps.executable_hash.outputs.sha256 }}
         run: |
           set -euo pipefail
+
+          echo "Analyzing executable SHA256: ${EXECUTABLE_SHA256}"
 
           # Public API limit is 4 requests/minute.
           # Poll every 30 seconds to remain comfortably within that limit.
@@ -156,10 +164,29 @@ jobs:
               HARMLESS=$(echo "$RESPONSE" | jq -r '.data.attributes.stats.harmless // 0')
 
               echo "=== VirusTotal Results ==="
-              echo "Malicious:  $MALICIOUS"
-              echo "Suspicious: $SUSPICIOUS"
-              echo "Undetected: $UNDETECTED"
-              echo "Harmless:   $HARMLESS"
+              echo "SHA256:      ${EXECUTABLE_SHA256}"
+              echo "Malicious:   $MALICIOUS"
+              echo "Suspicious:  $SUSPICIOUS"
+              echo "Undetected:  $UNDETECTED"
+              echo "Harmless:    $HARMLESS"
+
+              echo "=== VirusTotal Flagged Engines ==="
+
+              FLAGGED_RESULTS=$(echo "$RESPONSE" | jq -r '
+                .data.attributes.results
+                | to_entries[]
+                | select(
+                    .value.category == "malicious" or
+                    .value.category == "suspicious"
+                  )
+                | "\(.key): category=\(.value.category), result=\(.value.result // "N/A"), method=\(.value.method // "N/A"), engine_version=\(.value.engine_version // "N/A")"
+              ')
+
+              if [ -n "$FLAGGED_RESULTS" ]; then
+                echo "$FLAGGED_RESULTS"
+              else
+                echo "No malicious or suspicious engine results reported."
+              fi
 
               if [ "$MALICIOUS" -gt 0 ]; then
                 echo "::error::VirusTotal reported ${MALICIOUS} malicious detection(s). Windows artifact will NOT be uploaded."
@@ -177,7 +204,7 @@ jobs:
 
           echo "::error::VirusTotal analysis did not complete within the polling window."
           exit 1
-          
+
       - name: Remove Non-Shipping Debug Files
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         shell: bash
