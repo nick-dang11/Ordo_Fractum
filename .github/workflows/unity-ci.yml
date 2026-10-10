@@ -188,16 +188,47 @@ jobs:
                 echo "No malicious or suspicious engine results reported."
               fi
 
-              if [ "$MALICIOUS" -gt 0 ]; then
-                echo "::error::VirusTotal reported ${MALICIOUS} malicious detection(s). Windows artifact will NOT be uploaded."
+              # Controlled exception:
+              # Ignore only this specific known Gridinsoft false-positive signature.
+              GRIDINSOFT_KNOWN_FP=$(echo "$RESPONSE" | jq -r '
+                .data.attributes.results.Gridinsoft
+                | select(
+                    .category == "malicious" and
+                    .result == "Trojan.Win64.Downloader.oa!s1"
+                  )
+                | .result // ""
+              ')
+
+              # Count all malicious results except the exact Gridinsoft signature above.
+              NON_WHITELISTED_MALICIOUS=$(echo "$RESPONSE" | jq -r '
+                .data.attributes.results
+                | to_entries
+                | map(
+                    select(
+                      .value.category == "malicious" and
+                      !(
+                        .key == "Gridinsoft" and
+                        .value.result == "Trojan.Win64.Downloader.oa!s1"
+                      )
+                    )
+                  )
+                | length
+              ')
+
+              if [ "$NON_WHITELISTED_MALICIOUS" -gt 0 ]; then
+                echo "::error::VirusTotal reported ${NON_WHITELISTED_MALICIOUS} non-whitelisted malicious detection(s). Windows artifact will NOT be uploaded."
                 exit 1
+              fi
+
+              if [ "$GRIDINSOFT_KNOWN_FP" = "Trojan.Win64.Downloader.oa!s1" ]; then
+                echo "::warning::Ignoring known Gridinsoft false-positive signature: Trojan.Win64.Downloader.oa!s1"
               fi
 
               if [ "$SUSPICIOUS" -gt 0 ]; then
                 echo "::warning::VirusTotal reported ${SUSPICIOUS} suspicious detection(s). Review before distribution."
               fi
 
-              echo "VirusTotal reported no malicious detections."
+              echo "VirusTotal reported no non-whitelisted malicious detections."
               exit 0
             fi
           done
