@@ -43,7 +43,7 @@ public class PillEnemyCombat : MonoBehaviour
         canEnemyAttack = true;
     }
 
-    public void ForceSturn()
+    public void ForceStun()
     {
         if (isStunned) return;
         Debug.Log("Enemy stunned from posture break.");
