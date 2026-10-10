@@ -22,9 +22,9 @@ public class MenuController : MonoBehaviour
     [SerializeField] private Toggle invertYToggle = null;
 
     [Header("Graphics Settings")]
-    [SerializeField] private Slider brightnessSlider = null;
+    //[SerializeField] private Slider brightnessSlider = null;
     [SerializeField] private TMP_Text brightnessTextValue = null;
-    [SerializeField] private float defaultBrightness = 1;
+    //[SerializeField] private float defaultBrightness = 1;
 
     private int _qualityLevel;
     private bool _isFullScreen;
