@@ -16,13 +16,23 @@ public partial class PatrolsAction : Action
 
     protected override Status OnStart()
     {
+       // Debug.Log("Test: PatrolsAction is running");
+
+        if(Enemy == null || Enemy.Value == null)
+        {
+            Debug.LogWarning("Enemy is null or Enemy.Value is null in PatrolsAction");
+            return Status.Failure;
+        }
+
         movement = Enemy.Value.GetComponent<EnemyMovement>();
 
         if(movement == null)
         {
+            Debug.LogError("EnemyMovement component not found on Enemy in PatrolsAction");
             return Status.Failure;
         }
 
+       // Debug.Log("PatrolsAction: Enemy is patrolling.");
         movement.Patrol();
 
         return Status.Success;

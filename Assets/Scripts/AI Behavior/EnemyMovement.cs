@@ -18,13 +18,33 @@ public class EnemyMovement : MonoBehaviour
     }
 
     public void MoveTo(Vector3 location){
+
+        if(agent == null || !agent.isOnNavMesh)
+        {
+            Debug.LogWarning("NavMeshAgent is not available or not on a valid NavMesh in EnemyMovement");
+            return;
+        }
+
         agent.isStopped = false;
-        agent.SetDestination(location);// navigates toward this position
+        bool accepted =  agent.SetDestination(location);// navigates toward this position
+
+       /* Debug.Log("Desitination accepted" + accepted + 
+        "| Requested Location: " + location +
+        "| Agent Distance: " + agent.remainingDistance +
+        "| Enemy Position: " + transform.position
+        ); */
 
     }
 
     public void Chase()
     {
+        if(controller == null || controller.Player == null)
+        {
+            Debug.LogWarning("EnemyAIController or Player is null in EnemyMovement");
+            return;
+        }
+
+        //Debug.Log("CHASE DESTINATION:" + controller.Player.position);
         MoveTo(controller.Player.position);
     }
 
@@ -40,6 +60,7 @@ public class EnemyMovement : MonoBehaviour
             return;
         }
 
+        Debug.Log("PATROL is SETTING DESTINATION");
         MoveTo(patrolPoints[currentPatrolIndex].position);
 
         if (ReachedDestination())
@@ -50,11 +71,22 @@ public class EnemyMovement : MonoBehaviour
 
     public bool ReachedDestination()
     {
+        if(agent == null || !agent.isOnNavMesh)
+        {
+            return false; // agent is not on a valid NavMesh
+        }
+
         if (agent.pathPending)
         {
             return false; // path is being traveled and we have not arrived yet
         }
         //remainingDistance is how much farther does the agent have to travel from max distance to 0(reach your detination)
+
+        if(float.IsInfinity(agent.remainingDistance))
+        {
+            return false; // remaining distance is not valid
+        }
+        
         return agent.remainingDistance <= agent.stoppingDistance; 
     }
 

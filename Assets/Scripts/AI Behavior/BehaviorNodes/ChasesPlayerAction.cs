@@ -20,8 +20,11 @@ public partial class ChasesPlayerAction : Action
 
     protected override Status OnStart()
     {
-        if (Enemy.Value == null)
+       // Debug.Log("Test: ChasesPlayerAction is running");
+
+        if (Enemy == null || Enemy.Value == null)
         {
+            Debug.LogWarning("Enemy is null or Enemy.Value is null in ChasesPlayerAction");
             return Status.Failure;
         }
 
@@ -29,24 +32,21 @@ public partial class ChasesPlayerAction : Action
 
         if (movement == null)
         {
+            Debug.LogError("EnemyMovement component not found on Enemy in ChasesPlayerAction");
             return Status.Failure;
         }
 
+       // Debug.Log("ChasesPlayerAction: Enemy is chasing the player.");
         movement.Chase();
 
-        return Status.Running;
+        return Status.Success;
     }
 
     protected override Status OnUpdate()
     {
-        if (movement == null)
-        {
-            return Status.Failure;
-        }
+       
 
-        movement.Chase();
-
-        return Status.Running;
+        return Status.Success; // Action is complete
     }
 
     protected override void OnEnd()
