@@ -1,5 +1,7 @@
 public abstract class EnemyBaseState
 {
+    public virtual int PriorityLevel => 0;
+
     public abstract void EnterState(EnemyStateManager context);
 
     public abstract void UpdateState(EnemyStateManager context);

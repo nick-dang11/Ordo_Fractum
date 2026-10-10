@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class EnemyBlockState : EnemyBaseState
 {
+    public override int PriorityLevel => 1;
+
     public override void EnterState(EnemyStateManager context)
     {
         Debug.Log("Enemy entered Block State");

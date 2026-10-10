@@ -3,6 +3,9 @@ using UnityEngine.UI;
 
 public class EnemyPosture : MonoBehaviour
 {
+    [Header("References")]
+    private EnemyStateManager stateManager;
+
     [Header("Posture")]
     [SerializeField, Min(1f)]
     private float maxPosture = 100f;
@@ -28,6 +31,13 @@ public class EnemyPosture : MonoBehaviour
     public float MaxPosture => maxPosture;
     public bool IsPostureBroken => isPostureBroken;
 
+    private void Awake()
+    {
+        if(stateManager == null)
+        {
+            stateManager = GetComponent<EnemyStateManager>();
+        }
+    }
     private void Start()
     {
         currentPosture = 0f;
@@ -104,8 +114,10 @@ public class EnemyPosture : MonoBehaviour
             $"[EnemyPosture] Posture broken on {name}."
         );
 
-        // EnemyStateManager -> StunnedState
-        // will be connected next.
+        if(stateManager != null)
+        {
+            stateManager.RequestStun();
+        }
     }
 
     private void UpdatePostureUI()
@@ -120,5 +132,18 @@ public class EnemyPosture : MonoBehaviour
     private void DebugAddPosture()
     {
         ApplyPostureDamage(25f);
+    }
+
+    public void RecoverFromPostureBreak(float recoveryPercent)
+    {
+        recoveryPercent = Mathf.Clamp01(recoveryPercent);
+
+        currentPosture = maxPosture * recoveryPercent;
+        isPostureBroken = false;
+        decayTimer = 0f;
+
+        UpdatePostureUI();
+
+        Debug.Log($"EnemyPosture {name} recovered at {currentPosture}/{maxPosture} posture.");
     }
 }

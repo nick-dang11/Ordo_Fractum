@@ -4567,6 +4567,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStateManager
   combat: {fileID: 1691084827}
+  posture: {fileID: 1691084836}
 --- !u!114 &1691084836
 MonoBehaviour:
   m_ObjectHideFlags: 0
