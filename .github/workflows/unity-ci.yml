@@ -206,9 +206,10 @@ jobs:
                 | map(
                     select(
                       .value.category == "malicious" and
-                      !(
-                        .key == "Gridinsoft" and
-                        .value.result == "Trojan.Win64.Downloader.oa!s1"
+                      (
+                        (.key == "Gridinsoft" and
+                        .value.result == "Trojan.Win64.Downloader.oa!s1")
+                        | not
                       )
                     )
                   )
