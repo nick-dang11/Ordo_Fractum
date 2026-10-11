@@ -1450,7 +1450,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &176058835
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4301,7 +4301,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 45742382}
+      - m_Target: {fileID: 806574155}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -5067,7 +5067,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &806574156
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5444,6 +5444,8 @@ MonoBehaviour:
   brightnessSlider: {fileID: 887324227}
   brightnessTextValue: {fileID: 362277481}
   defaultBrightness: 1
+  qualityDropdown: {fileID: 1661209276}
+  fullScreenToggle: {fileID: 785727035}
   confirmationPrompt: {fileID: 1291854211}
   _newGameLevel: MainScene
   noSavedGameDialog: {fileID: 1075283225}
@@ -7038,7 +7040,7 @@ RectTransform:
   m_Father: {fileID: 847138908}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: -0.7677, y: 0}
   m_SizeDelta: {x: 0.041, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -11755,8 +11757,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 29923510}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -12548,7 +12550,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Gameplay
+          m_StringArgument: Graphics
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1990304818
