@@ -5,6 +5,7 @@ public class EnemyPosture : MonoBehaviour
 {
     [Header("References")]
     private EnemyStateManager stateManager;
+    private EnemyHealth enemyHealth;
 
     [Header("Posture")]
     [SerializeField, Min(1f)]
@@ -53,8 +54,8 @@ public class EnemyPosture : MonoBehaviour
 
     private void Update()
     {
-        if (isPostureBroken)
-            return;
+        if (stateManager != null && stateManager.CurrentState == stateManager.DeathState) return;
+        if (isPostureBroken) return;
 
         decayTimer += Time.deltaTime;
 
@@ -128,12 +129,6 @@ public class EnemyPosture : MonoBehaviour
         }
     }
 
-    [ContextMenu("Debug Deal Posture Damage")]
-    private void DebugAddPosture()
-    {
-        ApplyPostureDamage(25f);
-    }
-
     public void RecoverFromPostureBreak(float recoveryPercent)
     {
         recoveryPercent = Mathf.Clamp01(recoveryPercent);
@@ -145,5 +140,11 @@ public class EnemyPosture : MonoBehaviour
         UpdatePostureUI();
 
         Debug.Log($"EnemyPosture {name} recovered at {currentPosture}/{maxPosture} posture.");
+    }
+
+    [ContextMenu("Debug Deal Posture Damage")]
+    private void DebugAddPosture()
+    {
+        ApplyPostureDamage(25f);
     }
 }

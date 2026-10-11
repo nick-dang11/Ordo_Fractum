@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-public class BillBoard : MonoBehaviour
+public class EnemyHealthUI : MonoBehaviour
 {
    public Transform cam;
    
