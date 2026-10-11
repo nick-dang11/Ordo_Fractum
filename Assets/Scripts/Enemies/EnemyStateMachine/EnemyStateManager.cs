@@ -12,6 +12,8 @@ public class EnemyStateManager : MonoBehaviour
     public EnemyBaseState CurrentState { get; private set; }
     public EnemyBlockState BlockState { get; private set; }
     public EnemyStunnedState StunnedState { get; private set; }
+    public EnemyDeathState DeathState { get; private set; }
+
 
     public void Awake()
     {
@@ -27,6 +29,7 @@ public class EnemyStateManager : MonoBehaviour
 
         BlockState = new EnemyBlockState();
         StunnedState = new EnemyStunnedState();
+        DeathState = new EnemyDeathState();
     }
 
     private void Start()
@@ -41,6 +44,8 @@ public class EnemyStateManager : MonoBehaviour
 
     public bool SwitchState(EnemyBaseState newState, bool force = false)
     {
+        if (CurrentState == DeathState) return false; // death has utmost prio!
+
         if (newState == null || newState == CurrentState)
         {
             Debug.LogWarning($"EnemyStateManager cannot switch {name} to a null or own state.", this);
@@ -68,5 +73,10 @@ public class EnemyStateManager : MonoBehaviour
     public void RecoverFromStun()
     {
         Posture?.RecoverFromPostureBreak(0.8f);
+    }
+
+    public void RequestDeath()
+    {
+        SwitchState(DeathState, true);
     }
 }

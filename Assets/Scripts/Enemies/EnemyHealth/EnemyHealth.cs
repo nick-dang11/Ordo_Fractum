@@ -4,15 +4,18 @@ public class EnemyHealth : MonoBehaviour
 {
     [SerializeField] private EnemyCombat enemyCombat;
     [SerializeField] private EnemyPosture enemyPosture;
+    [SerializeField] private EnemyStateManager enemyStateManager;
 
     public Slider healthbarSlider;
     public Slider easeHealthbarSlider;
     public float maxHealth = 100f;
     public float health;
     private float lerpSpeed = 2f;
+    public bool deathRequested;
 
     private void Awake()
     {
+        if (enemyStateManager == null) enemyStateManager = GetComponent<EnemyStateManager>();
         if (enemyCombat == null) enemyCombat = GetComponent <EnemyCombat>();
         if (enemyPosture == null) enemyPosture = GetComponent<EnemyPosture>();
     }
@@ -50,7 +53,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if (damage <= 0f) return;
+        if (damage <= 0f || deathRequested) return;
 
         if(enemyCombat != null && enemyCombat.IsBlocking)
         {
@@ -59,13 +62,18 @@ public class EnemyHealth : MonoBehaviour
             if(enemyPosture != null)
             {
                 enemyPosture.ApplyPostureDamage(damage);
+
+                if (!enemyPosture.IsPostureBroken)
+                {
+                    enemyCombat.PlayBlockFeedback();
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"EnemyPosture is not assigned on {name}.");
             }
 
-            if (!enemyPosture.IsPostureBroken)
-            {
-                enemyCombat.PlayBlockFeedback();
-            }
-            return;
+                return;
         }
 
         health -= damage; 
@@ -74,8 +82,23 @@ public class EnemyHealth : MonoBehaviour
 
         if (health <= 0f)
         {
+            deathRequested = true;
+            health = 0f;
+
             Debug.Log("Enemy is Dead");
-            Destroy(gameObject);
+
+            if(enemyStateManager != null)
+            {
+                enemyStateManager.RequestDeath();
+            }
+
+            return;
         }
+    }
+
+    [ContextMenu("Debug Deal Damage")]
+    private void DebugTakeDamage()
+    {
+        TakeDamage(95f);
     }
 }

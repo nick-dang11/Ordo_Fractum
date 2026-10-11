@@ -2,14 +2,20 @@ using UnityEngine;
 
 public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 {
+    [Header("References")]
     [SerializeField] private WeaponHitbox weaponHitbox;
     [SerializeField] private Animator animate;
     [SerializeField] private EnemyCombatDetection enemyCombatDetection;
+
+    [SerializeField] private GameObject healthUI;
+    [SerializeField] private GameObject postureUI;
+    [SerializeField] private Collider enemyCollider;
 
     [SerializeField, Min(0f)] private float enemyDamage = 1f;
     [SerializeField, Min(0f)] private float enemyAttackCooldown = 1.5f;
     [SerializeField, Min(0f)] private float faceTargetSpeed = 8f;
 
+    private int deadLayer;
     private float nextAttackTime;
     private bool isAttacking = false;
     public bool IsAttacking => isAttacking;
@@ -19,11 +25,22 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     private bool isStunned;
     public bool IsStunned => isStunned;
 
-    public bool CanAttack => !isAttacking && !isBlocking && !isStunned && Time.time >= nextAttackTime;
-    public bool CanBlock => !isAttacking && !isBlocking && !isStunned;
+    private bool isDead;
+    public bool IsDead => isDead;
 
+    public bool CanAttack => !isDead && !isAttacking && !isBlocking && !isStunned && Time.time >= nextAttackTime;
+    public bool CanBlock => !isDead && !isAttacking && !isBlocking && !isStunned;
+
+    private void Awake()
+    {
+        deadLayer = LayerMask.NameToLayer("DeadEnemy");
+
+        if (deadLayer == -1) Debug.LogError("DeadEnemy layer does not exist.");
+    }
     private void Update()
     {
+        if (isDead) return;
+
         if (enemyCombatDetection == null) return;
 
         if (enemyCombatDetection.isPlayerInAttackRange && CanAttack)
@@ -153,6 +170,25 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         }
     }
 
+    public void StartDeath()
+    {
+        if (isDead) return;
+
+        isDead = true;
+
+        if (deadLayer != -1) SetLayerRecursively(gameObject, deadLayer); // fixed CombatDetection flagging corpse as active enemy
+
+        EndBlock();
+        EndStun();
+        EndAttack();
+        HideUI();
+
+        if (weaponHitbox != null) weaponHitbox.DisableHitbox();
+        if (enemyCollider != null) enemyCollider.enabled = false;
+
+        if (animate != null) animate.SetTrigger("Death");
+    }
+
     public float GetAttackDamage(AttackData attackData)
     {
         Debug.Log(
@@ -172,14 +208,16 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 
     public void FacePlayerTarget()
     {
-        if(enemyCombatDetection == null)
+        if (isDead) return;
+
+        if (enemyCombatDetection == null)
         {
             Debug.LogWarning("EnemyCombatDetection is not assigned.");
             return;
         }
 
         Transform target = enemyCombatDetection.detectedPlayer;
-        if(target == null)
+        if (target == null)
         {
             Debug.LogWarning("No detected player.");
             return;
@@ -207,5 +245,24 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         if (animate == null) return;
 
         animate.SetTrigger("BlockHit");
+    }
+
+    public void HideUI()
+    {
+        if (healthUI != null)
+            healthUI.SetActive(false);
+
+        if (postureUI != null)
+            postureUI.SetActive(false);
+    }
+
+    private void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        obj.layer = newLayer;
+
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, newLayer);
+        }
     }
 }
