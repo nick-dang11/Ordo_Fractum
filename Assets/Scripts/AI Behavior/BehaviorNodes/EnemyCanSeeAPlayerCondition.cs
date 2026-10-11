@@ -12,9 +12,27 @@ public partial class EnemyCanSeeAPlayerCondition : Condition
     public override bool IsTrue()
     {
         //Find the existing enemydetection component on the enemy gameobject and store its refrence in detection
+//        Debug.Log("Test: IsTrue is running in EnemyCanSeeAPlayerCondition");
+        
+        if(Enemy == null || Enemy.Value == null)
+        {
+            Debug.LogWarning("Enemy is null or Enemy.Value is null in EnemyCanSeeAPlayerCondition");
+            return false;
+        }
+
         EnemyDetection detection = Enemy.Value.GetComponent<EnemyDetection>();
 
-        return detection.CanSeePlayer(); //return true of false it the enemy can see the player
+        if(detection == null)
+        {
+            Debug.LogWarning("EnemyDetection component not found on Enemy in EnemyCanSeeAPlayerCondition");
+            return false;
+        }
+
+        bool shouldChase =  detection.ShouldChasePlayer(); // Call the ShouldChasePlayer method from EnemyDetection
+
+        Debug.Log($"SHOULD CHASE PLAYER: {shouldChase}");
+        return shouldChase;
+
     }
 
     public override void OnStart()
