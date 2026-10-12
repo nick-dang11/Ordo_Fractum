@@ -6,7 +6,7 @@ public class CheckpointRespawn : MonoBehaviour
     [Header("Player Components")]
     [SerializeField] private CharacterController characterController;
     [SerializeField] private PlayerCombat playerCombat;
-    [SerializeField] private HealthSystem healthSystem;
+    [SerializeField] private PlayerHealth healthSystem;
     [SerializeField] private HealingAnimation healingAnimation;
 
     [Header("Debug")]
@@ -24,7 +24,7 @@ public class CheckpointRespawn : MonoBehaviour
         }
         if (healthSystem == null)
         {
-            healthSystem = GetComponent<HealthSystem>();
+            healthSystem = GetComponent<PlayerHealth>();
         }
         if (healingAnimation == null)
         {

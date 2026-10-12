@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HealthSystem : MonoBehaviour
+public class PlayerHealth : MonoBehaviour
 {
 
     [Header("Health")]
@@ -68,7 +68,7 @@ public class HealthSystem : MonoBehaviour
             playerRespawn.Respawn();
         } else
         {
-            Debug.LogError("[HealthSystem] PlayerRespawn could not be found.", this);
+            Debug.LogError("PlayerHealth PlayerRespawn could not be found.", this);
         }
     }
     [ContextMenu("Test - Kill Player")]

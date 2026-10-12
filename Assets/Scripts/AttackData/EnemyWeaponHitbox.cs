@@ -9,7 +9,7 @@ public class EnemyWeaponHitbox : WeaponHitbox
         {
             return blockZone.Owner != null;
         }
-        return other.GetComponentInParent<HealthSystem>() != null;
+        return other.GetComponentInParent<PlayerHealth>() != null;
     }
 
     protected override void HandleHit(Collider other, CombatHitContext context)
@@ -63,10 +63,10 @@ public class EnemyWeaponHitbox : WeaponHitbox
             playerCombat.TriggerBlockFeedback(context);
             return;
         }
-        HealthSystem healthSystem = playerCombat.GetComponentInParent<HealthSystem>();
+        PlayerHealth healthSystem = playerCombat.GetComponentInParent<PlayerHealth>();
         if (healthSystem == null)
         {
-            Debug.LogWarning("[EnemyWeaponHitbox] Player has no HealthSystem.", playerCombat);
+            Debug.LogWarning("[EnemyWeaponHitbox] Player has no PlayerHealth.", playerCombat);
             return;
         }
         Debug.Log("[Defense] Result = HIT");

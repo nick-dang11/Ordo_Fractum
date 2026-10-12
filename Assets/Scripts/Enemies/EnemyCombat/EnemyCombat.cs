@@ -8,6 +8,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     [SerializeField] private Animator animate;
     [SerializeField] private EnemyCombatDetection enemyCombatDetection;
     [SerializeField] private Transform executionAnchor;
+    [SerializeField] private AttackTimelineDriver attackTimelineDriver;
 
     [SerializeField] private GameObject healthUI;
     [SerializeField] private GameObject postureUI;
@@ -171,6 +172,12 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     public void StartStun()
     {
         EndBlock();
+
+        if (isAttacking)
+        {
+            InterruptCurrentAttack();
+        }
+
         isStunned = true;
 
         if (animate != null)
@@ -328,5 +335,21 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         if (isDead || isBeingExecuted) { yield break; }
         isDeflectReacting = false;
         Debug.Log($"[EnemyCombat] {name} finished its deflect reaction.");
+    }
+
+    private void InterruptCurrentAttack()
+    {
+        currentAttackInvalidated = true;
+        isAttacking = false;
+
+        if (weaponHitbox != null)
+        {
+            weaponHitbox.DisableHitbox();
+        }
+
+        if (attackTimelineDriver != null)
+        {
+            attackTimelineDriver.CancelCurrentAttack();
+        }
     }
 }

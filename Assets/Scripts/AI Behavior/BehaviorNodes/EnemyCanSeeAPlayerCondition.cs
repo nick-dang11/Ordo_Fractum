@@ -30,7 +30,7 @@ public partial class EnemyCanSeeAPlayerCondition : Condition
 
         bool shouldChase =  detection.ShouldChasePlayer(); // Call the ShouldChasePlayer method from EnemyDetection
 
-        Debug.Log($"SHOULD CHASE PLAYER: {shouldChase}");
+        //Debug.Log($"SHOULD CHASE PLAYER: {shouldChase}");
         return shouldChase;
 
     }
