@@ -142,7 +142,8 @@ public class PlayerMovement : MonoBehaviour
         bool isSprinting =
             isMoving &&
             sprintHeld &&
-            validSprintDirection;
+            validSprintDirection &&
+            !inCombat;
 
         if (_sprintLayerIndex >= 0)
         {
