@@ -7,6 +7,12 @@ public class EnemyMovement : MonoBehaviour
     private EnemyAIController controller; // Connects to the EnemyController script to access the player transform
     // Access the public property from EnemyController
     [SerializeField] 
+    private float patrolSpeed = 2f;
+
+    [SerializeField]
+    private float chaseSpeed = 4f;
+
+    [SerializeField] 
     private Transform[] patrolPoints; // Array of patrol points for the enemy to move between
 
     private int currentPatrolIndex = 0; // Index to keep track of the current patrol point
@@ -26,7 +32,8 @@ public class EnemyMovement : MonoBehaviour
         }
 
         agent.isStopped = false;
-        bool accepted =  agent.SetDestination(location);// navigates toward this position
+        agent.SetDestination(location);// navigates toward this position
+        //bool accepted = agent.SetDestination(location); // navigates toward this position
 
        /* Debug.Log("Desitination accepted" + accepted + 
         "| Requested Location: " + location +
@@ -38,12 +45,17 @@ public class EnemyMovement : MonoBehaviour
 
     public void Chase()
     {
+        if(agent == null || !agent.isOnNavMesh)
+        {
+            return;
+        }
         if(controller == null || controller.Player == null)
         {
             Debug.LogWarning("EnemyAIController or Player is null in EnemyMovement");
             return;
         }
 
+        agent.speed = chaseSpeed;
         //Debug.Log("CHASE DESTINATION:" + controller.Player.position);
         MoveTo(controller.Player.position);
     }
@@ -55,12 +67,20 @@ public class EnemyMovement : MonoBehaviour
 
     public void Patrol()
     {
-        if(patrolPoints.Length == 0)
+        if(agent == null || !agent.isOnNavMesh)
         {
             return;
         }
 
-        Debug.Log("PATROL is SETTING DESTINATION");
+        if(patrolPoints == null || patrolPoints.Length == 0 )
+        {
+            Debug.LogWarning("No patrol points assigned in EnemyMovement");
+            return;
+        }
+
+        agent.speed = patrolSpeed;
+
+       // Debug.Log("PATROL is SETTING DESTINATION");
         MoveTo(patrolPoints[currentPatrolIndex].position);
 
         if (ReachedDestination())
