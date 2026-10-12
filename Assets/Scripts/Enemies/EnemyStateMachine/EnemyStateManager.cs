@@ -34,12 +34,12 @@ public class EnemyStateManager : MonoBehaviour
         ExecutedState = new EnemyExecutedState();
     }
 
-    private void Start()
-    {
-        SwitchState(BlockState); 
-        // starts enemy in block state, if you find errors with
-        // enemy not being able to attack repeatedly, comment this start section out
-    }
+    //private void Start()
+    //{
+    //    SwitchState(BlockState); 
+    //    // starts enemy in block state, if you find errors with
+    //    // enemy not being able to attack repeatedly, comment this start section out
+    //}
 
     private void Update()
     {

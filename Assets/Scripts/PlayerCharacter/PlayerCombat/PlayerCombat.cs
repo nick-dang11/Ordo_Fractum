@@ -33,6 +33,11 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 
     public float pendingDamage;
     private bool wasBlockHeld = false;
+
+    [Header("Deflect Posture")]
+    [SerializeField, Min(0f)]
+    private float deflectPostureDamage = 25f;
+    public float DeflectPostureDamage => deflectPostureDamage;
     public bool BlockPressedThisFrame => input != null && input.block && !wasBlockHeld;
     public bool BlockReleasedThisFrame => input != null && !input.block && wasBlockHeld;
 
