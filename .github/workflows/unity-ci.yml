@@ -124,6 +124,89 @@ jobs:
 
           if [ "$HTTP_CODE" = "200" ]; then
             echo "File already exists in VirusTotal."
+
+            MALICIOUS=$(jq -r '.data.attributes.last_analysis_stats.malicious // 0' vt_file_response.json)
+            SUSPICIOUS=$(jq -r '.data.attributes.last_analysis_stats.suspicious // 0' vt_file_response.json)
+            UNDETECTED=$(jq -r '.data.attributes.last_analysis_stats.undetected // 0' vt_file_response.json)
+            HARMLESS=$(jq -r '.data.attributes.last_analysis_stats.harmless // 0' vt_file_response.json)
+
+            RESULT_COUNT=$(jq -r '
+              (.data.attributes.last_analysis_results // {})
+              | length
+            ' vt_file_response.json)
+
+            if [ "$RESULT_COUNT" -gt 0 ]; then
+              echo "Using existing VirusTotal analysis."
+
+              echo "=== VirusTotal Results ==="
+              echo "SHA256:      ${EXECUTABLE_SHA256}"
+              echo "Malicious:   $MALICIOUS"
+              echo "Suspicious:  $SUSPICIOUS"
+              echo "Undetected:  $UNDETECTED"
+              echo "Harmless:    $HARMLESS"
+
+              echo "=== VirusTotal Flagged Engines ==="
+
+              FLAGGED_RESULTS=$(jq -r '
+                (.data.attributes.last_analysis_results // {})
+                | to_entries[]
+                | select(
+                    .value.category == "malicious" or
+                    .value.category == "suspicious"
+                  )
+                | "\(.key): category=\(.value.category), result=\(.value.result // "N/A"), method=\(.value.method // "N/A"), engine_version=\(.value.engine_version // "N/A")"
+              ' vt_file_response.json)
+
+              if [ -n "$FLAGGED_RESULTS" ]; then
+                echo "$FLAGGED_RESULTS"
+              else
+                echo "No malicious or suspicious engine results reported."
+              fi
+
+              GRIDINSOFT_KNOWN_FP=$(jq -r '
+                (.data.attributes.last_analysis_results.Gridinsoft // {})
+                | select(
+                    .category == "malicious" and
+                    .result == "Trojan.Win64.Downloader.oa!s1"
+                  )
+                | .result // ""
+              ' vt_file_response.json)
+
+              NON_WHITELISTED_MALICIOUS=$(jq -r '
+                (.data.attributes.last_analysis_results // {})
+                | to_entries
+                | map(
+                    select(
+                      .value.category == "malicious" and
+                      (
+                        (.key == "Gridinsoft" and
+                        .value.result == "Trojan.Win64.Downloader.oa!s1")
+                        | not
+                      )
+                    )
+                  )
+                | length
+              ' vt_file_response.json)
+
+              if [ "$NON_WHITELISTED_MALICIOUS" -gt 0 ]; then
+                echo "::error::VirusTotal reported ${NON_WHITELISTED_MALICIOUS} non-whitelisted malicious detection(s). Windows artifact will NOT be uploaded."
+                exit 1
+              fi
+
+              if [ "$GRIDINSOFT_KNOWN_FP" = "Trojan.Win64.Downloader.oa!s1" ]; then
+                echo "::warning::Ignoring known Gridinsoft false-positive signature: Trojan.Win64.Downloader.oa!s1"
+              fi
+
+              if [ "$SUSPICIOUS" -gt 0 ]; then
+                echo "::warning::VirusTotal reported ${SUSPICIOUS} suspicious detection(s). Review before distribution."
+              fi
+
+              echo "VirusTotal reported no non-whitelisted malicious detections."
+              echo "scan_required=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            echo "Existing VirusTotal file has no usable analysis results."
             echo "Requesting reanalysis."
 
             RESPONSE=$(curl \
@@ -133,6 +216,17 @@ jobs:
               --request POST \
               --url "https://www.virustotal.com/api/v3/files/${EXECUTABLE_SHA256}/analyse" \
               --header "x-apikey: ${VIRUSTOTAL_API_KEY}")
+
+            ANALYSIS_ID=$(echo "$RESPONSE" | jq -r '.data.id')
+
+            if [ -z "$ANALYSIS_ID" ] || [ "$ANALYSIS_ID" = "null" ]; then
+              echo "::error::VirusTotal did not return an analysis ID."
+              echo "$RESPONSE"
+              exit 1
+            fi
+
+            echo "scan_required=true" >> "$GITHUB_OUTPUT"
+            echo "analysis_id=$ANALYSIS_ID" >> "$GITHUB_OUTPUT"
 
           elif [ "$HTTP_CODE" = "404" ]; then
             echo "File not found in VirusTotal."
@@ -147,25 +241,29 @@ jobs:
               --header "x-apikey: ${VIRUSTOTAL_API_KEY}" \
               --form "file=@build/StandaloneWindows64/OrdoFractum.exe")
 
+            ANALYSIS_ID=$(echo "$RESPONSE" | jq -r '.data.id')
+
+            if [ -z "$ANALYSIS_ID" ] || [ "$ANALYSIS_ID" = "null" ]; then
+              echo "::error::VirusTotal did not return an analysis ID."
+              echo "$RESPONSE"
+              exit 1
+            fi
+
+            echo "VirusTotal upload successful."
+            echo "scan_required=true" >> "$GITHUB_OUTPUT"
+            echo "analysis_id=$ANALYSIS_ID" >> "$GITHUB_OUTPUT"
+
           else
             echo "::error::Unexpected VirusTotal lookup response: HTTP ${HTTP_CODE}"
             cat vt_file_response.json
             exit 1
           fi
 
-          ANALYSIS_ID=$(echo "$RESPONSE" | jq -r '.data.id')
-
-          if [ -z "$ANALYSIS_ID" ] || [ "$ANALYSIS_ID" = "null" ]; then
-            echo "::error::VirusTotal did not return an analysis ID."
-            echo "$RESPONSE"
-            exit 1
-          fi
-
-          echo "VirusTotal analysis requested successfully."
-          echo "analysis_id=$ANALYSIS_ID" >> "$GITHUB_OUTPUT"
-
       - name: Wait for VirusTotal Analysis
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: >
+          github.event_name == 'push' &&
+          github.ref == 'refs/heads/main' &&
+          steps.virustotal_upload.outputs.scan_required == 'true'
         shell: bash
         env:
           VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
@@ -176,11 +274,13 @@ jobs:
 
           echo "Analyzing executable SHA256: ${EXECUTABLE_SHA256}"
 
-          # Public API limit is 4 requests/minute.
-          # Poll every 30 seconds to remain comfortably within that limit.
-          for ATTEMPT in {1..10}; do
-            echo "Waiting for VirusTotal analysis... attempt ${ATTEMPT}/10"
-            sleep 30
+          MAX_ATTEMPTS=10
+          POLL_INTERVAL=30
+
+          for ((ATTEMPT=1; ATTEMPT<=MAX_ATTEMPTS; ATTEMPT++)); do
+            echo "Waiting for VirusTotal analysis... attempt ${ATTEMPT}/${MAX_ATTEMPTS}"
+
+            sleep "$POLL_INTERVAL"
 
             RESPONSE=$(curl \
               --fail \
@@ -191,6 +291,8 @@ jobs:
               --header "x-apikey: ${VIRUSTOTAL_API_KEY}")
 
             STATUS=$(echo "$RESPONSE" | jq -r '.data.attributes.status')
+
+            echo "VirusTotal analysis status: ${STATUS}"
 
             if [ "$STATUS" = "completed" ]; then
               MALICIOUS=$(echo "$RESPONSE" | jq -r '.data.attributes.stats.malicious // 0')
@@ -208,7 +310,7 @@ jobs:
               echo "=== VirusTotal Flagged Engines ==="
 
               FLAGGED_RESULTS=$(echo "$RESPONSE" | jq -r '
-                .data.attributes.results
+                (.data.attributes.results // {})
                 | to_entries[]
                 | select(
                     .value.category == "malicious" or
@@ -223,10 +325,8 @@ jobs:
                 echo "No malicious or suspicious engine results reported."
               fi
 
-              # Controlled exception:
-              # Ignore only this specific known Gridinsoft false-positive signature.
               GRIDINSOFT_KNOWN_FP=$(echo "$RESPONSE" | jq -r '
-                .data.attributes.results.Gridinsoft
+                (.data.attributes.results.Gridinsoft // {})
                 | select(
                     .category == "malicious" and
                     .result == "Trojan.Win64.Downloader.oa!s1"
@@ -234,9 +334,8 @@ jobs:
                 | .result // ""
               ')
 
-              # Count all malicious results except the exact Gridinsoft signature above.
               NON_WHITELISTED_MALICIOUS=$(echo "$RESPONSE" | jq -r '
-                .data.attributes.results
+                (.data.attributes.results // {})
                 | to_entries
                 | map(
                     select(
