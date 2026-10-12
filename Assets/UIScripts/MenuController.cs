@@ -22,9 +22,9 @@ public class MenuController : MonoBehaviour
     [SerializeField] private Toggle invertYToggle = null;
 
     [Header("Graphics Settings")]
-    //[SerializeField] private Slider brightnessSlider = null;
+    [SerializeField] private Slider brightnessSlider = null;
     [SerializeField] private TMP_Text brightnessTextValue = null;
-    //[SerializeField] private float defaultBrightness = 1;
+    [SerializeField] private float defaultBrightness = 1;
 
     private int _qualityLevel;
     private bool _isFullScreen;
@@ -38,6 +38,41 @@ public class MenuController : MonoBehaviour
     private string levelToLoad;
     [SerializeField] private GameObject noSavedGameDialog = null;
 
+    [Header("Resolution Dropdowns")]
+    public TMP_Dropdown resolutionDropdown;
+    private Resolution[] resolutions;
+
+    public void Start()
+    {
+        resolutions = Screen.resolutions;
+        resolutionDropdown.ClearOptions();
+
+        List<string> options = new List<string>();
+
+        int currentResolutionIndex = 0;
+        
+        for (int i = 0; i < resolutions.Length; i++)
+        {
+            string option = resolutions[i].width + " x " + resolutions[i].height;
+            options.Add(option);
+
+            if(resolutions[i].width == Screen.width && resolutions[i].height == Screen.height)
+            {
+                currentResolutionIndex = i; 
+            }
+        }
+
+       resolutionDropdown.AddOptions(options);
+       resolutionDropdown.value = currentResolutionIndex;
+       resolutionDropdown.RefreshShownValue();
+    }
+   
+    public void SetResolution(int resolutionIndex)
+     {
+       Resolution resolution = resolutions[resolutionIndex];
+       Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+    }
+    
     public void NewGameDialogYes()
     {
         SceneManager.LoadScene(_newGameLevel);
