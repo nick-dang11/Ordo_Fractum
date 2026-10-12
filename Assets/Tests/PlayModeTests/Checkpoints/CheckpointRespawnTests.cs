@@ -18,7 +18,7 @@ public class CheckpointRespawnTests
     private Type checkpointType;
     private Type checkpointTriggerType;
     private Type checkpointRespawnType;
-    private Type healthSystemType;
+    private Type playerHealthType;
 
     private FieldInfo defaultSpawnField;
     private FieldInfo checkpointIdField;
@@ -59,16 +59,16 @@ public class CheckpointRespawnTests
                 "CheckpointRespawn, Assembly-CSharp"
             );
 
-        healthSystemType =
+        playerHealthType =
             Type.GetType(
-                "HealthSystem, Assembly-CSharp"
+                "PlayerHealth, Assembly-CSharp"
             );
 
         Assert.IsNotNull(managerType);
         Assert.IsNotNull(checkpointType);
         Assert.IsNotNull(checkpointTriggerType);
         Assert.IsNotNull(checkpointRespawnType);
-        Assert.IsNotNull(healthSystemType);
+        Assert.IsNotNull(playerHealthType);
 
         // ---------------------------------------------------------
         // Reflection setup.
@@ -392,9 +392,9 @@ public class CheckpointRespawnTests
 
         // Add health first so CheckpointRespawn's
         // Awake can locate it.
-        Component healthSystem =
+        Component playerHealth =
             player.AddComponent(
-                healthSystemType
+                playerHealthType
             );
 
         Component checkpointRespawn =
@@ -406,12 +406,12 @@ public class CheckpointRespawnTests
         yield return null;
 
         FieldInfo healthField =
-            healthSystemType.GetField(
+            playerHealthType.GetField(
                 "health"
             );
 
         FieldInfo maxHealthField =
-            healthSystemType.GetField(
+            playerHealthType.GetField(
                 "maxHealth"
             );
 
@@ -420,7 +420,7 @@ public class CheckpointRespawnTests
 
         // Simulate a damaged player.
         healthField.SetValue(
-            healthSystem,
+            playerHealth,
             1
         );
 
@@ -465,13 +465,13 @@ public class CheckpointRespawnTests
         int health =
             (int)
             healthField.GetValue(
-                healthSystem
+                playerHealth
             );
 
         int maxHealth =
             (int)
             maxHealthField.GetValue(
-                healthSystem
+                playerHealth
             );
 
         Assert.AreEqual(

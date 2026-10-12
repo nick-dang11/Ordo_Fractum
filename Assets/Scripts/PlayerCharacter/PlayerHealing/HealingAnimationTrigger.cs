@@ -4,7 +4,7 @@ public class HealingAnimation : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private PlayerInputManager playerInputManager;
-    [SerializeField] private HealthSystem healthSystem;
+    [SerializeField] private PlayerHealth healthSystem;
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private PlayerWill playerWill;
 

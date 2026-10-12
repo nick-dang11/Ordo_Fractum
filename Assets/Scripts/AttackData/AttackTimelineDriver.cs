@@ -92,4 +92,18 @@ public class AttackTimelineDriver : MonoBehaviour
         currentAttackData = null;
         Debug.Log("AttackTimelineDriver attack ended.");
     }
+
+    public void CancelCurrentAttack()
+    {
+        currentAttackToken++;
+
+        currentAttackData = null;
+        currentDamage = 0f;
+        hitboxActive = false;
+
+        if (weaponHitbox != null)
+        {
+            weaponHitbox.DisableHitbox();
+        }
+    }
 }

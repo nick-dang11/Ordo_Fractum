@@ -14,7 +14,7 @@ public class PlayerUIHealth : MonoBehaviour
     public Sprite FullHeart;
     public Image[] hearts;
 
-    public HealthSystem playerUIHealth;
+    public PlayerHealth playerUIHealth;
 
 
     void Start()
