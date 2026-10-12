@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputManager : MonoBehaviour
 {
+    [Header("References")]
+    [SerializeField] private PlayerExecution playerExecution;
+
     [Header("Character Input Values")]
     public Vector2 move;
     public Vector2 look;
@@ -29,6 +32,11 @@ public class PlayerInputManager : MonoBehaviour
     public Vector2 EvadeDirection { get; private set; }
 
 
+    public void Awake()
+    {
+        if(playerExecution == null) playerExecution = GetComponent<PlayerExecution>();
+    }
+
     // input callbacks
     // link these in inspector: PlayerInput via "Invoke Unity Events"
     // see pinned messages in #github-commits for example
@@ -42,8 +50,14 @@ public class PlayerInputManager : MonoBehaviour
     public void OnSprint(InputAction.CallbackContext context) => SprintInput(context.ReadValue<bool>());
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if (context.performed || context.started)
+        if (context.started)
         {
+            if (TryExecutionInput())
+            {
+                AttackInput(false);
+                return;
+            }
+
             AttackInput(true);
         }
         else if (context.canceled)
@@ -53,8 +67,14 @@ public class PlayerInputManager : MonoBehaviour
     }
     public void OnHeavyAttack(InputAction.CallbackContext context)
     {
-        if (context.performed || context.started)
+        if (context.started)
         {
+            if (TryExecutionInput())
+            {
+                HeavyAttackInput(false);
+                return;
+            }
+
             HeavyAttackInput(true);
         }
         else if (context.canceled)
@@ -62,6 +82,7 @@ public class PlayerInputManager : MonoBehaviour
             HeavyAttackInput(false);
         }
     }
+
     public void OnBlock(InputAction.CallbackContext context)
     {
         if (context.performed || context.started)
@@ -163,4 +184,11 @@ public class PlayerInputManager : MonoBehaviour
         }
     }
     public void ConsumeEvadeRequest() => IsEvadeRequested = false;
+
+    private bool TryExecutionInput()
+    {
+        if (playerExecution == null) return false;
+
+        return playerExecution.TryExecute();
+    }
 }

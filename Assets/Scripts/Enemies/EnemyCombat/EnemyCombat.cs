@@ -6,6 +6,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     [SerializeField] private WeaponHitbox weaponHitbox;
     [SerializeField] private Animator animate;
     [SerializeField] private EnemyCombatDetection enemyCombatDetection;
+    [SerializeField] private Transform executionAnchor;
 
     [SerializeField] private GameObject healthUI;
     [SerializeField] private GameObject postureUI;
@@ -18,6 +19,9 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     private int deadLayer;
     private float nextAttackTime;
     private bool isAttacking = false;
+    private bool useExecutionDeathPose;
+
+    public Transform ExecutionAnchor => executionAnchor;
     public bool IsAttacking => isAttacking;
     private bool isBlocking = false;
     public bool IsBlocking => isBlocking;
@@ -25,11 +29,15 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     private bool isStunned;
     public bool IsStunned => isStunned;
 
+    private bool isBeingExecuted;
+    public bool IsBeingExecuted => isBeingExecuted;
+    public bool UseExecutionDeathPose => useExecutionDeathPose;
+
     private bool isDead;
     public bool IsDead => isDead;
 
-    public bool CanAttack => !isDead && !isAttacking && !isBlocking && !isStunned && Time.time >= nextAttackTime;
-    public bool CanBlock => !isDead && !isAttacking && !isBlocking && !isStunned;
+    public bool CanAttack => !isDead && !isBeingExecuted && !isAttacking && !isBlocking && !isStunned && Time.time >= nextAttackTime;
+    public bool CanBlock => !isDead && !isBeingExecuted && !isAttacking && !isBlocking && !isStunned;
 
     private void Awake()
     {
@@ -39,7 +47,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     }
     private void Update()
     {
-        if (isDead) return;
+        if (isDead || isBeingExecuted) return;
 
         if (enemyCombatDetection == null) return;
 
@@ -53,7 +61,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     {
         Debug.Log(
             $"[EnemyCombat] TryAttack called. " +
-            $"CanAttack={CanAttack}, " +    
+            $"CanAttack={CanAttack}, " +
             $"isAttacking={isAttacking}, " +
             $"Time={Time.time}, " +
             $"nextAttackTime={nextAttackTime}"
@@ -65,7 +73,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
             return false;
         }
 
-        if(enemyCombatDetection == null)
+        if (enemyCombatDetection == null)
         {
             Debug.LogWarning($"EnemyCombatDetection is not assigned.");
             return false;
@@ -104,7 +112,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
             $"isAttacking = {isAttacking}, Time = {Time.time}"
         );
 
-        if(animate != null)
+        if (animate != null)
         {
             animate.ResetTrigger("Attack");
         }
@@ -133,7 +141,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         }
 
         isBlocking = true;
-        if(animate != null) animate.SetBool("Blocking", true);
+        if (animate != null) animate.SetBool("Blocking", true);
         Debug.Log($"EnemyCombat started block on {name}.");
 
         return true;
@@ -154,7 +162,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         EndBlock();
         isStunned = true;
 
-        if(animate != null)
+        if (animate != null)
         {
             animate.SetBool("Stunned", true);
         }
@@ -162,7 +170,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 
     public void EndStun()
     {
-        isStunned=false;
+        isStunned = false;
 
         if (animate != null)
         {
@@ -170,10 +178,31 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         }
     }
 
+    public void StartExecution()
+    {
+        if (isDead || isBeingExecuted) return;
+
+        useExecutionDeathPose = true;
+        isBeingExecuted = true;
+
+        EndBlock();
+        isStunned = false;
+        if(animate != null)
+        {
+            animate.SetBool("Stunned", false);
+            animate.SetTrigger("GetExecuted");
+        }
+        EndAttack();
+
+        if (weaponHitbox != null) weaponHitbox.DisableHitbox();
+        Debug.Log($"Enemy {name} is being executed.");
+    }
+
     public void StartDeath()
     {
         if (isDead) return;
 
+        isBeingExecuted = false; // not all deaths caused by execution!
         isDead = true;
 
         if (deadLayer != -1) SetLayerRecursively(gameObject, deadLayer); // fixed CombatDetection flagging corpse as active enemy
@@ -186,7 +215,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         if (weaponHitbox != null) weaponHitbox.DisableHitbox();
         if (enemyCollider != null) enemyCollider.enabled = false;
 
-        if (animate != null) animate.SetTrigger("Death");
+        if (animate != null && !useExecutionDeathPose) animate.SetTrigger("Death");
     }
 
     public float GetAttackDamage(AttackData attackData)
@@ -208,7 +237,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 
     public void FacePlayerTarget()
     {
-        if (isDead) return;
+        if (isDead || isBeingExecuted || isStunned) return;
 
         if (enemyCombatDetection == null)
         {
@@ -219,7 +248,6 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         Transform target = enemyCombatDetection.detectedPlayer;
         if (target == null)
         {
-            Debug.LogWarning("No detected player.");
             return;
         }
 

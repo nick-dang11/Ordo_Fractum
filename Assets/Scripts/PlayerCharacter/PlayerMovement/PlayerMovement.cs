@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private InputActionAsset _InputActions;
     [SerializeField] private Transform _MainCamera;
     [SerializeField] private CombatDetection _combatDetection;
+    [SerializeField] private StateManager stateManager;
 
     [Header("Movement Settings")]
     [SerializeField] private float _rotationSpeed = 720f;
@@ -17,7 +18,6 @@ public class PlayerMovement : MonoBehaviour
     private float _gravity = -9.81f;
     private Vector3 _velocity;
     private InputAction _moveAction;
-    private Vector3 _rootMotionDeltaPosition;
 
     void Awake()
     {
@@ -104,6 +104,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnAnimatorMove()
     {
+        if (stateManager != null &&
+        stateManager.currentState == stateManager.playerExecutingState)
+        {
+            return;
+        }
+
         if (_CharacterController != null && _CharacterController.enabled)
         {
             // takes position delta from the animation and appplies to CharacterController
@@ -149,5 +155,29 @@ public class PlayerMovement : MonoBehaviour
         {
             return _CharacterController != null && _CharacterController.isGrounded;
         }
+    }
+
+    public void Teleport(Vector3 position, Quaternion rotation)
+    {
+        bool controllerWasEnabled =
+            _CharacterController != null &&
+            _CharacterController.enabled;
+
+        if (controllerWasEnabled)
+            _CharacterController.enabled = false;
+
+        transform.SetPositionAndRotation(
+            position,
+            rotation
+        );
+
+        // clears accumulated vertical movement so gravity/root motion doesn't affect the execution
+        _velocity = Vector3.zero;
+
+        if (controllerWasEnabled)
+            _CharacterController.enabled = true;
+
+        Debug.Log(
+            $"PlayerMovement teleported to {transform.position}, rotation={transform.rotation.eulerAngles}");
     }
 }

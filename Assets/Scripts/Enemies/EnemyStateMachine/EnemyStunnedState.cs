@@ -4,7 +4,7 @@ public class EnemyStunnedState : EnemyBaseState
 {
     public override int PriorityLevel => 2;
 
-    private const float stunDuration = 3f;
+    private const float stunDuration = 4f;
     private float stunEndTime;
 
     public override void EnterState(EnemyStateManager context)
