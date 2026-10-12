@@ -47,17 +47,28 @@ public abstract class WeaponHitbox : MonoBehaviour
         SetWeaponColor(inactiveColor);
     }
 
-    public virtual void EnableHitbox(float damage, AttackData attackData = null, float postureDamage = 0f)
+    public virtual void EnableHitbox(float damage)
+    {
+        EnableHitboxInternal(damage, null, 0f);
+    }
+    public void EnableHitboxWithContext(float damage, AttackData attackData, float postureDamage = 0f)
+    {
+        EnableHitboxInternal(damage, attackData, postureDamage);
+    }
+
+    private void EnableHitboxInternal(float damage, AttackData attackData, float postureDamage)
     {
         if (ownerRoot != null)
         {
             EnemyCombat enemyCombat = ownerRoot.GetComponent<EnemyCombat>();
+
             if (enemyCombat != null && enemyCombat.CurrentAttackInvalidated)
             {
                 Debug.Log($"[WeaponHitbox] Hitbox activation ignored for " + $"{ownerRoot.name} because the current attack " + $"was invalidated.");
                 return;
             }
         }
+
         hitTargets.Clear();
 
         isHitboxActive = true;
