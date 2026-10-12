@@ -70,9 +70,12 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         return isBlocking;
     }
 
-    public void TriggerBlockFeedback()
+    public void TriggerBlockFeedback(CombatHitContext context)
     {
-        Debug.Log("Player BLOCKED the attack!");
+        if (context.AttackerRoot != null)
+        {
+            Debug.Log($"[Block] Blocked attack from " + $"{context.AttackerRoot.name}");
+        }
         animate.SetTrigger("BlockHit");
         if (clashFeedback != null)
         {
@@ -183,14 +186,20 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         EndBlock();
     }
 
-    public void TriggerDeflectFeedback()
+    public void TriggerDeflectFeedback(
+    CombatHitContext context)
     {
-        Debug.Log("DEFLECT!");
-        animate.SetTrigger("Deflect");
-        if (clashFeedback != null)
+        if (context.AttackerRoot != null)
         {
-            clashFeedback.PlayDeflect();
+            Debug.Log($"[Deflect] Deflected attack from " + $"{context.AttackerRoot.name}");
+        } else
+        {
+            Debug.LogWarning("[Deflect] Deflect occurred, but attacker was missing.");
         }
+
+        animate.SetTrigger("Deflect");
+
+        if (clashFeedback != null) { clashFeedback.PlayDeflect(); }
     }
 
     public void SetPendingDamage(float damage)
