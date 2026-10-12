@@ -12,7 +12,7 @@ public class EnemyWeaponHitbox : WeaponHitbox
         return other.GetComponentInParent<HealthSystem>() != null;
     }
 
-    protected override void HandleHit(Collider other)
+    protected override void HandleHit(Collider other, CombatHitContext context)
     {
         PlayerCombat playerCombat = ResolvePlayerCombat(other);
         if (playerCombat == null)
@@ -20,7 +20,7 @@ public class EnemyWeaponHitbox : WeaponHitbox
             Debug.LogWarning($"[EnemyWeaponHitbox] Could not resolve " + $"PlayerCombat from '{other.name}'.", other);
             return;
         }
-        ResolvePlayerImpact(playerCombat, other);
+        ResolvePlayerImpact(playerCombat, other, context);
     }
     private PlayerCombat ResolvePlayerCombat(Collider other)
     {
@@ -37,7 +37,7 @@ public class EnemyWeaponHitbox : WeaponHitbox
         }
         return playerCombat;
     }
-    private void ResolvePlayerImpact(PlayerCombat playerCombat, Collider contactedCollider)
+    private void ResolvePlayerImpact(PlayerCombat playerCombat, Collider contactedCollider, CombatHitContext context)
     {
         if (playerCombat == null)
             return;
@@ -48,11 +48,20 @@ public class EnemyWeaponHitbox : WeaponHitbox
             if (timeSinceBlock <= playerCombat.deflectWindow)
             {
                 Debug.Log("[Defense] Result = DEFLECT");
-                playerCombat.TriggerDeflectFeedback();
+                playerCombat.TriggerDeflectFeedback(context);
+                if (context.AttackerRoot != null)
+                {
+                    EnemyCombat enemyCombat = context.AttackerRoot.GetComponent<EnemyCombat>();
+
+                    if (enemyCombat != null) { enemyCombat.HandleDeflected(); }
+                    else { Debug.LogWarning($"[EnemyWeaponHitbox] " + $"{context.AttackerRoot.name} has no EnemyCombat."); }
+                }
+                else {
+                    Debug.LogWarning("[EnemyWeaponHitbox] Deflect occurred, " + "but AttackerRoot was null.");}
                 return;
             }
             Debug.Log("[Defense] Result = Block");
-            playerCombat.TriggerBlockFeedback();
+            playerCombat.TriggerBlockFeedback(context);
             return;
         }
         HealthSystem healthSystem = playerCombat.GetComponentInParent<HealthSystem>();

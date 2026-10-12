@@ -7,7 +7,7 @@ public class PlayerWeaponHitbox : WeaponHitbox
         return other.GetComponentInParent<EnemyHealth>() != null;
     }
 
-    protected override void HandleHit(Collider other)
+    protected override void HandleHit(Collider other, CombatHitContext context)
     {
         EnemyHealth enemyHealth = other.GetComponentInParent<EnemyHealth>();
 

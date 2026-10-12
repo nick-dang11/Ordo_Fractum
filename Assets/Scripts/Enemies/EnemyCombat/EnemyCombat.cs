@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 {
@@ -36,7 +37,17 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     private bool isDead;
     public bool IsDead => isDead;
 
-    public bool CanAttack => !isDead && !isBeingExecuted && !isAttacking && !isBlocking && !isStunned && Time.time >= nextAttackTime;
+    private bool currentAttackInvalidated = false;
+    public bool CurrentAttackInvalidated => currentAttackInvalidated;
+
+    private bool isDeflectReacting = false;
+    public bool IsDeflectReacting => isDeflectReacting;
+
+    [Header("Deflect Reaction")]
+    [SerializeField, Min(0f)]
+    private float deflectReactionDuration = 0.6f;
+
+    public bool CanAttack => !isDead && !isBeingExecuted && !isAttacking && !isBlocking && !isStunned && !isDeflectReacting && Time.time >= nextAttackTime;
     public bool CanBlock => !isDead && !isBeingExecuted && !isAttacking && !isBlocking && !isStunned;
 
     private void Awake()
@@ -90,7 +101,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
             Debug.LogWarning("Animator is not assigned.");
             return false;
         }
-
+        currentAttackInvalidated = false;
         isAttacking = true;
         nextAttackTime = Time.time + enemyAttackCooldown;
 
@@ -292,5 +303,30 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         {
             SetLayerRecursively(child.gameObject, newLayer);
         }
+    }
+
+    public void HandleDeflected()
+    {
+        if (isDead || isBeingExecuted) { return; }
+        if (currentAttackInvalidated) { return; }
+        Debug.Log($"[EnemyCombat] {name}'s current attack was DEFLECTED.");
+        currentAttackInvalidated = true;
+        isAttacking = false;
+        if (weaponHitbox != null) { weaponHitbox.DisableHitbox(); }
+        isDeflectReacting = true;
+        if (animate != null)
+        {
+            animate.ResetTrigger("Attack");
+            animate.SetTrigger("DeflectReaction");
+        }
+        StartCoroutine(DeflectReactionRoutine());
+    }
+
+    private IEnumerator DeflectReactionRoutine()
+    {
+        yield return new WaitForSeconds(deflectReactionDuration);
+        if (isDead || isBeingExecuted) { yield break; }
+        isDeflectReacting = false;
+        Debug.Log($"[EnemyCombat] {name} finished its deflect reaction.");
     }
 }

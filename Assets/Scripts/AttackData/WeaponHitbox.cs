@@ -18,6 +18,11 @@ public abstract class WeaponHitbox : MonoBehaviour
     [SerializeField] private float bloodVFXLifetime = 2f;
     [SerializeField] private bool logHitRegistration = false;
 
+    [SerializeField] private GameObject ownerRoot;
+    private AttackData currentAttackData;
+    private float currentPostureDamage;
+    public GameObject OwnerRoot => ownerRoot;
+
     private bool isHitboxActive = false;
     private float currentDamage;
 
@@ -32,33 +37,49 @@ public abstract class WeaponHitbox : MonoBehaviour
     protected virtual void Awake()
     {
         weaponCollider = GetComponent<Collider>();
-
-        if (!weaponCollider.isTrigger)
-        {
-            Debug.LogWarning($"{name} WeaponHitbox collider does not have is Trigger toggled on. Setting isTrigger to true", this);
-
-            weaponCollider.isTrigger = true;
-        }
-
         weaponCollider.enabled = false;
-
         weaponRenderer = GetComponent<Renderer>();
-
         if (weaponRenderer == null)
         {
             weaponRenderer = GetComponentInChildren<Renderer>();
         }
-
+        ResolveOwner();
         SetWeaponColor(inactiveColor);
     }
 
     public virtual void EnableHitbox(float damage)
     {
-        currentDamage = damage;
+        EnableHitboxInternal(damage, null, 0f);
+    }
+    public void EnableHitboxWithContext(float damage, AttackData attackData, float postureDamage = 0f)
+    {
+        EnableHitboxInternal(damage, attackData, postureDamage);
+    }
+
+    private void EnableHitboxInternal(float damage, AttackData attackData, float postureDamage)
+    {
+        if (ownerRoot != null)
+        {
+            EnemyCombat enemyCombat = ownerRoot.GetComponent<EnemyCombat>();
+
+            if (enemyCombat != null && enemyCombat.CurrentAttackInvalidated)
+            {
+                Debug.Log($"[WeaponHitbox] Hitbox activation ignored for " + $"{ownerRoot.name} because the current attack " + $"was invalidated.");
+                return;
+            }
+        }
+
         hitTargets.Clear();
 
         isHitboxActive = true;
         weaponCollider.enabled = true;
+
+        currentDamage = damage;
+        currentAttackData = attackData;
+        currentPostureDamage = postureDamage;
+
+        Debug.Log($"Hitbox enabled with damage: {currentDamage}");
+
         SetWeaponColor(activeColor);
     }
 
@@ -116,9 +137,9 @@ public abstract class WeaponHitbox : MonoBehaviour
         if (!isHitboxActive) return;
         if (other == null) return;
 
-        GameObject targetRoot = other.transform.root.gameObject;
+        GameObject targetRoot = ResolveTargetRoot(other);
 
-        if (targetRoot == transform.root.gameObject) return; // prevent self damage for weapon owner
+        if (targetRoot == null) return; // prevent self damage for weapon owner
 
         if (hitTargets.Contains(targetRoot))
         {
@@ -129,17 +150,59 @@ public abstract class WeaponHitbox : MonoBehaviour
             return;
         }
         if (!IsValidTarget(other)) return;
+        CombatHitContext context = BuildHitContext(other);
         hitTargets.Add(targetRoot);
         if (logHitRegistration)
         {
             Debug.Log($"[WeaponHitbox] Registered target " + $"'{targetRoot.name}' from collider '{other.name}'.", this);
         }
-        HandleHit(other);
+        HandleHit(other, context);
     }
 
+    private void ResolveOwner()
+    {
+        MonoBehaviour[] behaviours = GetComponentsInParent<MonoBehaviour>(true);
+        foreach (MonoBehaviour behaviour in behaviours)
+        {
+            if (behaviour is IAttackDamageSource)
+            {
+                if (ownerRoot == null) { ownerRoot = behaviour.gameObject; }
+                return;
+            }
+        }
+        Debug.LogWarning($"[WeaponHitbox] Could not resolve an attack owner for {name}.");
+    }
 
+    private GameObject ResolveTargetRoot(Collider other)
+    {
+        PlayerCombat playerCombat = other.GetComponentInParent<PlayerCombat>();
+
+        if (playerCombat != null) { return playerCombat.gameObject; }
+
+        EnemyCombat enemyCombat = other.GetComponentInParent<EnemyCombat>();
+
+        if (enemyCombat != null) { return enemyCombat.gameObject; }
+
+        return other.transform.root.gameObject;
+    }
+    private CombatHitContext BuildHitContext(Collider other)
+    {
+        GameObject targetRoot = ResolveTargetRoot(other);
+
+        Vector3 impactPoint = other.ClosestPoint(weaponCollider.bounds.center);
+
+        return new CombatHitContext(
+            attackerRoot: ownerRoot,
+            targetRoot: targetRoot,
+            weaponCollider: weaponCollider,
+            attackData: currentAttackData,
+            damage: currentDamage,
+            postureDamage: currentPostureDamage,
+            impactPoint: impactPoint
+        );
+    }
 
     protected abstract bool IsValidTarget(Collider other);
 
-    protected abstract void HandleHit(Collider other);
+    protected abstract void HandleHit(Collider other, CombatHitContext context);
 }
