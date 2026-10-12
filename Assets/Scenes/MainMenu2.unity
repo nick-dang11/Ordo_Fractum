@@ -3140,6 +3140,61 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 384674510}
   m_CullTransparentMesh: 1
+--- !u!1 &408524647
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 408524649}
+  - component: {fileID: 408524648}
+  m_Layer: 0
+  m_Name: LoadPrefs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &408524648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408524647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac9cde02dd3be7d4389fa19e1c25cf7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LoadPrefs
+  canUse: 1
+  menuController: {fileID: 863432281}
+  volumeTextValue: {fileID: 34408598}
+  volumeSlider: {fileID: 479815881}
+  brightnessSlider: {fileID: 887324227}
+  brightnessTextValue: {fileID: 362277481}
+  qualityDropdown: {fileID: 1661209276}
+  fullScreenToggle: {fileID: 785727035}
+  controllerSenTextValue: {fileID: 1646312140}
+  controllerSenSlider: {fileID: 119771098}
+  invertYToggle: {fileID: 1709689116}
+--- !u!4 &408524649
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408524647}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 559.7304, y: 245.45499, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &411453524
 GameObject:
   m_ObjectHideFlags: 0
@@ -13798,3 +13853,4 @@ SceneRoots:
   - {fileID: 915628561}
   - {fileID: 811276566}
   - {fileID: 863432282}
+  - {fileID: 408524649}
