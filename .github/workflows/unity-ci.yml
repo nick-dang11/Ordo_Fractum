@@ -106,27 +106,62 @@ jobs:
         shell: bash
         env:
           VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
+          EXECUTABLE_SHA256: ${{ steps.executable_hash.outputs.sha256 }}
         run: |
           set -euo pipefail
 
-          RESPONSE=$(curl \
-            --fail \
+          echo "Checking VirusTotal for existing file:"
+          echo "${EXECUTABLE_SHA256}"
+
+          HTTP_CODE=$(curl \
             --silent \
             --show-error \
-            --request POST \
-            --url "https://www.virustotal.com/api/v3/files" \
-            --header "x-apikey: ${VIRUSTOTAL_API_KEY}" \
-            --form "file=@build/StandaloneWindows64/OrdoFractum.exe")
+            --output vt_file_response.json \
+            --write-out "%{http_code}" \
+            --request GET \
+            --url "https://www.virustotal.com/api/v3/files/${EXECUTABLE_SHA256}" \
+            --header "x-apikey: ${VIRUSTOTAL_API_KEY}")
+
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "File already exists in VirusTotal."
+            echo "Requesting reanalysis."
+
+            RESPONSE=$(curl \
+              --fail \
+              --silent \
+              --show-error \
+              --request POST \
+              --url "https://www.virustotal.com/api/v3/files/${EXECUTABLE_SHA256}/analyse" \
+              --header "x-apikey: ${VIRUSTOTAL_API_KEY}")
+
+          elif [ "$HTTP_CODE" = "404" ]; then
+            echo "File not found in VirusTotal."
+            echo "Uploading executable."
+
+            RESPONSE=$(curl \
+              --fail \
+              --silent \
+              --show-error \
+              --request POST \
+              --url "https://www.virustotal.com/api/v3/files" \
+              --header "x-apikey: ${VIRUSTOTAL_API_KEY}" \
+              --form "file=@build/StandaloneWindows64/OrdoFractum.exe")
+
+          else
+            echo "::error::Unexpected VirusTotal lookup response: HTTP ${HTTP_CODE}"
+            cat vt_file_response.json
+            exit 1
+          fi
 
           ANALYSIS_ID=$(echo "$RESPONSE" | jq -r '.data.id')
 
           if [ -z "$ANALYSIS_ID" ] || [ "$ANALYSIS_ID" = "null" ]; then
-            echo "VirusTotal did not return an analysis ID."
+            echo "::error::VirusTotal did not return an analysis ID."
             echo "$RESPONSE"
             exit 1
           fi
 
-          echo "VirusTotal submission accepted."
+          echo "VirusTotal analysis requested successfully."
           echo "analysis_id=$ANALYSIS_ID" >> "$GITHUB_OUTPUT"
 
       - name: Wait for VirusTotal Analysis
