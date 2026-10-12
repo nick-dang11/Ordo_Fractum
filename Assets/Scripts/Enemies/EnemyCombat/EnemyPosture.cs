@@ -80,23 +80,15 @@ public class EnemyPosture : MonoBehaviour
         if (damage <= 0f || isPostureBroken)
             return;
 
-        currentPosture +=
-            damage * postureDamageMultiplier;
+        currentPosture += damage * postureDamageMultiplier;
 
-        currentPosture = Mathf.Clamp(
-            currentPosture,
-            0f,
-            maxPosture
-        );
+        currentPosture = Mathf.Clamp(currentPosture, 0f, maxPosture);
 
         decayTimer = 0f;
 
         UpdatePostureUI();
 
-        Debug.Log(
-            $"[EnemyPosture] {name}: " +
-            $"{currentPosture}/{maxPosture}"
-        );
+        Debug.Log($"[EnemyPosture] {name}: " + $"{currentPosture}/{maxPosture}");
 
         if (currentPosture >= maxPosture)
         {

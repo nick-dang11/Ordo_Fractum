@@ -52,12 +52,11 @@ public class EnemyWeaponHitbox : WeaponHitbox
                 if (context.AttackerRoot != null)
                 {
                     EnemyCombat enemyCombat = context.AttackerRoot.GetComponent<EnemyCombat>();
-
                     if (enemyCombat != null) { enemyCombat.HandleDeflected(); }
                     else { Debug.LogWarning($"[EnemyWeaponHitbox] " + $"{context.AttackerRoot.name} has no EnemyCombat."); }
                 }
-                else {
-                    Debug.LogWarning("[EnemyWeaponHitbox] Deflect occurred, " + "but AttackerRoot was null.");}
+                else { Debug.LogWarning("[EnemyWeaponHitbox] Deflect occurred, " + "but AttackerRoot was null.");}
+                ApplyDeflectPostureDamage(playerCombat, context);
                 return;
             }
             Debug.Log("[Defense] Result = Block");
@@ -73,6 +72,26 @@ public class EnemyWeaponHitbox : WeaponHitbox
         Debug.Log("[Defense] Result = HIT");
         healthSystem.TakeDamage(Mathf.RoundToInt(CurrentDamage)); // rounding to prevent unforseen errors
         SpawnBloodVFX(contactedCollider);
+    }
+    private void ApplyDeflectPostureDamage(PlayerCombat playerCombat, CombatHitContext context)
+    {
+        if (playerCombat == null) { return; }
+
+        if (context.AttackerRoot == null)
+        {
+            Debug.LogWarning("[EnemyWeaponHitbox] Cannot apply deflect posture: " + "AttackerRoot is missing.");
+            return;
+        }
+
+        EnemyPosture postureMeter = context.AttackerRoot.GetComponentInChildren<EnemyPosture>(true);
+
+        if (postureMeter == null)
+        {
+            Debug.LogWarning($"[EnemyWeaponHitbox] {context.AttackerRoot.name} " + $"has no EnemyPostureMeter.");
+            return;
+        }
+
+        postureMeter.ApplyPostureDamage(playerCombat.DeflectPostureDamage);
     }
 
     [ContextMenu("DEBUG Enable Hitbox")]
