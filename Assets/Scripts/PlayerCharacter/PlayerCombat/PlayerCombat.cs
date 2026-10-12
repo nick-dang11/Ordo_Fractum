@@ -9,7 +9,6 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     [SerializeField] private float heavyAttackDamage = 40f;
     [SerializeField] private BlockZone blockZone;
     [SerializeField] private CombatClashFeedback clashFeedback;
-    // [SerializeField] private PlayerStamina playerStamina;
     [SerializeField] private PlayerPosture playerPosture;
 
     public bool wasAttacking = false;

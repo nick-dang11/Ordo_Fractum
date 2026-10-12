@@ -13,6 +13,7 @@ public class EnemyStateManager : MonoBehaviour
     public EnemyBlockState BlockState { get; private set; }
     public EnemyStunnedState StunnedState { get; private set; }
     public EnemyDeathState DeathState { get; private set; }
+    public EnemyExecutedState ExecutedState { get; private set; }
 
 
     public void Awake()
@@ -30,6 +31,7 @@ public class EnemyStateManager : MonoBehaviour
         BlockState = new EnemyBlockState();
         StunnedState = new EnemyStunnedState();
         DeathState = new EnemyDeathState();
+        ExecutedState = new EnemyExecutedState();
     }
 
     private void Start()
@@ -78,5 +80,12 @@ public class EnemyStateManager : MonoBehaviour
     public void RequestDeath()
     {
         SwitchState(DeathState, true);
+    }
+
+    public bool RequestExecution()
+    {
+        if(CurrentState != StunnedState) return false;
+
+        return SwitchState(ExecutedState);
     }
 }
