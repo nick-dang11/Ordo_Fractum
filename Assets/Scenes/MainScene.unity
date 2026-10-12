@@ -2930,6 +2930,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: MocapEnemy - Block
       objectReference: {fileID: 0}
+    - target: {fileID: 3047151988590228466, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4023741029571530838, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4023741029571530838, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6168619457890461158, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -4623,6 +4635,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4023741029571530838, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4023741029571530838, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6168619457890461158, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -4643,6 +4663,14 @@ PrefabInstance:
       propertyPath: m_SkinWidth
       value: 0.0001
       objectReference: {fileID: 0}
+    - target: {fileID: 6638796796653249491, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8937205026060797890, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 10bea47aa5214b4438769656a2b7f7f4, type: 2}
     - target: {fileID: 9208360456012289320, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
       propertyPath: PlayerObject
       value: 
@@ -5178,108 +5206,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
   m_PrefabInstance: {fileID: 939421551388515701}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &939421551388515705
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 939421551388515704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 336021be4155fec49905a623f52e7cef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CombatClashFeedback
-  fallbackClashPoint: {fileID: 122695179}
-  blockVfxPrefab: {fileID: 8078720523478869859, guid: 27c709d0e882b134fa2488dc4c6fafbb, type: 3}
-  deflectVfxPrefab: {fileID: 4503612902121041701, guid: b0c7d5aaf646f3a4b99a9f5db86900b6, type: 3}
-  vfxLifetime: 0.2
-  audioSource: {fileID: 1265403272}
-  blockClip: {fileID: 8300000, guid: 3f338efc03b0db04b8fe84edc34f16c1, type: 3}
-  deflectClip: {fileID: 8300000, guid: d675da10f1ca01f419860a5305507127, type: 3}
---- !u!114 &939421551388515706 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6898766285396604641, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-  m_PrefabInstance: {fileID: 939421551388515701}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 939421551388515704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 930a66befcb631f479d11c7da56158ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
---- !u!114 &939421551388515713 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3398993597898389615, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-  m_PrefabInstance: {fileID: 939421551388515701}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 939421551388515704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b61353cbb61a5943b40c0c366abb12d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealing
---- !u!114 &939421551388515714 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5221989036913721363, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-  m_PrefabInstance: {fileID: 939421551388515701}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 939421551388515704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ee7faf631c6c68408372ad6334938e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
---- !u!143 &939421551388515722 stripped
-CharacterController:
-  m_CorrespondingSourceObject: {fileID: 6291261830347497589, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-  m_PrefabInstance: {fileID: 939421551388515701}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &939421551388515723
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 939421551388515704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8a50bee7ed71bd418a92adbf381e94b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CheckpointRespawn
-  characterController: {fileID: 939421551388515722}
-  playerCombat: {fileID: 939421551388515706}
-  healthSystem: {fileID: 939421551388515714}
-  healingAnimation: {fileID: 939421551388515713}
-  logRespawns: 1
---- !u!114 &939421551388515724
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 939421551388515704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ab5ef15c2bf6a34db07baac21aaa8e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerRespawn
-  checkpointRespawn: {fileID: 939421551388515723}
---- !u!114 &939421551388515728
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 939421551388515704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65cb3067721f12a4eb599ff094138c23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerWill
-  maxWill: 99
-  currentWill: 99
-  willFill: {fileID: 1293019794}
 --- !u!1001 &3016538680853475536
 PrefabInstance:
   m_ObjectHideFlags: 0

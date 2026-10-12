@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AttackData
   animationStateName: SO_LongS_OxGuardR_AttackThrust_OxGuardR
   startHitFrame: 30
-  endHitFrame: 38
+  endHitFrame: 45
   totalFrames: 71
