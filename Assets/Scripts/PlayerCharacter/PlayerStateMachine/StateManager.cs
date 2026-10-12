@@ -8,11 +8,13 @@ public class StateManager : MonoBehaviour
     public PlayerInputManager inputManager;
     public PlayerMovement movement;
     public PlayerEvade playerEvade;
+    public PlayerExecution playerExecution;
 
     public IdleState idleState = new IdleState();
     public BlockingState blockState = new BlockingState();
     public AttackingState attackingState = new AttackingState();
     public EvadingState EvadingState = new EvadingState();
+    public ExecutingState playerExecutingState = new ExecutingState();
 
     private void Start()
     {
@@ -20,6 +22,7 @@ public class StateManager : MonoBehaviour
         if (inputManager == null) inputManager = GetComponent<PlayerInputManager>();
         if (movement == null) movement = GetComponent<PlayerMovement>();
         if (playerEvade == null) playerEvade = GetComponent<PlayerEvade>();
+        if (playerExecution == null) playerExecution = GetComponent<PlayerExecution>();
 
 
         currentState = idleState;
