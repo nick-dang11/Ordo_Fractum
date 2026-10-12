@@ -19,14 +19,42 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _velocity;
     private InputAction _moveAction;
 
+    private InputAction _sprintAction;
+    private int _sprintLayerIndex;
+
+    [SerializeField]
+    private float _sprintLayerBlendSpeed = 8f;
+
     void Awake()
     {
         _CharacterController = GetComponent<CharacterController>();
-        _moveAction = _InputActions.FindActionMap("Player").FindAction("Move");
+
+        InputActionMap playerActions =
+            _InputActions.FindActionMap("Player");
+
+        _moveAction =
+            playerActions.FindAction("Move");
+
+        _sprintAction =
+            playerActions.FindAction("Sprint");
+
+        _sprintLayerIndex =
+            _Animator.GetLayerIndex("SprintLayer");
+
+        if (_sprintLayerIndex >= 0)
+        {
+            _Animator.SetLayerWeight(
+                _sprintLayerIndex,
+                0f
+            );
+        }
 
         if (_MainCamera == null && Camera.main != null)
         {
-            Debug.LogWarning("Error: Main Camera may not be assigned to PlayerMovement.");
+            Debug.LogWarning(
+                "Error: Main Camera may not be assigned to PlayerMovement."
+            );
+
             _MainCamera = Camera.main.transform;
         }
     }
@@ -100,7 +128,44 @@ public class PlayerMovement : MonoBehaviour
         }
 
         _velocity.y += _gravity * Time.deltaTime;
-    }
+
+        // -------------------------
+        // SPRINT
+        // -------------------------
+        bool sprintHeld =
+                    _sprintAction != null &&
+                    _sprintAction.IsPressed();
+
+        bool validSprintDirection =
+            targetY >= -0.05f;
+
+        bool isSprinting =
+            isMoving &&
+            sprintHeld &&
+            validSprintDirection;
+
+        if (_sprintLayerIndex >= 0)
+        {
+            float targetSprintWeight =
+                isSprinting ? 1f : 0f;
+
+            float currentSprintWeight =
+                _Animator.GetLayerWeight(_sprintLayerIndex);
+
+            float newSprintWeight =
+                Mathf.MoveTowards(
+                    currentSprintWeight,
+                    targetSprintWeight,
+                    Time.deltaTime * _sprintLayerBlendSpeed
+                );
+
+            _Animator.SetLayerWeight(
+                _sprintLayerIndex,
+                newSprintWeight
+            );
+        }
+
+    } 
 
     private void OnAnimatorMove()
     {
@@ -112,26 +177,25 @@ public class PlayerMovement : MonoBehaviour
 
         if (_CharacterController != null && _CharacterController.enabled)
         {
-            // takes position delta from the animation and appplies to CharacterController
             Vector3 movement = _Animator.deltaPosition;
+
             movement.y = _velocity.y * Time.deltaTime;
 
-            // apply root motion rotation so model synchronizes with animations
-            //transform.rotation *= _Animator.deltaRotation;
-
-            // passes animation's movement delta to CharacterController
             _CharacterController.Move(movement);
         }
     }
 
+
     private void OnEnable()
     {
-        _moveAction.Enable();
+        _moveAction?.Enable();
+        _sprintAction?.Enable();
     }
 
     private void OnDisable()
     {
-        _moveAction.Disable();
+        _moveAction?.Disable();
+        _sprintAction?.Disable();
     }
 
     public Vector3 GetCameraRelativeDirection(Vector2 input)
