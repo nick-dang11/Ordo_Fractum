@@ -5320,6 +5320,14 @@ PrefabInstance:
       propertyPath: 'hearts.Array.data[3]'
       value: 
       objectReference: {fileID: 1080786939}
+    - target: {fileID: 6898766285396604641, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: counterRange
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6898766285396604641, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: counterWindowDuration
+      value: 0.75
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

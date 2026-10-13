@@ -52,7 +52,11 @@ public class EnemyWeaponHitbox : WeaponHitbox
                 if (context.AttackerRoot != null)
                 {
                     EnemyCombat enemyCombat = context.AttackerRoot.GetComponent<EnemyCombat>();
-                    if (enemyCombat != null) { enemyCombat.HandleDeflected(); }
+                    if (enemyCombat != null)
+                    {
+                        enemyCombat.HandleDeflected();
+                        playerCombat.OpenCounterWindow(enemyCombat);
+                    }
                     else { Debug.LogWarning($"[EnemyWeaponHitbox] " + $"{context.AttackerRoot.name} has no EnemyCombat."); }
                 }
                 else { Debug.LogWarning("[EnemyWeaponHitbox] Deflect occurred, " + "but AttackerRoot was null.");}
