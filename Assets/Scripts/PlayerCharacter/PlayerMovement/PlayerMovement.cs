@@ -139,10 +139,12 @@ public class PlayerMovement : MonoBehaviour
         bool validSprintDirection =
             targetY >= -0.05f;
 
-        bool isSprinting =
-            isMoving &&
-            sprintHeld &&
-            validSprintDirection;
+        bool isSprinting = CanSprint(
+            isMoving,
+            sprintHeld,
+            validSprintDirection,
+            inCombat
+        );
 
         if (_sprintLayerIndex >= 0)
         {
@@ -243,5 +245,17 @@ public class PlayerMovement : MonoBehaviour
 
         Debug.Log(
             $"PlayerMovement teleported to {transform.position}, rotation={transform.rotation.eulerAngles}");
+    }
+
+    public static bool CanSprint(
+        bool isMoving,
+        bool sprintHeld,
+        bool validSprintDirection,
+        bool inCombat)
+    {
+    return isMoving &&
+           sprintHeld &&
+           validSprintDirection &&
+           !inCombat;
     }
 }
