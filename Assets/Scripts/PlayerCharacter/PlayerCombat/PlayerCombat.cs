@@ -34,6 +34,26 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     public float pendingDamage;
     private bool wasBlockHeld = false;
 
+    [Header("Counter Window")]
+    [SerializeField, Min(0f)]
+    private float counterWindowDuration = 0.75f;
+
+    [SerializeField, Min(0f)]
+    private float counterRange = 3f;
+
+    [SerializeField]
+    private GameObject counterDebugIndicator;
+
+    private EnemyCombat counterTarget;
+    private float counterWindowEndTime;
+    private bool counterWindowOpen;
+
+    public bool CanCounter => counterWindowOpen && counterTarget != null;
+
+    public EnemyCombat CounterTarget => counterTarget;
+
+    public float CounterTimeRemaining => CanCounter ? Mathf.Max(0f, counterWindowEndTime - Time.time): 0f;
+
     [Header("Deflect Posture")]
     [SerializeField, Min(0f)]
     private float deflectPostureDamage = 25f;
@@ -41,9 +61,15 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     public bool BlockPressedThisFrame => input != null && input.block && !wasBlockHeld;
     public bool BlockReleasedThisFrame => input != null && !input.block && wasBlockHeld;
 
+    private bool isCountering = false;
+    public bool IsCountering => isCountering;
+    [Header("Counter Attack")]
+    [SerializeField, Min(0f)]
+    private float counterDamage = 25f;
+
     void Start() { }
 
-    void Update() { }
+    void Update() { UpdateCounterWindow(); }
 
     private void LateUpdate()
     {
@@ -93,13 +119,30 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 
     public void LightAndHeavy()
     {
-        if (input == null) return;
-        if (isBlocking) return;
+        if (input == null) { return; }
 
         bool lightPressed = input.attack && !wasLightAttacking;
         bool heavyPressed = input.heavyAttack && !wasHeavyAttacking;
 
-        // If both are pressed on the same frame, heavy takes priority.
+        if (isCountering)
+        {
+            wasLightAttacking = input.attack;
+            wasHeavyAttacking = input.heavyAttack;
+            return;
+        }
+        if (lightPressed && CanCounter)
+        {
+            BeginCounter();
+            wasLightAttacking = input.attack;
+            wasHeavyAttacking = input.heavyAttack;
+            return;
+        }
+        if (isBlocking)
+        {
+            wasLightAttacking = input.attack;
+            wasHeavyAttacking = input.heavyAttack;
+            return;
+        }
         if (heavyPressed)
         {
             ProcessAttackInput(isHeavy: true);
@@ -110,7 +153,6 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         }
         wasLightAttacking = input.attack;
         wasHeavyAttacking = input.heavyAttack;
-        //wasAttacking = input.attack || input.heavyAttack;
     }
 
     private void ProcessAttackInput(bool isHeavy)
@@ -264,5 +306,140 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
             weaponHitbox.DisableHitbox();
         }
         Debug.Log("[PlayerCombat] Reset for respawn.");
+    }
+
+    public void OpenCounterWindow(EnemyCombat target)
+    {
+        if (target == null || target.IsDead) { return; }
+
+        counterTarget = target;
+        counterWindowEndTime = Time.time + counterWindowDuration;
+
+        counterWindowOpen = true;
+
+        if (counterDebugIndicator != null) { counterDebugIndicator.SetActive(true); }
+
+        Debug.Log($"[Counter] Window OPEN for {target.name}.");
+    }
+
+    public void CloseCounterWindow(string reason = "")
+    {
+        if (!counterWindowOpen) { return; }
+
+        string targetName = counterTarget != null ? counterTarget.name : "NULL";
+        Debug.Log($"[Counter] Window CLOSED for {targetName}. " + $"Reason={reason}");
+
+        counterWindowOpen = false;
+        counterWindowEndTime = 0f;
+        counterTarget = null;
+
+        if (counterDebugIndicator != null) { counterDebugIndicator.SetActive(false); }
+    }
+
+    private void UpdateCounterWindow()
+    {
+        if (isCountering) { return; }
+        if (!counterWindowOpen) { return; }
+
+        if (Time.time >= counterWindowEndTime) {
+            CloseCounterWindow("expired");
+            return;
+        }
+
+        if (counterTarget == null) {
+            CloseCounterWindow("target missing");
+            return;
+        }
+
+        if (counterTarget.IsDead) {
+            CloseCounterWindow("target died");
+            return;
+        }
+
+        float distance = Vector3.Distance(transform.position, counterTarget.transform.position);
+
+        if (distance > counterRange) { CloseCounterWindow("target out of range"); }
+    }
+    private void BeginCounter()
+    {
+        if (!CanCounter) { return; }
+
+        if (counterTarget == null)
+        {
+            CloseCounterWindow("counter target missing");
+            return;
+        }
+
+        if (counterTarget.IsDead)
+        {
+            CloseCounterWindow("counter target died");
+            return;
+        }
+
+        float distance = Vector3.Distance(transform.position, counterTarget.transform.position);
+
+        if (distance > counterRange)
+        {
+            CloseCounterWindow("target out of range before counter");
+            return;
+        }
+
+        Debug.Log($"[Counter] Counter STARTED against " + $"{counterTarget.name}.");
+
+        isCountering = true;
+
+        ForceStopBlocking();
+
+        FaceCounterTarget();
+
+        // IMPORTANT:
+        // Give the existing attack/hitbox system
+        // the counter's damage value.
+        SetPendingDamage(counterDamage);
+
+        if (animate != null) { animate.SetTrigger("CounterAttack"); }
+    }
+
+    private void FaceCounterTarget()
+    {
+        if (counterTarget == null) { return; }
+
+        Vector3 direction = counterTarget.transform.position - transform.position;
+
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude <= 0.001f) { return; }
+
+        transform.rotation = Quaternion.LookRotation(direction);
+    }
+    public void EnableCounterHitbox()
+    {
+        if (!isCountering) { return; }
+
+        if (weaponHitbox == null) { return; }
+
+        weaponHitbox.EnableHitbox(counterDamage);
+
+        Debug.Log($"[Counter] Counter hitbox ENABLED. Damage={counterDamage}");
+    }
+    public void DisableCounterHitbox()
+    {
+        if (weaponHitbox == null) { return; }
+
+        weaponHitbox.DisableHitbox();
+
+        Debug.Log("[Counter] Counter hitbox DISABLED.");
+    }
+    public void EndCounter()
+    {
+        if (!isCountering) { return; }
+
+        if (weaponHitbox != null) { weaponHitbox.DisableHitbox(); }
+
+        isCountering = false;
+
+        CloseCounterWindow("counter completed");
+
+        Debug.Log("[Counter] Counter COMPLETE.");
     }
 }
