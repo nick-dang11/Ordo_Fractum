@@ -1,19 +1,17 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class EnemyMovement : MonoBehaviour
 {
     private NavMeshAgent agent;
     private EnemyAIController controller; // Connects to the EnemyController script to access the player transform
     // Access the public property from EnemyController
-    [SerializeField] 
-    private float patrolSpeed = 2f;
-
-    [SerializeField]
-    private float chaseSpeed = 4f;
-
-    [SerializeField] 
-    private Transform[] patrolPoints; // Array of patrol points for the enemy to move between
+    [SerializeField] private float patrolSpeed = 2f;
+    [SerializeField] private float chaseSpeed = 4f;
+    [SerializeField] private float sprintDistance = 4f;
+    [SerializeField] private float combatStopDistance = 1.7f; // 1.7 for execution range
+    [SerializeField] private Transform[] patrolPoints; // Array of patrol points for the enemy to move between
 
     private int currentPatrolIndex = 0; // Index to keep track of the current patrol point
 
@@ -49,13 +47,24 @@ public class EnemyMovement : MonoBehaviour
         {
             return;
         }
+
         if(controller == null || controller.Player == null)
         {
             Debug.LogWarning("EnemyAIController or Player is null in EnemyMovement");
             return;
         }
 
-        agent.speed = chaseSpeed;
+        float distanceToPlayer = GetDistanceToPlayer();
+
+        if (distanceToPlayer <= combatStopDistance)
+        {
+            Stop();
+            return;
+        }
+
+        agent.speed = distanceToPlayer > sprintDistance ? chaseSpeed : patrolSpeed;
+        //  set speed to chaseSpeed if true (distanceToPlayer > sprintDistance), else false
+
         //Debug.Log("CHASE DESTINATION:" + controller.Player.position);
         MoveTo(controller.Player.position);
     }
@@ -130,7 +139,12 @@ public class EnemyMovement : MonoBehaviour
         MoveTo(patrolPoints[currentPatrolIndex].position);
     }
 
-    
+    private float GetDistanceToPlayer()
+    {
+        if (controller == null || controller.Player == null) return float.PositiveInfinity;
+
+        return Vector3.Distance(transform.position, controller.Player.position);
+    }
 }
 
 //add patrol, reached destination, next patrol points and returnm methods
