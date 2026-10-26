@@ -76,11 +76,11 @@ public class EnemyDetection : MonoBehaviour
             directionToPlayer
         );
 
-        Debug.Log(
-           "EnemyForward: " + forwardDirection +
-            " | AngleToPlayer: " + angleToPlayer +
-            "| FOV limit: " + fieldOfViewAngle / 2f
-        );
+        //Debug.Log(
+        //   "EnemyForward: " + forwardDirection +
+        //    " | AngleToPlayer: " + angleToPlayer +
+        //    "| FOV limit: " + fieldOfViewAngle / 2f
+        //);
 
         return angleToPlayer <= fieldOfViewAngle / 2f;
     }
@@ -142,7 +142,7 @@ public class EnemyDetection : MonoBehaviour
         if(CanSeePlayer())
         {
             lastTimePlayerSeen = Time.time;
-            Debug.Log("Player Visible:Timer reset to: " + lastTimePlayerSeen);
+            //Debug.Log("Player Visible:Timer reset to: " + lastTimePlayerSeen);
             return true;
         }
 
