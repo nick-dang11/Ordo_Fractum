@@ -10,7 +10,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float patrolSpeed = 2f;
     [SerializeField] private float chaseSpeed = 4f;
     [SerializeField] private float sprintDistance = 4f;
-    [SerializeField] private float combatStopDistance = 1.7f; // 1.7 for execution range
+    [SerializeField] private float combatStopDistance = 3f; // 3 for combat range, 1.7 for execution range
     [SerializeField] private Transform[] patrolPoints; // Array of patrol points for the enemy to move between
 
     private int currentPatrolIndex = 0; // Index to keep track of the current patrol point

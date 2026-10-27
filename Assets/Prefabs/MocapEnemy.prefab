@@ -596,6 +596,12 @@ GameObject:
   - component: {fileID: 7124248941740884681}
   - component: {fileID: 163640941635355023}
   - component: {fileID: 8766218699057898754}
+  - component: {fileID: 361923344512014601}
+  - component: {fileID: 7736683908052422111}
+  - component: {fileID: 2676919918432753351}
+  - component: {fileID: 312606564413666211}
+  - component: {fileID: 956708287060126303}
+  - component: {fileID: 8345775540156111504}
   m_Layer: 8
   m_Name: MocapEnemy
   m_TagString: Enemy
@@ -623,6 +629,7 @@ Transform:
   - {fileID: 8201488169477949188}
   - {fileID: 2384002585163439917}
   - {fileID: 191090010972060996}
+  - {fileID: 8377730016243342226}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &8937205026060797890
@@ -635,10 +642,10 @@ Animator:
   m_GameObject: {fileID: 3047151988590228466}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 9024b90c2d1d72c4a9e422f5fdce7b6d, type: 3}
-  m_Controller: {fileID: 9100000, guid: 0838f541219357f4696618769e5547d8, type: 2}
+  m_Controller: {fileID: 9100000, guid: 074368670d33eb945a673f8fa02c59a1, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -684,8 +691,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8469e4427ab9ec845a49197bf26f0202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCombatDetection
-  detectionRadius: 10
-  attackRange: 2
+  detectionRadius: 5
+  attackRange: 3
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 512
@@ -755,12 +762,14 @@ MonoBehaviour:
   animate: {fileID: 8937205026060797890}
   enemyCombatDetection: {fileID: 8325864871925291311}
   executionAnchor: {fileID: 191090010972060996}
+  attackTimelineDriver: {fileID: 7124248941740884681}
   healthUI: {fileID: 437541423076593779}
   postureUI: {fileID: 3792806945608335472}
   enemyCollider: {fileID: 6291261830347497589}
   enemyDamage: 1
   enemyAttackCooldown: 1.5
   faceTargetSpeed: 8
+  deflectReactionDuration: 0.6
 --- !u!114 &7124248941740884681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -805,6 +814,135 @@ MonoBehaviour:
   postureDecreaseRate: 10
   decreaseDelay: 2
   postureSlider: {fileID: 7442175248262854842}
+--- !u!195 &361923344512014601
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_AgentTypeID: -1372625422
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0.5
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &7736683908052422111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphAgent
+  m_Graph: {fileID: 3084970616320676880, guid: d9215997741ad7a4c91eead94d302153, type: 2}
+  m_BlackboardVariableOverridesList:
+  - rid: 5319909365811773440
+  - rid: 6624560363030446203
+  m_OriginalGraph: {fileID: 0}
+  m_IsInitialised: 0
+  m_IsStarted: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 5319909365811773440
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 3047151988590228466}
+    - rid: 6624560363030446203
+      type: {class: 'BlackboardVariable`1[[System.Collections.Generic.List`1[[UnityEngine.GameObject, UnityEngine.CoreModule]], mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 3003461833447844251
+          m_Value1: 3622686186274304372
+        Name: PatrolPoints
+        m_Value:
+        - {fileID: 0}
+        - {fileID: 0}
+        - {fileID: 0}
+        - {fileID: 0}
+--- !u!114 &2676919918432753351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33225601c23ffa64a942055a33aa17cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAIController
+  player: {fileID: 0}
+--- !u!114 &312606564413666211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d94268783f210040a75a5c46022aee8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
+  patrolSpeed: 2
+  chaseSpeed: 4
+  sprintDistance: 4
+  combatStopDistance: 2.5
+  patrolPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &956708287060126303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1868d3ea88e73e43a086c59ea02ca6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDetection
+  detectionDistance: 10
+  fieldOfViewAngle: 0
+  lineOfSightMask:
+    serializedVersion: 2
+    m_Bits: 1536
+  visionDirection: {fileID: 8377730016243342226}
+  lostSightDelay: 5
+--- !u!114 &8345775540156111504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 348f768b174e5374ca8e3aebce5a2fb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAIAnimation
 --- !u!1 &3792806945608335472
 GameObject:
   m_ObjectHideFlags: 0
@@ -1386,6 +1524,37 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &8363769807224860252
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8377730016243342226}
+  m_Layer: 8
+  m_Name: VisionDirection
+  m_TagString: Untagged
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8377730016243342226
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8363769807224860252}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.13052616, z: 0, w: 0.9914449}
+  m_LocalPosition: {x: 0, y: 1.591, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1635731429984112327}
+  m_LocalEulerAnglesHint: {x: 0, y: 15, z: 0}
 --- !u!1 &8558005223424357751
 GameObject:
   m_ObjectHideFlags: 0
@@ -2036,6 +2205,7 @@ MonoBehaviour:
   bloodVFXPrefab: {fileID: 0}
   bloodVFXLifetime: 2
   logHitRegistration: 0
+  ownerRoot: {fileID: 3047151988590228466}
 --- !u!4 &8526422762743204414 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1835543676097021715, guid: e712b3802f52f804eabbd62d48d2ebdf, type: 3}
