@@ -16,3 +16,5 @@ MonoBehaviour:
   startHitFrame: 30
   endHitFrame: 45
   totalFrames: 71
+  allowEarlyBlockCancel: 1
+  allowLateBlockCancel: 1
