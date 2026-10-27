@@ -264,6 +264,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         }
 
         Transform target = enemyCombatDetection.detectedPlayer;
+
         if (target == null)
         {
             return;
@@ -279,11 +280,14 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 
         Quaternion targetRotation = Quaternion.LookRotation(direction);
 
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            targetRotation,
-            faceTargetSpeed * Time.deltaTime
-        );
+        //transform.rotation = Quaternion.Slerp(
+        //    transform.rotation,
+        //    targetRotation,
+        //    faceTargetSpeed * Time.deltaTime
+        //); 
+        // lerp version
+
+        transform.rotation = targetRotation;
     }
 
     public void PlayBlockFeedback()
@@ -324,7 +328,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         if (animate != null)
         {
             animate.ResetTrigger("Attack");
-            animate.SetTrigger("DeflectReaction");
+            animate.SetTrigger("DeflectedReaction");
         }
         StartCoroutine(DeflectReactionRoutine());
     }
