@@ -67,6 +67,15 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     [SerializeField, Min(0f)]
     private float counterDamage = 25f;
 
+    [Header("Enemy Targeting")]
+    [SerializeField] private PlayerActionController targeting;
+
+    private void Awake()
+    {
+        if (targeting == null)
+            targeting = GetComponent<PlayerActionController>();
+    }
+
     void Start() { }
 
     void Update() { UpdateCounterWindow(); }
@@ -101,21 +110,40 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         return isBlocking;
     }
 
+
     public void TriggerBlockFeedback(CombatHitContext context)
     {
         if (context.AttackerRoot != null)
         {
-            Debug.Log($"[Block] Blocked attack from " + $"{context.AttackerRoot.name}");
+            Debug.Log($"[Block] Blocked attack from " +
+                      $"{context.AttackerRoot.name}");
+    
+            
+            if (targeting != null)
+            {
+                targeting.FocusOnEnemy(
+                    context.AttackerRoot.transform
+                );
+            }
         }
+    
         animate.SetTrigger("BlockHit");
+    
         if (clashFeedback != null)
         {
             clashFeedback.PlayBlock();
         }
+    
         playerPosture.posture += playerPosture.postureFillRate * 3f;
-        playerPosture.posture = Mathf.Clamp(playerPosture.posture, 0f, playerPosture.maxPosture);
+        playerPosture.posture = Mathf.Clamp(
+            playerPosture.posture,
+            0f,
+            playerPosture.maxPosture
+        );
+    
         playerPosture.postureSlider.value = playerPosture.posture;
     }
+
 
     public void LightAndHeavy()
     {
@@ -158,16 +186,30 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     private void ProcessAttackInput(bool isHeavy)
     {
         Debug.Log($"[Combat] Input received. canCombo={canCombo}, comboStep={comboStep}, isHeavy={isHeavy}");
+    
         if (canCombo && comboStep < 3)
         {
-            // Continuing an existing chain — Animator resolves the exact
-            // branch (LA_LA, HA_LA, etc.) based on the state it's already in.
+            
+            if (targeting != null)
+            {
+                targeting.SnapToAttackTarget();
+            }
+    
+            
             animate.SetTrigger(isHeavy ? "ComboHeavy" : "ComboLight");
+    
             comboStep++;
+    
             SetPendingDamage(isHeavy ? heavyAttackDamage : lightAttackDamage);
         }
         else if (Time.time >= (isHeavy ? nextHeavyAttackTime : nextLightAttackTime))
         {
+            
+            if (targeting != null)
+            {
+                targeting.SnapToAttackTarget();
+            }
+    
             if (isHeavy)
             {
                 animate.SetTrigger("HeavyAttack");
@@ -178,7 +220,9 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
                 animate.SetTrigger("LightAttack");
                 nextLightAttackTime = Time.time + lightAttackCooldown;
             }
+    
             comboStep = 1;
+    
             SetPendingDamage(isHeavy ? heavyAttackDamage : lightAttackDamage);
         }
     }
@@ -233,20 +277,35 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         EndBlock();
     }
 
-    public void TriggerDeflectFeedback(
-    CombatHitContext context)
+    
+    public void TriggerDeflectFeedback(CombatHitContext context)
     {
         if (context.AttackerRoot != null)
         {
-            Debug.Log($"[Deflect] Deflected attack from " + $"{context.AttackerRoot.name}");
-        } else
-        {
-            Debug.LogWarning("[Deflect] Deflect occurred, but attacker was missing.");
+            Debug.Log($"[Deflect] Deflected attack from " +
+                      $"{context.AttackerRoot.name}");
+    
+            
+            if (targeting != null)
+            {
+                targeting.FocusOnEnemy(
+                    context.AttackerRoot.transform
+                );
+            }
         }
-
+        else
+        {
+            Debug.LogWarning(
+                "[Deflect] Deflect occurred, but attacker was missing."
+            );
+        }
+    
         animate.SetTrigger("Deflect");
-
-        if (clashFeedback != null) { clashFeedback.PlayDeflect(); }
+    
+        if (clashFeedback != null)
+        {
+            clashFeedback.PlayDeflect();
+        }
     }
 
     public void SetPendingDamage(float damage)
