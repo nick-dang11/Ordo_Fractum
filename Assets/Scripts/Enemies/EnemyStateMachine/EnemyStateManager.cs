@@ -6,6 +6,11 @@ public class EnemyStateManager : MonoBehaviour
     [SerializeField] private EnemyCombat combat;
     [SerializeField] private EnemyPosture posture;
 
+    public bool AllowsAI =>
+        CurrentState != StunnedState &&
+        CurrentState != ExecutedState &&
+        CurrentState != DeathState;
+
     public EnemyCombat Combat => combat;
     public EnemyPosture Posture => posture;
 

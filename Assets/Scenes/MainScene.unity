@@ -419,6 +419,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MocapEnemy - Master
       objectReference: {fileID: 0}
+    - target: {fileID: 4452894760529186067, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 330585546}
     - target: {fileID: 6168619457890461158, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -431,10 +435,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8345775540156111504, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 9056616922512226623, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 330585546}
     - target: {fileID: 9208360456012289320, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
       propertyPath: PlayerObject
       value: 
@@ -5959,6 +5963,10 @@ PrefabInstance:
     - target: {fileID: 1439612728775879960, guid: 9762e4b6d5af2f44eb2bc893879a271b, type: 3}
       propertyPath: m_Name
       value: Level Design
+      objectReference: {fileID: 0}
+    - target: {fileID: 1439612728775879960, guid: 9762e4b6d5af2f44eb2bc893879a271b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
