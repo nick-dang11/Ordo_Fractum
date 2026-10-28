@@ -155,10 +155,12 @@ public class EnemyDetection : MonoBehaviour
 
         float timeRemaining = Mathf.Max(0f, lostSightDelay - timeSinceLastSeen);
 
-        Debug.Log("Lost sight|Time elapsed: " + 
-        timeSinceLastSeen.ToString("F2") + 
-        " | Time remaining: " + 
-        timeRemaining.ToString("F2") + 'S');
+        //Debug.Log("Lost sight|Time elapsed: " + 
+        //timeSinceLastSeen.ToString("F2") + 
+        //" | Time remaining: " + 
+        //timeRemaining.ToString("F2") + 'S');
+        // please clean up your update() comments chris
+
         return timeSinceLastSeen <= lostSightDelay;
 
        
