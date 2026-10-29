@@ -373,7 +373,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1635731429984112327, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1635731429984112327, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5725,6 +5725,18 @@ PrefabInstance:
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 330585546}
+    - target: {fileID: 4314512831245376467, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: heavyAttack
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4314512831245376467, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: StateManager
+      value: 
+      objectReference: {fileID: 939421551388515754}
+    - target: {fileID: 4314512831245376467, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: playerExecution
+      value: 
+      objectReference: {fileID: 939421551388515759}
     - target: {fileID: 4614217513729342346, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
       propertyPath: willFill
       value: 
@@ -5912,6 +5924,28 @@ MonoBehaviour:
   detectionRadius: 3
   radiusColor: {r: 0, g: 0, b: 0, a: 0.2}
   floorOffset: 0.05
+--- !u!114 &939421551388515754 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 308716282217272228, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+  m_PrefabInstance: {fileID: 939421551388515701}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939421551388515704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fb6683e7bfccf543a05c0197f4990b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StateManager
+--- !u!114 &939421551388515759 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6088435763116395548, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+  m_PrefabInstance: {fileID: 939421551388515701}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939421551388515704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7314a42896adb91499fb2fe773ef1bcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerExecution
 --- !u!1001 &3016538680853475536
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6059,11 +6093,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3152772219972399443, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3152772219972399443, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4727365448537288004, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: player
@@ -6077,13 +6111,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Test Dummy 1
       objectReference: {fileID: 0}
-    - target: {fileID: 6154859257792311373, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
-      propertyPath: m_AnchorMax.x
+    - target: {fileID: 5043930547961259473, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6154859257792311373, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154859257792311373, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 944794368688548140, guid: 0ec819499e189c84a8d4dd7f5205c10e, type: 3}

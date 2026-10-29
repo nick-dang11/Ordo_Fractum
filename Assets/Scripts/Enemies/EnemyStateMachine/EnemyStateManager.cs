@@ -1,20 +1,30 @@
 using UnityEngine;
+using Unity.Behavior;
+using UnityEngine.AI;
 
 public class EnemyStateManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private EnemyCombat combat;
     [SerializeField] private EnemyPosture posture;
+    [SerializeField] private BehaviorGraphAgent behaviorAgent;
+    [SerializeField] private NavMeshAgent navAgent;
 
     public bool AllowsAI =>
         CurrentState != StunnedState &&
         CurrentState != ExecutedState &&
         CurrentState != DeathState;
 
+    public void RefreshAI()
+    {
+        SetAIEnabled(AllowsAI);
+    }
+
     public EnemyCombat Combat => combat;
     public EnemyPosture Posture => posture;
 
     public EnemyBaseState CurrentState { get; private set; }
+    public EnemyNeutralState NeutralState { get; private set; }
     public EnemyBlockState BlockState { get; private set; }
     public EnemyStunnedState StunnedState { get; private set; }
     public EnemyDeathState DeathState { get; private set; }
@@ -33,18 +43,27 @@ public class EnemyStateManager : MonoBehaviour
             posture = GetComponent<EnemyPosture>();
         }
 
+        if(behaviorAgent == null)
+        {
+            behaviorAgent = GetComponent<BehaviorGraphAgent>();
+        }
+
+        if(navAgent == null)
+        {
+            navAgent = GetComponent<NavMeshAgent>();
+        }
+
+        NeutralState = new EnemyNeutralState();
         BlockState = new EnemyBlockState();
         StunnedState = new EnemyStunnedState();
         DeathState = new EnemyDeathState();
         ExecutedState = new EnemyExecutedState();
     }
 
-    //private void Start()
-    //{
-    //    SwitchState(BlockState); 
-    //    // starts enemy in block state, if you find errors with
-    //    // enemy not being able to attack repeatedly, comment this start section out
-    //}
+    private void Start()
+    {
+        SwitchState(NeutralState);
+    }
 
     private void Update()
     {
@@ -70,7 +89,7 @@ public class EnemyStateManager : MonoBehaviour
         CurrentState = newState;
         Debug.Log($"{name}: {previousState} -> {CurrentState.GetType().Name}");
         CurrentState.EnterState(this);
-
+        RefreshAI();
         return true;
     }
 
@@ -94,5 +113,32 @@ public class EnemyStateManager : MonoBehaviour
         if(CurrentState != StunnedState) return false;
 
         return SwitchState(ExecutedState);
+    }
+
+    public void SetAIEnabled(bool enabled)
+    {
+        if (!enabled)
+        {
+            if (behaviorAgent != null) behaviorAgent.enabled = false;
+
+            if (navAgent != null && navAgent.isOnNavMesh)
+            {
+                navAgent.isStopped = true;
+                navAgent.ResetPath();
+            }
+        }
+
+        else
+        {
+            if (navAgent != null && navAgent.isOnNavMesh)
+            {
+                navAgent.isStopped = false;
+            }
+
+            if (behaviorAgent != null)
+            {
+                behaviorAgent.enabled = true;
+            }
+        }
     }
 }

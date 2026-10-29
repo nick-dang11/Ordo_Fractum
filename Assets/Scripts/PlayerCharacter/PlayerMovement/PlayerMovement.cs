@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Awake()
     {
+        if(stateManager == null) stateManager = GetComponent<StateManager>();
         _CharacterController = GetComponent<CharacterController>();
 
         InputActionMap playerActions =
@@ -61,6 +62,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (stateManager != null && stateManager.currentState == stateManager.playerExecutingState)
+        {
+            Debug.Log("PlayerMovement: Execution guard active");
+
+            _Animator.SetFloat("MoveX", 0f);
+            _Animator.SetFloat("MoveY", 0f);
+            _Animator.SetBool("IsMoving", false);
+            return;
+        }
+
         bool inCombat = _combatDetection != null && _combatDetection.isEnemyNearby;
         _Animator.SetBool("InCombat", inCombat);
 
@@ -167,17 +178,31 @@ public class PlayerMovement : MonoBehaviour
             );
         }
 
-    } 
+    }
 
     private void OnAnimatorMove()
     {
-        if (stateManager != null &&
-        stateManager.currentState == stateManager.playerExecutingState)
+        if (_Animator == null) return;
+
+        bool isExecuting =
+            stateManager != null &&
+            stateManager.currentState == stateManager.playerExecutingState;
+
+        if (isExecuting)
         {
+            if (_CharacterController != null &&
+                _CharacterController.enabled)
+            {
+                _CharacterController.Move(_Animator.deltaPosition);
+            }
+
+            transform.rotation *= _Animator.deltaRotation;
+
             return;
         }
 
-        if (_CharacterController != null && _CharacterController.enabled)
+        if (_CharacterController != null &&
+            _CharacterController.enabled)
         {
             Vector3 movement = _Animator.deltaPosition;
 

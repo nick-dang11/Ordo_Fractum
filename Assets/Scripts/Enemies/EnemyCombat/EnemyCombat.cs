@@ -16,7 +16,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 
     [SerializeField, Min(0f)] private float enemyDamage = 1f;
     [SerializeField, Min(0f)] private float enemyAttackCooldown = 1.5f;
-    [SerializeField, Min(0f)] private float faceTargetSpeed = 8f;
+    //[SerializeField, Min(0f)] private float faceTargetSpeed = 8f; // temp unused
 
     private int deadLayer;
     private float nextAttackTime;
@@ -182,6 +182,8 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 
         if (animate != null)
         {
+            animate.ResetTrigger("DeflectedReaction");
+            animate.ResetTrigger("Attack");
             animate.SetBool("Stunned", true);
         }
     }
