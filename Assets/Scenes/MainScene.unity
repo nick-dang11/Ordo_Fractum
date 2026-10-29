@@ -435,6 +435,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8766218699057898754, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: maxPosture
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 9056616922512226623, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
       propertyPath: mainCamera
       value: 
