@@ -17,7 +17,7 @@ using UnityEngine.TestTools;
  * configured execution range, and not already executing.
  *
  * If the stun timer expires before execution is accepted, the enemy recovers
- * posture, returns to Block / normal combat, and is no longer execution
+ * posture, returns to Neutral / normal combat, and is no longer execution
  * eligible.
  *
  * These tests intentionally do NOT retest:
@@ -45,7 +45,7 @@ using UnityEngine.TestTools;
  *   verifies EnemyStunnedState -> EnemyExecutedState
  *
  * - Execution_RecoveryExpires_RemovesEligibility
- *   verifies EnemyStunnedState -> posture recovery -> EnemyBlockState
+ *   verifies EnemyStunnedState -> posture recovery -> EnemyNeutralState
  *
  * - Execution_AcceptedBeforeRecovery_TransitionsToDeathExactlyOnce
  *   verifies EnemyStunnedState -> EnemyExecutedState -> EnemyDeathState
@@ -125,7 +125,7 @@ public class ExecutionEligibilityTests
     private PropertyInfo stunnedStateProperty;
     private PropertyInfo executedStateProperty;
     private PropertyInfo deathStateProperty;
-    private PropertyInfo blockStateProperty;
+    private PropertyInfo neutralStateProperty;
 
     private PropertyInfo isBeingExecutedProperty;
     private PropertyInfo isDeadProperty;
@@ -460,9 +460,9 @@ public class ExecutionEligibilityTests
         yield return null;
 
         Assert.AreSame(
-            GetEnemyState(blockStateProperty),
+            GetEnemyState(neutralStateProperty),
             GetCurrentEnemyState(),
-            "Expired stun should transition the enemy back into EnemyBlockState."
+            "Expired stun should transition the enemy back into EnemyNeutralState."
         );
 
         Assert.IsFalse(
@@ -485,9 +485,9 @@ public class ExecutionEligibilityTests
         );
 
         Assert.AreSame(
-            GetEnemyState(blockStateProperty),
+            GetEnemyState(neutralStateProperty),
             GetCurrentEnemyState(),
-            "A recovered enemy should remain in normal combat rather than entering EnemyExecutedState."
+            "A recovered enemy should remain in EnemyNeutralState rather than entering EnemyExecutedState."
         );
     }
 
@@ -764,9 +764,9 @@ public class ExecutionEligibilityTests
                 BindingFlags.Public
             );
 
-        blockStateProperty =
+        neutralStateProperty =
             enemyStateManagerType.GetProperty(
-                "BlockState",
+                "NeutralState",
                 BindingFlags.Instance |
                 BindingFlags.Public
             );
@@ -880,7 +880,7 @@ public class ExecutionEligibilityTests
         Assert.IsNotNull(stunnedStateProperty);
         Assert.IsNotNull(executedStateProperty);
         Assert.IsNotNull(deathStateProperty);
-        Assert.IsNotNull(blockStateProperty);
+        Assert.IsNotNull(neutralStateProperty);
 
         Assert.IsNotNull(isBeingExecutedProperty);
         Assert.IsNotNull(isDeadProperty);
