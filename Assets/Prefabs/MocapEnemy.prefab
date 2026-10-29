@@ -616,6 +616,7 @@ GameObject:
   - component: {fileID: 312606564413666211}
   - component: {fileID: 956708287060126303}
   - component: {fileID: 8345775540156111504}
+  - component: {fileID: 4436548227930582800}
   m_Layer: 8
   m_Name: MocapEnemy
   m_TagString: Enemy
@@ -782,7 +783,6 @@ MonoBehaviour:
   enemyCollider: {fileID: 6291261830347497589}
   enemyDamage: 1
   enemyAttackCooldown: 1.5
-  faceTargetSpeed: 8
   deflectReactionDuration: 0.6
 --- !u!114 &7124248941740884681
 MonoBehaviour:
@@ -811,6 +811,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStateManager
   combat: {fileID: 872181531737438651}
   posture: {fileID: 8766218699057898754}
+  behaviorAgent: {fileID: 0}
+  navAgent: {fileID: 0}
 --- !u!114 &8766218699057898754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -823,7 +825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c0da22e5d3a8514290c4cec5f35cf64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyPostureMeter
-  maxPosture: 100
+  maxPosture: 10
   postureDamageMultiplier: 1
   postureDecreaseRate: 10
   decreaseDelay: 2
@@ -939,7 +941,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDetection
   detectionDistance: 10
-  fieldOfViewAngle: 45
+  fieldOfViewAngle: 90
   lineOfSightMask:
     serializedVersion: 2
     m_Bits: 1536
@@ -957,6 +959,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 348f768b174e5374ca8e3aebce5a2fb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAIAnimation
+--- !u!114 &4436548227930582800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d709e10126f1d9499b0c85567dab3da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDetectionGizmos
+  detectionRadius: 2.5
+  radiusColor: {r: 0, g: 0, b: 0.72156864, a: 1}
+  floorOffset: 0.05
 --- !u!1 &3792806945608335472
 GameObject:
   m_ObjectHideFlags: 0
@@ -1608,7 +1625,7 @@ Transform:
   m_GameObject: {fileID: 8558005223424357751}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 1.7}
+  m_LocalPosition: {x: 0.18, y: 0, z: 2.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

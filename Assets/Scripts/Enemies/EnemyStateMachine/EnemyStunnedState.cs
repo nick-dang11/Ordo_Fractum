@@ -24,7 +24,7 @@ public class EnemyStunnedState : EnemyBaseState
         if (Time.time < stunEndTime) return;
 
         context.RecoverFromStun();
-        context.SwitchState(context.BlockState, true);
+        context.SwitchState(context.NeutralState, true);
     }
 
     public override void ExitState(EnemyStateManager context)

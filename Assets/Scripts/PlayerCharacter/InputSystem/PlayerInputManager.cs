@@ -7,6 +7,7 @@ public class PlayerInputManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private PlayerExecution playerExecution;
+    [SerializeField] private StateManager stateManager;
 
     [Header("Character Input Values")]
     public Vector2 move;
@@ -34,14 +35,29 @@ public class PlayerInputManager : MonoBehaviour
 
     public void Awake()
     {
-        if(playerExecution == null) playerExecution = GetComponent<PlayerExecution>();
+        if (playerExecution == null) playerExecution = GetComponent<PlayerExecution>();
+        if (stateManager == null) stateManager = GetComponent<StateManager>();
     }
 
     // input callbacks
     // link these in inspector: PlayerInput via "Invoke Unity Events"
     // see pinned messages in #github-commits for example
 
-    public void OnMove(InputAction.CallbackContext context) => MoveInput(context.ReadValue<Vector2>());
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        bool isExecuting =
+            stateManager != null &&
+            stateManager.currentState == stateManager.playerExecutingState;
+
+        if (isExecuting)
+        {
+            move = Vector2.zero;
+            return;
+        }
+
+        MoveInput(context.ReadValue<Vector2>());
+    }
+
     public void OnLook(InputAction.CallbackContext context)
     {
         if (cursorInputForLook) LookInput(context.ReadValue<Vector2>());
@@ -157,6 +173,19 @@ public class PlayerInputManager : MonoBehaviour
 
     private void Update()
     {
+        bool isExecuting =
+            stateManager != null &&
+            stateManager.currentState == stateManager.playerExecutingState;
+
+        if (isExecuting)
+        {
+            move = Vector2.zero;
+            sprint = false;
+            IsEvadeRequested = false;
+            evadeArmed = false;
+            return;
+        }
+
         CheckEvadeRequest();
     }
 
