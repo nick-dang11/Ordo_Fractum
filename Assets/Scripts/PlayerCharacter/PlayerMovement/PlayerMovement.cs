@@ -13,17 +13,13 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement Settings")]
     [SerializeField] private float _rotationSpeed = 720f;
-
+    [SerializeField] private float sprintSpeedMultiplier = 1.25f;
 
     private float _gravity = -9.81f;
     private Vector3 _velocity;
     private InputAction _moveAction;
 
     private InputAction _sprintAction;
-    private int _sprintLayerIndex;
-
-    [SerializeField]
-    private float _sprintLayerBlendSpeed = 8f;
 
     void Awake()
     {
@@ -39,17 +35,6 @@ public class PlayerMovement : MonoBehaviour
         _sprintAction =
             playerActions.FindAction("Sprint");
 
-        _sprintLayerIndex =
-            _Animator.GetLayerIndex("SprintLayer");
-
-        if (_sprintLayerIndex >= 0)
-        {
-            _Animator.SetLayerWeight(
-                _sprintLayerIndex,
-                0f
-            );
-        }
-
         if (_MainCamera == null && Camera.main != null)
         {
             Debug.LogWarning(
@@ -62,13 +47,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (stateManager != null && stateManager.currentState == stateManager.playerExecutingState)
+        if (stateManager != null &&
+             (stateManager.currentState == stateManager.playerExecutingState ||
+             stateManager.currentState == stateManager.playerStunnedState))
         {
-            Debug.Log("PlayerMovement: Execution guard active");
-
             _Animator.SetFloat("MoveX", 0f);
             _Animator.SetFloat("MoveY", 0f);
             _Animator.SetBool("IsMoving", false);
+            _Animator.SetBool("IsSprinting", false);
+
             return;
         }
 
@@ -140,12 +127,9 @@ public class PlayerMovement : MonoBehaviour
 
         _velocity.y += _gravity * Time.deltaTime;
 
-        // -------------------------
-        // SPRINT
-        // -------------------------
         bool sprintHeld =
-                    _sprintAction != null &&
-                    _sprintAction.IsPressed();
+            _sprintAction != null &&
+            _sprintAction.IsPressed();
 
         bool validSprintDirection =
             targetY >= -0.05f;
@@ -157,27 +141,7 @@ public class PlayerMovement : MonoBehaviour
             inCombat
         );
 
-        if (_sprintLayerIndex >= 0)
-        {
-            float targetSprintWeight =
-                isSprinting ? 1f : 0f;
-
-            float currentSprintWeight =
-                _Animator.GetLayerWeight(_sprintLayerIndex);
-
-            float newSprintWeight =
-                Mathf.MoveTowards(
-                    currentSprintWeight,
-                    targetSprintWeight,
-                    Time.deltaTime * _sprintLayerBlendSpeed
-                );
-
-            _Animator.SetLayerWeight(
-                _sprintLayerIndex,
-                newSprintWeight
-            );
-        }
-
+        _Animator.SetBool("IsSprinting", isSprinting);
     }
 
     private void OnAnimatorMove()

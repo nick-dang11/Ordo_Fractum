@@ -45,11 +45,12 @@ public class PlayerInputManager : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        bool isExecuting =
+        bool isMovementRestricted =
             stateManager != null &&
-            stateManager.currentState == stateManager.playerExecutingState;
+            (stateManager.currentState == stateManager.playerExecutingState ||
+             stateManager.currentState == stateManager.playerStunnedState);
 
-        if (isExecuting)
+        if (isMovementRestricted)
         {
             move = Vector2.zero;
             return;
@@ -62,10 +63,25 @@ public class PlayerInputManager : MonoBehaviour
     {
         if (cursorInputForLook) LookInput(context.ReadValue<Vector2>());
     }
-    public void OnJump(InputAction.CallbackContext context) => JumpInput(context.ReadValue<bool>());
-    public void OnSprint(InputAction.CallbackContext context) => SprintInput(context.ReadValue<bool>());
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        JumpInput(!IsActionRestricted() && context.ReadValue<bool>());
+    }
+
+    public void OnSprint(InputAction.CallbackContext context)
+    {
+        SprintInput(!IsActionRestricted() && context.ReadValue<bool>());
+    }
+
     public void OnAttack(InputAction.CallbackContext context)
     {
+        if (IsActionRestricted())
+        {
+            AttackInput(false);
+            return;
+        }
+
         if (context.started)
         {
             if (TryExecutionInput())
@@ -81,8 +97,15 @@ public class PlayerInputManager : MonoBehaviour
             AttackInput(false);
         }
     }
+
     public void OnHeavyAttack(InputAction.CallbackContext context)
     {
+        if (IsActionRestricted())
+        {
+            HeavyAttackInput(false);
+            return;
+        }
+
         if (context.started)
         {
             if (TryExecutionInput())
@@ -101,6 +124,12 @@ public class PlayerInputManager : MonoBehaviour
 
     public void OnBlock(InputAction.CallbackContext context)
     {
+        if (IsActionRestricted())
+        {
+            BlockInput(false);
+            return;
+        }
+
         if (context.performed || context.started)
         {
             BlockInput(true);
@@ -110,9 +139,16 @@ public class PlayerInputManager : MonoBehaviour
             BlockInput(false);
         }
     }
+
     public void OnSelfHeal(InputAction.CallbackContext context)
     {
-        if(context.performed || context.started)
+        if (IsActionRestricted())
+        {
+            Self_HealInput(false);
+            return;
+        }
+
+        if (context.performed || context.started)
         {
             Self_HealInput(true);
             Debug.Log("Self heal input detected");
@@ -173,16 +209,25 @@ public class PlayerInputManager : MonoBehaviour
 
     private void Update()
     {
-        bool isExecuting =
+        bool isMovementRestricted =
             stateManager != null &&
-            stateManager.currentState == stateManager.playerExecutingState;
+            (stateManager.currentState == stateManager.playerExecutingState ||
+             stateManager.currentState == stateManager.playerStunnedState);
 
-        if (isExecuting)
+        if (isMovementRestricted)
         {
             move = Vector2.zero;
             sprint = false;
+            jump = false;
+
+            attack = false;
+            heavyAttack = false;
+            block = false;
+            self_heal = false;
+
             IsEvadeRequested = false;
             evadeArmed = false;
+
             return;
         }
 
@@ -219,5 +264,11 @@ public class PlayerInputManager : MonoBehaviour
         if (playerExecution == null) return false;
 
         return playerExecution.TryExecute();
+    }
+    private bool IsActionRestricted()
+    {
+        return stateManager != null &&
+            (stateManager.currentState == stateManager.playerExecutingState ||
+             stateManager.currentState == stateManager.playerStunnedState);
     }
 }

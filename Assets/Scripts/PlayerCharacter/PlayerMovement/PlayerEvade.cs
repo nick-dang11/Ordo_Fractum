@@ -13,8 +13,6 @@ public class PlayerEvade : MonoBehaviour
     }
     [SerializeField] private PlayerEvadeVFX evadeVFX;
 
-    private int evadeLayerIndex;
-
     private int hashEvade = Animator.StringToHash("Evade");
     private int hashEvadeX = Animator.StringToHash("EvadeX");
     private int hashEvadeY = Animator.StringToHash("EvadeY");
@@ -27,8 +25,6 @@ public class PlayerEvade : MonoBehaviour
     private void Awake()
     {
         if (animator == null) animator = GetComponentInChildren<Animator>();
-
-        evadeLayerIndex = animator.GetLayerIndex("Evade Layer");
     }
 
     public void StartEvade(Vector2 localDirection)
@@ -49,27 +45,39 @@ public class PlayerEvade : MonoBehaviour
 
     public void UpdateEvade()
     {
-        if (IsEvadeComplete) return;
+        if (IsEvadeComplete)
+            return;
 
         evadeTimer += Time.deltaTime;
 
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(evadeLayerIndex);
+        AnimatorStateInfo stateInfo =
+            animator.GetCurrentAnimatorStateInfo(0);
 
-        bool isCurrentlyEvading = stateInfo.IsTag("Evading") || stateInfo.IsName("Directional Evade");
+        bool isCurrentlyEvading =
+            stateInfo.IsTag("Evading") ||
+            stateInfo.IsName("Directional Evade");
 
-        if(isCurrentlyEvading && stateInfo.normalizedTime >= 1.0f && !animator.IsInTransition(0))
+        if (isCurrentlyEvading &&
+            stateInfo.normalizedTime >= 1.0f &&
+            !animator.IsInTransition(0))
         {
             IsEvadeComplete = true;
         }
-        else if(evadeTimer >= safetyTimeout)
+        else if (evadeTimer >= safetyTimeout)
         {
+            Debug.LogWarning(
+                "PlayerEvade: Safety timeout reached before evade completed."
+            );
+
             IsEvadeComplete = true;
         }
     }
 
     public void CleanupEvade()
     {
+        animator.ResetTrigger(hashEvade);
         animator.SetBool(hashIsEvading, false);
+
         IsEvadeComplete = false;
     }
 }
