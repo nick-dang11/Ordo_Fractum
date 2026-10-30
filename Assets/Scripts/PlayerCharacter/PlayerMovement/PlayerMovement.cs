@@ -170,6 +170,12 @@ public class PlayerMovement : MonoBehaviour
         {
             Vector3 movement = _Animator.deltaPosition;
 
+            if (_Animator.GetBool("IsSprinting"))
+            {
+                movement.x *= sprintSpeedMultiplier;
+                movement.z *= sprintSpeedMultiplier;
+            }
+
             movement.y = _velocity.y * Time.deltaTime;
 
             _CharacterController.Move(movement);

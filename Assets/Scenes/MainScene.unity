@@ -348,6 +348,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 312606564413666211, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: combatStopDistance
+      value: 2.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 312606564413666211, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
       value: 
       objectReference: {fileID: 254210831}
@@ -363,6 +367,10 @@ PrefabInstance:
       propertyPath: 'patrolPoints.Array.data[3]'
       value: 
       objectReference: {fileID: 323550567}
+    - target: {fileID: 872181531737438651, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: enemyAttackCooldown
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1635731429984112327, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6381,10 +6389,10 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 939421551388515701}
+  - {fileID: 251197837}
   - {fileID: 1904665789}
   - {fileID: 1225295891}
   - {fileID: 923442223}
-  - {fileID: 251197837}
   - {fileID: 8422742801113867613}
   - {fileID: 1169850607}
   - {fileID: 318433460}
