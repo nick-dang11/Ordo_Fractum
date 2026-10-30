@@ -14,17 +14,25 @@ public class PlayerHealth : MonoBehaviour
 
    [Header("References")]
    public PlayerInputManager playerInputManager;
+    private StateManager stateManager;
 
-   void Start()
+    void Start()
    {
        health = maxHealth;
        playerRespawn = GetComponent<PlayerRespawn>();
-
+       stateManager = GetComponent<StateManager>();
    }
 
     public void TakeDamage(int damage_amount)
     {
-        health -= damage_amount;
+        int finalDamage = damage_amount;
+
+        if (stateManager != null && stateManager.currentState == stateManager.playerStunnedState)
+        {
+            finalDamage += 1;
+        }
+
+        health -= finalDamage;
         health = Mathf.Clamp(health, 0, maxHealth);
         Debug.Log("Current Health: " + health);
 

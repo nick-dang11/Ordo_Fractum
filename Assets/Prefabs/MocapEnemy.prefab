@@ -825,7 +825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c0da22e5d3a8514290c4cec5f35cf64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyPostureMeter
-  maxPosture: 10
+  maxPosture: 100
   postureDamageMultiplier: 1
   postureDecreaseRate: 10
   decreaseDelay: 2
