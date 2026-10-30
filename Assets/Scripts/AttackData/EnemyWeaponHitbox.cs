@@ -30,7 +30,7 @@ public class EnemyWeaponHitbox : WeaponHitbox
             Debug.Log($"[EnemyWeaponHitbox] BlockZone contact: " + $"{other.name}");
             return blockZone.Owner;
         }
-        PlayerCombat playerCombat = other.GetComponent<PlayerCombat>();
+        PlayerCombat playerCombat = other.GetComponentInParent<PlayerCombat>();
         if (playerCombat != null)
         {
             Debug.Log($"[EnemyWeaponHitbox] Player body contact: " + $"{other.name}");
