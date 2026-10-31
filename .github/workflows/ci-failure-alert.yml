@@ -1,0 +1,114 @@
+
+name: CI Failure Alert
+
+on:
+  workflow_run:
+    workflows: ["Ordo Fractum CI"]
+    types: [completed]
+
+permissions:
+  actions: read
+  issues: write
+
+concurrency:
+  group: ci-failure-alert-${{ github.event.workflow_run.id }}
+  cancel-in-progress: false
+
+jobs:
+  report-failure:
+    name: Check Windows Build Failure
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Build and Create Issue
+        uses: actions/github-script@v9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const run = context.payload.workflow_run;
+
+            // Get the individual job results
+            const jobs = await github.paginate(
+              github.rest.actions.listJobsForWorkflowRun,
+              {
+                owner,
+                repo,
+                run_id: run.id,
+                filter: "latest",
+                per_page: 100
+              }
+            );
+
+            // Look specifically for Windows Build
+            const build = jobs.find(
+              job => job.name === "Windows Build"
+            );
+
+            if (!build) {
+              core.warning("Windows Build job not found.");
+              return;
+            }
+
+            // Only report Windows Build failures
+            if (build.conclusion !== "failure") {
+              core.info(
+                "Windows Build did not fail. No issue created."
+              );
+              return;
+            }
+
+            const title =
+              `[CI Failure] Windows Build Run ${run.id}`;
+
+            // Check for an existing issue
+            const existing = await github.paginate(
+              github.rest.issues.listForRepo,
+              {
+                owner,
+                repo,
+                state: "all",
+                per_page: 100
+              }
+            );
+
+            if (existing.some(issue =>
+              !issue.pull_request && issue.title === title
+            )) {
+              core.info("Issue already exists.");
+              return;
+            }
+
+            // Create failure report
+            const body = [
+              "## Windows Build Failure Detected",
+              `- **Workflow:** ${run.name}`,
+              `- **Failed Job:** ${build.name}`,
+              `- **Build Status:** ${build.conclusion}`,
+              `- **Branch:** ${run.head_branch}`,
+              `- **Commit:** ${run.head_sha}`,
+              `- **Run ID:** ${run.id}`,
+              `- **Workflow URL:** ${run.html_url}`,
+              `- **Failed Job URL:** ${build.html_url}`,
+              "",
+              "## Investigation Checklist",
+              "- [ ] Review Windows Build logs",
+              "- [ ] Identify cause of failure",
+              "- [ ] Determine security relevance",
+              "- [ ] Document corrective action",
+              "- [ ] Verify successful build",
+              "- [ ] Close issue when resolved"
+            ].join("\n");
+
+            const issue = await github.rest.issues.create({
+              owner,
+              repo,
+              title,
+              body,
+              assignees: ["Josiahp301"]
+            });
+
+            core.notice(
+              `Created issue: ${issue.data.html_url}`
+            );
