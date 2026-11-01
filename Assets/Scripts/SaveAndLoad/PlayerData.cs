@@ -1,8 +1,11 @@
 using UnityEngine;
+using System;
 
+
+ [Serializable]
 public class PlayerData
 {
-    public int health;
-    public int will;
-    public float[] position;
+
+    public int health; 
+
 }
