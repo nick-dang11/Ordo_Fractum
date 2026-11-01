@@ -5,9 +5,9 @@ public class SaveSystem
 {
     private static string SavePath = Path.Combine(Application.persistentDataPath, "savefile.json");
 
-    public static void SaveGame(PlayerData gameData)
+    public static void SaveGame(PlayerData Data)
     {
-        string json = JsonUtility.ToJson(gameData);
+        string json = JsonUtility.ToJson(Data,true);
         File.WriteAllText(SavePath, json);
 
         Debug.Log($"Game saved to {SavePath}");
@@ -18,10 +18,11 @@ public class SaveSystem
         if(File.Exists(SavePath))
         {
             string json = File.ReadAllText(SavePath);
-            PlayerData gameData = JsonUtility.FromJson<PlayerData>(json);
+
+            PlayerData Data = JsonUtility.FromJson<PlayerData>(json);
 
             Debug.Log($"Game loaded from {SavePath}");
-            return gameData;
+            return Data;
         }
         else
         {
