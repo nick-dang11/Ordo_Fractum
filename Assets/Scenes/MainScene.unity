@@ -1538,8 +1538,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b68a7fa16793a14c9f542646b0be808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameSaveManager
-  playerHealth: {fileID: 939421551388515727}
-  playerTransform: {fileID: 939421551388515702}
 --- !u!4 &571106658
 Transform:
   m_ObjectHideFlags: 0
@@ -5651,7 +5649,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1865273160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5748,7 +5746,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 481b9441b2be3ed4a8319d6f57c2a927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenu
-  pauseMenuUI: {fileID: 1250053601}
 --- !u!1 &1872800264
 GameObject:
   m_ObjectHideFlags: 0
@@ -6883,17 +6880,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
   m_PrefabInstance: {fileID: 939421551388515701}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &939421551388515727 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5221989036913721363, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-  m_PrefabInstance: {fileID: 939421551388515701}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 939421551388515704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ee7faf631c6c68408372ad6334938e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
 --- !u!1001 &3016538680853475536
 PrefabInstance:
   m_ObjectHideFlags: 0
