@@ -60,6 +60,21 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Free Runner Disk Space
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "=== Disk space before cleanup ==="
+          df -h /
+
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+
+          echo "=== Disk space after cleanup ==="
+          df -h /
+
       - name: Cache Unity Build Library
         uses: actions/cache@v4
         with:
@@ -73,6 +88,13 @@ jobs:
         id: build_metadata
         shell: bash
         run: echo "short_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+  
+      - name: Check Disk Space Before Unity Build
+        shell: bash
+        run: |
+          df -h /
+          docker system df
+          du -sh Library 2>/dev/null || true
 
       - name: Build Windows Game
         id: build
