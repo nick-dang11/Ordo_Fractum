@@ -11,6 +11,7 @@ public class SaveSystem
         File.WriteAllText(SavePath, json);
 
         Debug.Log($"Game saved to {SavePath}");
+        Debug.Log("save file location: " + SavePath);
     }
 
     public static PlayerData LoadGame()
