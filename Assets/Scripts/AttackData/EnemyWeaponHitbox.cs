@@ -80,7 +80,7 @@ public class EnemyWeaponHitbox : WeaponHitbox
 
         if (playerAnimator != null)
         {
-            playerAnimator.SetTrigger("HitReact");
+            //playerAnimator.SetTrigger("HitReact");
         }
 
         SpawnBloodVFX(contactedCollider);
