@@ -11,6 +11,7 @@ public class PlayerExecution : MonoBehaviour
     [SerializeField] private LayerMask enemyLayerMask;
 
     private EnemyStateManager executionTarget;
+    private bool isExecuting;
 
     private void Awake()
     {
@@ -23,8 +24,13 @@ public class PlayerExecution : MonoBehaviour
 
     public bool TryExecute()
     {
-        if (executionTarget != null) return false;
-        if (stateManager == null) return false;
+        if (isExecuting || executionTarget != null)
+            return false;
+
+        if (stateManager == null ||
+            stateManager.movement == null ||
+            stateManager.playerExecutingState == null)
+            return false;
 
         Collider[] enemies = Physics.OverlapSphere(
             transform.position,
@@ -66,8 +72,10 @@ public class PlayerExecution : MonoBehaviour
                 continue;
 
             executionTarget = enemyStateManager;
+            isExecuting = true;
 
             stateManager.movement.Teleport(executionAnchor.position, executionAnchor.rotation);
+
             if (playerAnimator != null)
             {
                 playerAnimator.SetTrigger("ExecuteEnemy");
@@ -87,10 +95,13 @@ public class PlayerExecution : MonoBehaviour
 
     public void FinishExecution()
     {
+        if (!isExecuting)
+            return;
+
         if (executionTarget == null)
         {
             Debug.LogWarning("FinishExecution called with no execution target.");
-
+            isExecuting = false;
             return;
         }
 
@@ -98,12 +109,13 @@ public class PlayerExecution : MonoBehaviour
 
         executionTarget.RequestDeath();
 
+        isExecuting = false;
+        executionTarget = null;
+
         stateManager.SwitchState(
             stateManager.idleState,
             true
         );
-
-        executionTarget = null;
 
         Debug.Log("Execution finished. Player returned to Idle.");
     }

@@ -27,12 +27,22 @@ public class PlayerPosture : MonoBehaviour
     {
         stateManager = GetComponent<StateManager>();
         playerCombat = GetComponent<PlayerCombat>();
-        postureSlider.maxValue = maxPosture;
-        postureSlider.value = posture;
+
+        maxPosture = Mathf.Max(1f, maxPosture);
+        posture = Mathf.Clamp(posture, 0f, maxPosture);
+
+        if (postureSlider != null)
+        {
+            postureSlider.maxValue = maxPosture;
+            postureSlider.value = posture;
+        }
     }
 
     void Update()
     {
+        maxPosture = Mathf.Max(1f, maxPosture);
+        posture = Mathf.Clamp(posture, 0f, maxPosture);
+
         if (stateManager != null &&
             stateManager.currentState == stateManager.playerStunnedState)
         {
@@ -43,9 +53,12 @@ public class PlayerPosture : MonoBehaviour
         }
 
         if (recentHitTimer > 0f)
-            recentHitTimer -= Time.deltaTime;
+            recentHitTimer = Mathf.Max(0f, recentHitTimer - Time.deltaTime);
 
-        if (!playerCombat.IsBlocking())
+        if (posture >= maxPosture && !postureBroken)
+            TriggerGuardBreak();
+
+        if (!postureBroken && playerCombat != null && !playerCombat.IsBlocking())
         {
             decayTimer += Time.deltaTime;
 
@@ -57,10 +70,10 @@ public class PlayerPosture : MonoBehaviour
         }
 
         if (postureSlider != null)
+        {
+            postureSlider.maxValue = maxPosture;
             postureSlider.value = posture;
-
-        if (posture >= maxPosture)
-            TriggerGuardBreak();
+        }
     }
 
     private void TriggerGuardBreak()
