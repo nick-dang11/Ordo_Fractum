@@ -10,7 +10,7 @@ public static class SaveValidator
         }
 
         if(data.health < 0 || data.health > maxHealth)
-        {
+        {   
             Debug.LogWarning("Invalid health value in save data. Starting with default values.");
             return false;
         }
