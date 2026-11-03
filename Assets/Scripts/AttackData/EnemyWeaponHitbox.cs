@@ -75,7 +75,17 @@ public class EnemyWeaponHitbox : WeaponHitbox
         }
         Debug.Log("[Defense] Result = HIT");
         healthSystem.TakeDamage(Mathf.RoundToInt(CurrentDamage)); // rounding to prevent unforseen errors
+
+        Animator playerAnimator = playerCombat.GetComponent<Animator>();
+
+        if (playerAnimator != null)
+        {
+            //playerAnimator.SetTrigger("HitReact");
+        }
+
         SpawnBloodVFX(contactedCollider);
+
+
     }
     private void ApplyDeflectPostureDamage(PlayerCombat playerCombat, CombatHitContext context)
     {

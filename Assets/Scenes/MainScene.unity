@@ -564,6 +564,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MocapEnemy - Master
       objectReference: {fileID: 0}
+    - target: {fileID: 3047151988590228466, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4023741029571530838, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -1534,8 +1538,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b68a7fa16793a14c9f542646b0be808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameSaveManager
-  playerHealth: {fileID: 939421551388515703}
-  playerTransform: {fileID: 939421551388515702}
+  playerHealth: {fileID: 0}
+  playerTransform: {fileID: 0}
 --- !u!4 &571106658
 Transform:
   m_ObjectHideFlags: 0
@@ -5647,7 +5651,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1865273160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6864,6 +6868,18 @@ PrefabInstance:
       propertyPath: 'hearts.Array.data[3]'
       value: 
       objectReference: {fileID: 1080786939}
+    - target: {fileID: 6898766285396604641, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: attackDefinitions.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6898766285396604641, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: 'attackDefinitions.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 67c132c1b79bd5f498037bd8df05082f, type: 2}
+    - target: {fileID: 6898766285396604641, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+      propertyPath: 'attackDefinitions.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 589f66d98c17f234893c188790219d61, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

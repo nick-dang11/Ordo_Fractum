@@ -39,17 +39,72 @@ public class StateManager : MonoBehaviour
         }
     }
 
-    public void SwitchState(BaseState newState, bool bypassPriority = false)
+
+    public void SwitchState(
+        BaseState newState,
+        bool bypassPriority = false)
     {
-        if(bypassPriority || newState.prioritylevel >= currentState.prioritylevel)
+        if (newState == null || currentState == null)
+            return;
+
+        if (newState == currentState)
+            return;
+
+        bool legalAttackCancel = false;
+
+        if (newState == blockState && combat != null)
         {
-            currentState.ExitState(this);
-            currentState = newState;
-            currentState.EnterState(this);
+            // Never interrupt counterattacks with block.
+            if (combat.IsCountering)
+            {
+                Debug.Log("[BlockCancel] Counter is active.");
+                return;
+            }
+
+            bool attackActive =
+                currentState == attackingState ||
+                combat.IsAttacking ||
+                combat.IsAttackAnimationPlaying();
+
+            if (attackActive)
+            {
+                // Only newly pressed block input may cancel.
+                if (!combat.BlockPressedThisFrame ||
+                    !combat.CanBlockCancelCurrentAttack())
+                {
+                    Debug.Log(
+                        "[BlockCancel] Block denied."
+                    );
+                    return;
+                }
+
+                legalAttackCancel = true;
+            }
         }
-        else
+
+        // Existing priority rule.
+        if (!bypassPriority &&
+            newState.prioritylevel < currentState.prioritylevel)
         {
-            Debug.Log($"State switch blocked");
+            Debug.Log("State switch blocked.");
+            return;
         }
+
+        bool leavingAttacking =
+            currentState == attackingState;
+
+        // Exit old state first.
+        currentState.ExitState(this);
+
+        // Clean up if Animator was attacking while
+        // the gameplay state had already returned to Idle.
+        if (legalAttackCancel && !leavingAttacking)
+        {
+            combat.EndAttack();
+        }
+
+        currentState = newState;
+        currentState.EnterState(this);
     }
+
 }
