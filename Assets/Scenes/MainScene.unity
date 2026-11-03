@@ -6890,6 +6890,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1635731429984112327, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
   m_PrefabInstance: {fileID: 939421551388515701}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &939421551388515703 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5221989036913721363, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
+  m_PrefabInstance: {fileID: 939421551388515701}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939421551388515704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ee7faf631c6c68408372ad6334938e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
 --- !u!1 &939421551388515704 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
