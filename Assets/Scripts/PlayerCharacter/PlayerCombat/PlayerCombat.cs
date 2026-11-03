@@ -38,6 +38,10 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     [SerializeField, Min(0f)]
     private float counterWindowDuration = 0.75f;
 
+    [Header("Attack Cancel Data")]
+    [SerializeField]
+    private AttackData[] attackDefinitions;
+
     [SerializeField, Min(0f)]
     private float counterRange = 3f;
 
@@ -501,4 +505,119 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 
         Debug.Log("[Counter] Counter COMPLETE.");
     }
+
+    private AttackData FindAttackDefinition(
+        AnimatorStateInfo stateInfo)
+    {
+        if (attackDefinitions == null)
+            return null;
+
+        foreach (AttackData data in attackDefinitions)
+        {
+            if (data == null ||
+                string.IsNullOrEmpty(data.animationStateName))
+                continue;
+
+            if (stateInfo.IsName(data.animationStateName) ||
+                stateInfo.shortNameHash ==
+                    Animator.StringToHash(data.animationStateName))
+            {
+                return data;
+            }
+        }
+
+        return null;
+    }
+
+    public bool IsAttackAnimationPlaying()
+    {
+        if (animate == null)
+            return false;
+
+        AnimatorStateInfo current =
+            animate.GetCurrentAnimatorStateInfo(0);
+
+        if (current.IsTag("Attack"))
+            return true;
+
+        if (animate.IsInTransition(0))
+        {
+            AnimatorStateInfo next =
+                animate.GetNextAnimatorStateInfo(0);
+
+            return next.IsTag("Attack");
+        }
+
+        return false;
+    }
+
+    public bool CanBlockCancelCurrentAttack()
+    {
+        if (animate == null || isCountering)
+            return false;
+
+        AnimatorStateInfo current =
+            animate.GetCurrentAnimatorStateInfo(0);
+
+        // The attack must be the current Animator state.
+        if (!current.IsTag("Attack"))
+        {
+            Debug.Log("[BlockCancel] Attack not active yet.");
+            return false;
+        }
+
+        // Conservatively prevent canceling while blending
+        // between two separate attack states.
+        if (animate.IsInTransition(0))
+        {
+            AnimatorStateInfo next =
+                animate.GetNextAnimatorStateInfo(0);
+
+            if (next.IsTag("Attack"))
+            {
+                Debug.Log(
+                    "[BlockCancel] Denied during combo blend."
+                );
+                return false;
+            }
+        }
+
+        AttackData data = FindAttackDefinition(current);
+
+        if (data == null)
+        {
+            Debug.LogWarning(
+                "[BlockCancel] No matching AttackData. " +
+                "Check animationStateName and Inspector array."
+            );
+            return false;
+        }
+
+        if (!data.IsAttackValid() ||
+            !data.AreBlockCancelWindowsValid())
+        {
+            return false;
+        }
+
+        bool allowed = data.IsWithinBlockCancelWindow(
+            current.normalizedTime
+        );
+
+        int frame = Mathf.Clamp(
+            Mathf.FloorToInt(
+                current.normalizedTime * data.totalFrames
+            ),
+            1,
+            data.totalFrames
+        );
+
+        Debug.Log(
+            $"[BlockCancel] {data.name}, " +
+            $"Frame={frame}/{data.totalFrames}, " +
+            $"Allowed={allowed}"
+        );
+
+        return allowed;
+    }
+
 }

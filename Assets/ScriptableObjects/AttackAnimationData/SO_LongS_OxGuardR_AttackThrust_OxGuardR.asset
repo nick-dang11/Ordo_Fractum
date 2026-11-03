@@ -12,13 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 153a1fe106a06d6478e9267241de99a1, type: 3}
   m_Name: SO_LongS_OxGuardR_AttackThrust_OxGuardR
   m_EditorClassIdentifier: Assembly-CSharp::AttackData
-  animationStateName: SO_LongS_OxGuardR_AttackThrust_OxGuardR
+  animationStateName: LightAttack
   startHitFrame: 32
   endHitFrame: 45
   totalFrames: 76
   allowEarlyBlockCancel: 1
-  earlyBlockCancelStartFrame: 1
-  earlyBlockCancelEndFrame: 31
   allowLateBlockCancel: 1
-  lateBlockCancelStartFrame: 60
-  lateBlockCancelEndFrame: 76
