@@ -6,9 +6,15 @@ using UnityEngine;
 
 public static class ThirdPartySecurityScanner
 {
+    // Original third-party scripts
     private const string TargetFolder =
         "Assets/StarterAssets/ThirdPersonController/Scripts";
 
+    // Separate folder for security test scripts
+    private const string TestFolder =
+        "Assets/Security/Tests";
+
+    // Potentially sensitive API patterns
     private static readonly string[] SensitiveAPIs =
     {
         "UnityWebRequest",
@@ -22,24 +28,42 @@ public static class ThirdPartySecurityScanner
         "Application.persistentDataPath"
     };
 
+    // Scan original third-party scripts
     [MenuItem("Tools/Security/Scan Third-Party Scripts")]
     public static void ScanScripts()
     {
-        if (!Directory.Exists(TargetFolder))
+        ScanFolder(TargetFolder);
+    }
+
+    // Scan security test scripts
+    [MenuItem("Tools/Security/Scan Test Scripts")]
+    public static void ScanTestScripts()
+    {
+        ScanFolder(TestFolder);
+    }
+
+    // Reusable scanning method
+    private static void ScanFolder(string folder)
+    {
+        if (!Directory.Exists(folder))
         {
             Debug.LogError(
-                "[Security Scan] Target folder not found: " +
-                TargetFolder);
+                "[Security Scan] Folder not found: " + folder);
             return;
         }
 
         string[] files = Directory.GetFiles(
-            TargetFolder, "*.cs", SearchOption.AllDirectories);
+            folder, "*.cs", SearchOption.AllDirectories);
 
         int totalFindings = 0;
+        int filesRead = 0;
+        int filesFailed = 0;
 
-        Debug.Log("[Security Scan] Starting scan...");
-        Debug.Log("[Security Scan] Scripts found: " + files.Length);
+        Debug.Log(
+            "[Security Scan] Starting scan: " + folder);
+
+        Debug.Log(
+            "[Security Scan] Scripts found: " + files.Length);
 
         foreach (string file in files)
         {
@@ -48,12 +72,16 @@ public static class ThirdPartySecurityScanner
             try
             {
                 lines = File.ReadAllLines(file);
+                filesRead++;
             }
             catch (Exception ex)
             {
+                filesFailed++;
+
                 Debug.LogError(
                     "[Security Scan] Could not read " +
                     file + ": " + ex.Message);
+
                 continue;
             }
 
@@ -76,8 +104,10 @@ public static class ThirdPartySecurityScanner
         }
 
         Debug.Log(
-            "[Security Scan] Completed. Files scanned: " +
+            "[Security Scan] Completed. Files found: " +
             files.Length +
+            " | Files read: " + filesRead +
+            " | Read errors: " + filesFailed +
             " | Potential API matches: " + totalFindings);
 
         Debug.Log(
