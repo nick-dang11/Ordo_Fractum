@@ -38,6 +38,12 @@ public class GameSaveManager : MonoBehaviour
             return;
         }
 
+        if(!SaveValidator.IsValid(data, playerHealth.maxHealth))
+        {
+            Debug.LogWarning("Invalid save data. Starting with default values.");
+            return;
+        }
+
         playerHealth.health = Mathf.Clamp(data.health, 0, playerHealth.maxHealth);
 
         //Restore Position 
