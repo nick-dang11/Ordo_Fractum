@@ -782,7 +782,7 @@ MonoBehaviour:
   postureUI: {fileID: 3792806945608335472}
   enemyCollider: {fileID: 6291261830347497589}
   enemyDamage: 1
-  enemyAttackCooldown: 1.5
+  enemyAttackCooldown: 2
   deflectReactionDuration: 0.6
 --- !u!114 &7124248941740884681
 MonoBehaviour:
@@ -864,10 +864,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphAgent
-  m_Graph: {fileID: 3084970616320676880, guid: d9215997741ad7a4c91eead94d302153, type: 2}
+  m_Graph: {fileID: -766359203340113427, guid: 59ad6f58648870c4d9590fadd6184063, type: 2}
   m_BlackboardVariableOverridesList:
   - rid: 5319909365811773440
-  - rid: 6624560363030446203
   m_OriginalGraph: {fileID: 0}
   m_IsInitialised: 0
   m_IsStarted: 0
@@ -882,18 +881,6 @@ MonoBehaviour:
           m_Value1: 0
         Name: Self
         m_Value: {fileID: 3047151988590228466}
-    - rid: 6624560363030446203
-      type: {class: 'BlackboardVariable`1[[System.Collections.Generic.List`1[[UnityEngine.GameObject, UnityEngine.CoreModule]], mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 3003461833447844251
-          m_Value1: 3622686186274304372
-        Name: PatrolPoints
-        m_Value:
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
-        - {fileID: 0}
 --- !u!114 &2676919918432753351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -922,7 +909,7 @@ MonoBehaviour:
   patrolSpeed: 2
   chaseSpeed: 4
   sprintDistance: 4
-  combatStopDistance: 2.5
+  combatStopDistance: 2.2
   patrolPoints:
   - {fileID: 0}
   - {fileID: 0}
