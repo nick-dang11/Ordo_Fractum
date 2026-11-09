@@ -57,17 +57,17 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 
         if (deadLayer == -1) Debug.LogError("DeadEnemy layer does not exist.");
     }
-    private void Update()
-    {
-        if (isDead || isBeingExecuted) return;
+    //private void Update()
+    //{
+    //    if (isDead || isBeingExecuted) return;
 
-        if (enemyCombatDetection == null) return;
+    //    if (enemyCombatDetection == null) return;
 
-        if (enemyCombatDetection.isPlayerInAttackRange && CanAttack)
-        {
-            TryAttack();
-        }
-    }
+    //    if (enemyCombatDetection.isPlayerInAttackRange && CanAttack)
+    //    {
+    //        TryAttack();
+    //    }
+    //}
 
     public bool TryAttack()
     {
