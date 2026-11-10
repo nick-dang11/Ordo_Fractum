@@ -48,8 +48,14 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     [SerializeField, Min(0f)]
     private float deflectReactionDuration = 0.6f;
 
-    public bool CanAttack => !isDead && !isBeingExecuted && !isAttacking && !isBlocking && !isStunned && !isDeflectReacting && Time.time >= nextAttackTime;
-    public bool CanBlock => !isDead && !isBeingExecuted && !isAttacking && !isBlocking && !isStunned;
+    [Header("Block Reaction")]
+    [SerializeField, Min(0f)]
+    private float blockReactionDuration = 0.35f;
+    private bool isBlockReacting = false;
+    public bool IsBlockReacting => isBlockReacting;
+
+    public bool CanAttack => !isDead && !isBeingExecuted && !isAttacking && !isBlocking && !isStunned && !isDeflectReacting && !isBlockReacting && Time.time >= nextAttackTime;
+    public bool CanBlock => !isDead && !isBeingExecuted && !isAttacking && !isBlocking && !isDeflectReacting && !isBlockReacting && !isStunned;
 
     private void Awake()
     {
@@ -182,6 +188,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 
         if (animate != null)
         {
+            animate.ResetTrigger("BlockedReaction");
             animate.ResetTrigger("DeflectedReaction");
             animate.ResetTrigger("Attack");
             animate.SetBool("Stunned", true);
@@ -316,6 +323,37 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         {
             SetLayerRecursively(child.gameObject, newLayer);
         }
+    }
+
+    public void HandleBlocked()
+    {
+        if (isDead || isBeingExecuted || isStunned)
+            return;
+
+        if (currentAttackInvalidated || !isAttacking)
+            return;
+
+        Debug.Log($"[EnemyCombat] {name}'s current attack was BLOCKED.");
+        InterruptCurrentAttack();
+
+        isBlockReacting = true;
+
+        if (animate != null)
+        {
+            animate.ResetTrigger("Attack");
+            animate.ResetTrigger("DeflectedReaction");
+            animate.SetTrigger("BlockedReaction");
+        }
+        StartCoroutine(BlockReactionRoutine());
+    }
+
+    private IEnumerator BlockReactionRoutine()
+    {
+        yield return new WaitForSeconds(blockReactionDuration);
+        isBlockReacting = false;
+        if (isDead || isBeingExecuted)
+            yield break;
+        Debug.Log($"[EnemyCombat] {name} finished its block reaction.");
     }
 
     public void HandleDeflected()
