@@ -795,10 +795,10 @@ AnimatorStateMachine:
     m_Position: {x: -590, y: -630, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7614802029285424821}
-    m_Position: {x: -290, y: -740, z: 0}
+    m_Position: {x: -90, y: -830, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -31369303347956804}
-    m_Position: {x: -80, y: -710, z: 0}
+    m_Position: {x: -330, y: -830, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1331696249412714250}
     m_Position: {x: 510, y: -560, z: 0}
@@ -814,9 +814,9 @@ AnimatorStateMachine:
     - {fileID: 9064443096200597434}
     - {fileID: 2425200014764007933}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: -330, y: 130, z: 0}
+  m_AnyStatePosition: {x: -550, y: -330, z: 0}
   m_EntryPosition: {x: 280, y: -240, z: 0}
-  m_ExitPosition: {x: -330, y: 170, z: 0}
+  m_ExitPosition: {x: -550, y: -290, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: -3874209293242929013}
 --- !u!206 &-5442778410583986204
@@ -1709,8 +1709,7 @@ AnimatorState:
   m_Name: HitReact
   m_Speed: 1
   m_CycleOffset: 0
-  m_Transitions:
-  - {fileID: -2230068125224823551}
+  m_Transitions: []
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0

@@ -37,6 +37,10 @@ public partial class EnemyAttacksAction : Action
             return Status.Failure;
         }
 
+        EnemyMovement movement = Enemy.Value.GetComponent<EnemyMovement>();
+
+        if ( movement != null) movement.Stop();
+
         return Status.Running;
     }
 
