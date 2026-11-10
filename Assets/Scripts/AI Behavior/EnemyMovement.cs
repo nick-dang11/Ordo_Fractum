@@ -19,6 +19,11 @@ public class EnemyMovement : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         controller = GetComponent<EnemyAIController>();
+        
+        if(agent != null)
+        {
+            agent.stoppingDistance = combatStopDistance;
+        }
     }
 
     public void MoveTo(Vector3 location){
@@ -76,12 +81,12 @@ public class EnemyMovement : MonoBehaviour
 
     public void Patrol()
     {
-        if(agent == null || !agent.isOnNavMesh)
+        if (agent == null || !agent.isActiveAndEnabled || !agent.isOnNavMesh)
         {
             return;
         }
 
-        if(patrolPoints == null || patrolPoints.Length == 0 )
+        if (patrolPoints == null || patrolPoints.Length == 0)
         {
             Debug.LogWarning("No patrol points assigned in EnemyMovement");
             return;
@@ -89,7 +94,6 @@ public class EnemyMovement : MonoBehaviour
 
         agent.speed = patrolSpeed;
 
-       // Debug.Log("PATROL is SETTING DESTINATION");
         MoveTo(patrolPoints[currentPatrolIndex].position);
 
         if (ReachedDestination())

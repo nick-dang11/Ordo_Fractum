@@ -17,7 +17,31 @@ public class EnemyAIAnimation : MonoBehaviour
     {
         if (EnemyNavMeshAgent == null || EnemyAnimator == null || !EnemyNavMeshAgent.isOnNavMesh) return;
 
-        EnemyAnimator.SetFloat("Speed", EnemyNavMeshAgent.velocity.magnitude);
+        float desiredSpeed = EnemyNavMeshAgent.isStopped
+            ? 0f
+            : EnemyNavMeshAgent.desiredVelocity.magnitude;
+
+        EnemyAnimator.SetFloat(
+            "Speed",
+            desiredSpeed,
+            0.1f,
+            Time.deltaTime
+        );
+    }
+
+    private float nextDebugTime;
+
+    private void LateUpdate()
+    {
+        if (EnemyAnimator == null ||
+            EnemyNavMeshAgent == null ||
+            !EnemyNavMeshAgent.isOnNavMesh ||
+            Time.time < nextDebugTime)
+        {
+            return;
+        }
+
 
     }
 }
+    

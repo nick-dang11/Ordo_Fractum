@@ -500,6 +500,10 @@ PrefabInstance:
       propertyPath: 'patrolPoints.Array.data[3]'
       value: 
       objectReference: {fileID: 323550567}
+    - target: {fileID: 956708287060126303, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: fieldOfViewAngle
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 1635731429984112327, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -570,6 +574,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6638796796653249491, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7736683908052422111, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: m_Graph
+      value: 
+      objectReference: {fileID: 3084970616320676880, guid: d9215997741ad7a4c91eead94d302153, type: 2}
+    - target: {fileID: 7736683908052422111, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: m_OriginalGraph
+      value: 
+      objectReference: {fileID: 3084970616320676880, guid: d9215997741ad7a4c91eead94d302153, type: 2}
+    - target: {fileID: 8937205026060797890, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
+      propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9056616922512226623, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
