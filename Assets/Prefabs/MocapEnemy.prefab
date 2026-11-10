@@ -784,6 +784,7 @@ MonoBehaviour:
   enemyDamage: 1
   enemyAttackCooldown: 2
   deflectReactionDuration: 0.6
+  blockReactionDuration: 0.35
 --- !u!114 &7124248941740884681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -864,10 +865,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraphAgent
-  m_Graph: {fileID: -766359203340113427, guid: 59ad6f58648870c4d9590fadd6184063, type: 2}
+  m_Graph: {fileID: 3084970616320676880, guid: d9215997741ad7a4c91eead94d302153, type: 2}
   m_BlackboardVariableOverridesList:
   - rid: 5319909365811773440
-  m_OriginalGraph: {fileID: 0}
+  m_OriginalGraph: {fileID: 3084970616320676880, guid: d9215997741ad7a4c91eead94d302153, type: 2}
   m_IsInitialised: 0
   m_IsStarted: 0
   references:

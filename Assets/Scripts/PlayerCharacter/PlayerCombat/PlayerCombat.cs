@@ -129,6 +129,14 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
                     context.AttackerRoot.transform
                 );
             }
+            EnemyCombat enemyCombat = context.AttackerRoot.GetComponentInParent<EnemyCombat>();
+
+            if (enemyCombat != null)
+            {
+                enemyCombat.HandleBlocked();
+            } else {
+                Debug.LogWarning("[Block] Could not find EnemyCombat on attacker.");
+            }
         }
     
         animate.SetTrigger("BlockHit");
@@ -139,12 +147,7 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         }
     
         playerPosture.posture += playerPosture.postureFillRate * 3f;
-        playerPosture.posture = Mathf.Clamp(
-            playerPosture.posture,
-            0f,
-            playerPosture.maxPosture
-        );
-    
+        playerPosture.posture = Mathf.Clamp(playerPosture.posture, 0f, playerPosture.maxPosture);
         playerPosture.postureSlider.value = playerPosture.posture;
     }
 
