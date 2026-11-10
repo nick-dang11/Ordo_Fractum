@@ -16,7 +16,7 @@ public class LockOnController : MonoBehaviour
     [Header("Cameras")]
     [SerializeField] private GameObject freeLookCamera;
     [SerializeField] private GameObject lockOnCamera;
-    [SerializeField] private Transform  lockOnCameraTarget;
+    [SerializeField] private Transform lockOnCameraTarget;
 
     [Header("TargetSearch")]
     [SerializeField] private LayerMask enemyLayers;
@@ -24,7 +24,7 @@ public class LockOnController : MonoBehaviour
     [SerializeField] private float lockRange = 18f;
     [SerializeField] private float breakLockRange = 24f;
     [SerializeField] private float screenWindow = 0.45f;
-    [SerializeField] private bool  requireLineOfSight = true;
+    [SerializeField] private bool requireLineOfSight = true;
 
     [Header("Camera Target")]
     //[SerializeField] private float cameraTargetWeight = 0.45f;
@@ -35,9 +35,9 @@ public class LockOnController : MonoBehaviour
     [SerializeField] private bool rotatePlayerTowardTarget = true;
     [SerializeField] private float rotationSpeed = 14f;
 
-    public Transform CurrentTarget { get; private set;  }
+    public Transform CurrentTarget { get; private set; }
     public bool IsLockedOn => CurrentTarget != null;
-    
+
     private void Awake()
     {
         if (PlayerRoot == null)
@@ -51,32 +51,53 @@ public class LockOnController : MonoBehaviour
 
     private void Update()
     {
-        if (Keyboard.current != null && Keyboard.current.tabKey.wasPressedThisFrame)
+        if (Keyboard.current != null &&
+            Keyboard.current.tabKey.wasPressedThisFrame)
         {
             ToggleLockOn();
         }
 
-        if (!IsLockedOn) 
+        if (!IsLockedOn)
             return;
 
-        HandleTargetSwitchInput();
-
-        if(!TargetStillValid())
+       
+        if (!TargetStillValid())
         {
-            ClearLockOn();
+            bool targetUnavailable =
+                CurrentTarget == null ||
+                !IsValidLockOnTarget(
+                    CurrentTarget.GetComponentInParent<LockOnTarget>()
+                );
+
+            Transform replacement =
+                targetUnavailable ? FindBestTarget() : null;
+
+            if (replacement != null)
+            {
+                LockOn(replacement);
+            }
+            else
+            {
+                ClearLockOn();
+            }
+
             return;
         }
+
+        HandleTargetSwitchInput();
 
         UpdateLockOnCameraTarget();
 
         if (rotatePlayerTowardTarget)
+        {
             RotatePlayerToTarget();
-
+        }
     }
 
     public void ToggleLockOn()
     {
         Debug.Log("Tab pressed. ToggleLockOn called.");
+
         if (IsLockedOn)
         {
             ClearLockOn();
@@ -85,7 +106,7 @@ public class LockOnController : MonoBehaviour
 
         Transform bestTarget = FindBestTarget();
 
-        if(bestTarget != null)
+        if (bestTarget != null)
         {
             LockOn(bestTarget);
         }
@@ -93,8 +114,6 @@ public class LockOnController : MonoBehaviour
         {
             Debug.Log("No Target Found.");
         }
-            
-            
     }
 
     public void ClearLockOn()
@@ -112,21 +131,29 @@ public class LockOnController : MonoBehaviour
 
     private Transform FindBestTarget()
     {
-        Collider[] hits = Physics.OverlapSphere(PlayerRoot.position, lockRange, enemyLayers, QueryTriggerInteraction.Collide);
+        Collider[] hits = Physics.OverlapSphere(
+            PlayerRoot.position,
+            lockRange,
+            enemyLayers,
+            QueryTriggerInteraction.Collide
+        );
 
         Transform bestTarget = null;
         float bestScore = float.MaxValue;
 
-        HashSet<LockOnTarget> checkedTargets = new HashSet<LockOnTarget>();
+        HashSet<LockOnTarget> checkedTargets =
+            new HashSet<LockOnTarget>();
 
         foreach (Collider hit in hits)
         {
-            LockOnTarget lockTarget = hit.GetComponentInParent<LockOnTarget>();
+            LockOnTarget lockTarget =
+                hit.GetComponentInParent<LockOnTarget>();
 
             if (lockTarget == null)
                 continue;
 
-            if (!lockTarget.IsLockable)
+            // Prevent dead enemies from being targeted.
+            if (!IsValidLockOnTarget(lockTarget))
                 continue;
 
             if (checkedTargets.Contains(lockTarget))
@@ -136,7 +163,8 @@ public class LockOnController : MonoBehaviour
 
             Transform aimPoint = lockTarget.AimPoint;
 
-            Vector3 viewportPoint = mainCamera.WorldToViewportPoint(aimPoint.position);
+            Vector3 viewportPoint =
+                mainCamera.WorldToViewportPoint(aimPoint.position);
 
             if (viewportPoint.z <= 0f)
                 continue;
@@ -144,12 +172,18 @@ public class LockOnController : MonoBehaviour
             Vector2 screenOffset = new Vector2(
                 viewportPoint.x - 0.5f,
                 viewportPoint.y - 0.5f
-                );
+            );
 
-            if (Mathf.Abs(screenOffset.x) > screenWindow || Mathf.Abs(screenOffset.y) > screenWindow)
+            if (Mathf.Abs(screenOffset.x) > screenWindow ||
+                Mathf.Abs(screenOffset.y) > screenWindow)
+            {
                 continue;
+            }
 
-            float distance = Vector3.Distance(PlayerRoot.position, aimPoint.position);
+            float distance = Vector3.Distance(
+                PlayerRoot.position,
+                aimPoint.position
+            );
 
             if (distance > lockRange)
                 continue;
@@ -160,11 +194,19 @@ public class LockOnController : MonoBehaviour
                     ? playerCameraPivot.position
                     : PlayerRoot.position + Vector3.up * 1.5f;
 
-                if (Physics.Linecast(origin, aimPoint.position, obstacleLayers, QueryTriggerInteraction.Ignore))
+                if (Physics.Linecast(
+                    origin,
+                    aimPoint.position,
+                    obstacleLayers,
+                    QueryTriggerInteraction.Ignore))
+                {
                     continue;
+                }
             }
 
-            float score = screenOffset.sqrMagnitude * 3f + distance / lockRange;
+            float score =
+                screenOffset.sqrMagnitude * 3f +
+                distance / lockRange;
 
             if (score < bestScore)
             {
@@ -176,23 +218,73 @@ public class LockOnController : MonoBehaviour
         return bestTarget;
     }
 
-    private bool TargetStillValid()
+    private static bool IsValidLockOnTarget(
+        LockOnTarget lockTarget)
     {
-        if(CurrentTarget == null) 
+        if (lockTarget == null ||
+            !lockTarget.isActiveAndEnabled ||
+            !lockTarget.gameObject.activeInHierarchy ||
+            !lockTarget.IsLockable)
+        {
             return false;
+        }
 
-        float distance = Vector3.Distance(PlayerRoot.position, CurrentTarget.position);
+        // Check whether the enemy is dead or being executed.
+        EnemyCombat combat =
+            lockTarget.GetComponentInParent<EnemyCombat>();
 
-        if(distance > breakLockRange)
+        if (combat != null &&
+            (combat.IsDead || combat.IsBeingExecuted))
+        {
             return false;
+        }
 
-        Vector3 viewportPoint = mainCamera.WorldToViewportPoint(CurrentTarget.position);
+        EnemyHealth health =
+            lockTarget.GetComponentInParent<EnemyHealth>();
 
-        if(viewportPoint.z <= 0f)
+        if (health != null && health.deathRequested)
+        {
             return false;
+        }
 
         return true;
+    }
 
+    private bool TargetStillValid()
+    {
+        if (CurrentTarget == null ||
+            !CurrentTarget.gameObject.activeInHierarchy)
+        {
+            return false;
+        }
+
+        LockOnTarget lockTarget =
+            CurrentTarget.GetComponentInParent<LockOnTarget>();
+
+        if (!IsValidLockOnTarget(lockTarget))
+        {
+            return false;
+        }
+
+        float distance = Vector3.Distance(
+            PlayerRoot.position,
+            CurrentTarget.position
+        );
+
+        if (distance > breakLockRange)
+        {
+            return false;
+        }
+
+        Vector3 viewportPoint =
+            mainCamera.WorldToViewportPoint(CurrentTarget.position);
+
+        if (viewportPoint.z <= 0f)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private void UpdateLockOnCameraTarget(bool instant = false)
@@ -204,30 +296,35 @@ public class LockOnController : MonoBehaviour
             ? playerCameraPivot.position
             : PlayerRoot.position + Vector3.up * 1.5f;
 
-        
         lockOnCameraTarget.position = playerPoint;
 
-       
-        Vector3 lookDirection = CurrentTarget.position - playerPoint;
+        Vector3 lookDirection =
+            CurrentTarget.position - playerPoint;
+
         lookDirection.y = 0f;
 
         if (lookDirection.sqrMagnitude > 0.001f)
         {
-            lockOnCameraTarget.rotation = Quaternion.LookRotation(lookDirection);
+            lockOnCameraTarget.rotation =
+                Quaternion.LookRotation(lookDirection);
         }
     }
 
     private void RotatePlayerToTarget()
     {
-        Transform objectToRotate = characterModel != null ? characterModel : PlayerRoot;
+        Transform objectToRotate =
+            characterModel != null ? characterModel : PlayerRoot;
 
-        Vector3 direction = CurrentTarget.position - objectToRotate.position;
+        Vector3 direction =
+            CurrentTarget.position - objectToRotate.position;
+
         direction.y = 0f;
 
         if (direction.sqrMagnitude < 0.001f)
             return;
 
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        Quaternion targetRotation =
+            Quaternion.LookRotation(direction);
 
         objectToRotate.rotation = Quaternion.Slerp(
             objectToRotate.rotation,
@@ -238,15 +335,21 @@ public class LockOnController : MonoBehaviour
 
     private void SetCameraMode(bool lockedOn)
     {
-        if(freeLookCamera != null)
+        if (freeLookCamera != null)
+        {
             freeLookCamera.SetActive(!lockedOn);
+        }
 
         if (lockOnCamera != null)
-            lockOnCamera.SetActive(lockedOn);
-
-        if(!lockedOn && lockOnCameraTarget != null)
         {
-            Vector3 playerPoint = playerCameraPivot != null ? playerCameraPivot.position : PlayerRoot.position + Vector3.up * 1.5f;
+            lockOnCamera.SetActive(lockedOn);
+        }
+
+        if (!lockedOn && lockOnCameraTarget != null)
+        {
+            Vector3 playerPoint = playerCameraPivot != null
+                ? playerCameraPivot.position
+                : PlayerRoot.position + Vector3.up * 1.5f;
 
             lockOnCameraTarget.position = playerPoint;
         }
@@ -257,13 +360,14 @@ public class LockOnController : MonoBehaviour
         if (Mouse.current == null)
             return;
 
-        float scrollValue = Mouse.current.scroll.ReadValue().y;
+        float scrollValue =
+            Mouse.current.scroll.ReadValue().y;
 
-        if(scrollValue > 0f)
+        if (scrollValue > 0f)
         {
             SwitchTarget(1);
         }
-        else if(scrollValue < 0f)
+        else if (scrollValue < 0f)
         {
             SwitchTarget(-1);
         }
@@ -278,8 +382,12 @@ public class LockOnController : MonoBehaviour
 
         targets.Sort((a, b) =>
         {
-            float ax = mainCamera.WorldToViewportPoint(a.position).x;
-            float bx = mainCamera.WorldToViewportPoint(b.position).x;
+            float ax =
+                mainCamera.WorldToViewportPoint(a.position).x;
+
+            float bx =
+                mainCamera.WorldToViewportPoint(b.position).x;
+
             return ax.CompareTo(bx);
         });
 
@@ -291,13 +399,18 @@ public class LockOnController : MonoBehaviour
         int nextIndex = currentIndex + direction;
 
         if (nextIndex >= targets.Count)
+        {
             nextIndex = 0;
+        }
 
-        if(nextIndex < 0)
+        if (nextIndex < 0)
+        {
             nextIndex = targets.Count - 1;
+        }
 
         LockOn(targets[nextIndex]);
     }
+
     private List<Transform> FindAllValidTargets()
     {
         List<Transform> targets = new List<Transform>();
@@ -309,16 +422,19 @@ public class LockOnController : MonoBehaviour
             QueryTriggerInteraction.Collide
         );
 
-        HashSet<LockOnTarget> checkedTargets = new HashSet<LockOnTarget>();
+        HashSet<LockOnTarget> checkedTargets =
+            new HashSet<LockOnTarget>();
 
         foreach (Collider hit in hits)
         {
-            LockOnTarget lockTarget = hit.GetComponentInParent<LockOnTarget>();
+            LockOnTarget lockTarget =
+                hit.GetComponentInParent<LockOnTarget>();
 
             if (lockTarget == null)
                 continue;
 
-            if (!lockTarget.IsLockable)
+            // NEW: Skip dead or otherwise invalid enemies.
+            if (!IsValidLockOnTarget(lockTarget))
                 continue;
 
             if (checkedTargets.Contains(lockTarget))
@@ -328,12 +444,16 @@ public class LockOnController : MonoBehaviour
 
             Transform aimPoint = lockTarget.AimPoint;
 
-            Vector3 viewportPoint = mainCamera.WorldToViewportPoint(aimPoint.position);
+            Vector3 viewportPoint =
+                mainCamera.WorldToViewportPoint(aimPoint.position);
 
             if (viewportPoint.z <= 0f)
                 continue;
 
-            float distance = Vector3.Distance(PlayerRoot.position, aimPoint.position);
+            float distance = Vector3.Distance(
+                PlayerRoot.position,
+                aimPoint.position
+            );
 
             if (distance > lockRange)
                 continue;
@@ -344,8 +464,14 @@ public class LockOnController : MonoBehaviour
                     ? playerCameraPivot.position
                     : PlayerRoot.position + Vector3.up * 1.5f;
 
-                if (Physics.Linecast(origin, aimPoint.position, obstacleLayers, QueryTriggerInteraction.Ignore))
+                if (Physics.Linecast(
+                    origin,
+                    aimPoint.position,
+                    obstacleLayers,
+                    QueryTriggerInteraction.Ignore))
+                {
                     continue;
+                }
             }
 
             targets.Add(aimPoint);
@@ -353,5 +479,4 @@ public class LockOnController : MonoBehaviour
 
         return targets;
     }
-
 }
