@@ -148,19 +148,19 @@ public class EnemyCombatTests
         );
     }
 
+
     [Test]
-    public void CanAttack_IsTrueForFreshEnemy()
+    public void CanAttack_IsFalseWithoutCombatReadyAnimator()
     {
         bool canAttack =
-            (bool)canAttackProperty.GetValue(
-                enemyCombat
-            );
+            (bool)canAttackProperty.GetValue(enemyCombat);
 
-        Assert.IsTrue(
+        Assert.IsFalse(
             canAttack,
-            "A fresh enemy should initially be able to attack."
+            "Enemy should not be able to attack without a combat-ready Animator."
         );
     }
+
 
     [Test]
     public void CanAttack_IsFalseWhileEnemyIsAttacking()

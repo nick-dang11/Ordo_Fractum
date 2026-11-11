@@ -88,7 +88,7 @@ public class MultiColliderExactlyOnceDamageTests
     private FieldInfo attackFramesField;
     private FieldInfo healthField;
     private FieldInfo maxHealthField;
-
+    private FieldInfo enemyAttackStartTimeField;
     private int activeToken;
 
     // ---------------------------------------------------------
@@ -406,6 +406,7 @@ public class MultiColliderExactlyOnceDamageTests
         attackFramesField = RequiredField(attackDataType, "totalFrames");
         healthField = RequiredField(playerHealthType, "health");
         maxHealthField = RequiredField(playerHealthType, "maxHealth");
+        enemyAttackStartTimeField = RequiredField(enemyCombatType, "attackStartTime");
     }
 
     private static FieldInfo RequiredField(Type type, string name)
@@ -448,7 +449,6 @@ public class MultiColliderExactlyOnceDamageTests
 
         // This test begins after attack eligibility is granted; it does
         // not invoke TryAttack or require a scene/Animator/BehaviorGraph.
-        enemyAttackingField.SetValue(enemyCombat, true);
     }
 
     private void CreateAttackData()
@@ -513,6 +513,14 @@ public class MultiColliderExactlyOnceDamageTests
 
     private int BeginActiveAttack()
     {
+        enemyAttackingField.SetValue(enemyCombat, true);
+
+
+        enemyAttackStartTimeField.SetValue(
+            enemyCombat,
+            Time.time
+        );
+
         int token = (int)Invoke(beginAttackMethod, attackDriver, attackData);
         Assert.Greater(token, 0);
         Assert.AreEqual(token, CurrentAttackToken());
