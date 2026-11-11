@@ -8,6 +8,9 @@ public class EnemyCombatDetection : MonoBehaviour
     [SerializeField] private LayerMask playerLayerMask;
     [SerializeField] private Animator animator;
 
+    private bool previousNearby;
+    private bool previousAttackRange;
+
     public Transform detectedPlayer;
 
     public bool isPlayerNearby { get; private set; }
@@ -35,6 +38,22 @@ public class EnemyCombatDetection : MonoBehaviour
         if (animator != null)
         {
             animator.SetBool("InCombat", isPlayerNearby);
+        }
+
+        if (previousNearby != isPlayerNearby ||
+          previousAttackRange != isPlayerInAttackRange)
+        {
+            Debug.Log(
+                $"[EnemyDetection] " +
+                $"Time={Time.time:F3}, " +
+                $"Frame={Time.frameCount}, " +
+                $"Nearby={isPlayerNearby}, " +
+                $"AttackRange={isPlayerInAttackRange}, " +
+                $"Player={(detectedPlayer != null ? detectedPlayer.name : "None")}"
+            );
+
+            previousNearby = isPlayerNearby;
+            previousAttackRange = isPlayerInAttackRange;
         }
     }
 
