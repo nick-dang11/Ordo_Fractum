@@ -17,6 +17,9 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     [SerializeField, Min(0f)] private float enemyDamage = 1f;
     [SerializeField, Min(0f)] private float enemyAttackCooldown = 1.5f;
     //[SerializeField, Min(0f)] private float faceTargetSpeed = 8f; // temp unused
+    [SerializeField, Min(0.1f)] private float maximumAttackDuration = 4f;
+
+    private float attackStartTime;
 
     private int deadLayer;
     private float nextAttackTime;
@@ -54,7 +57,20 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     private bool isBlockReacting = false;
     public bool IsBlockReacting => isBlockReacting;
 
-    public bool CanAttack => !isDead && !isBeingExecuted && !isAttacking && !isBlocking && !isStunned && !isDeflectReacting && !isBlockReacting && Time.time >= nextAttackTime;
+    private static readonly int OxReadyRHash =
+    Animator.StringToHash("Base Layer.Ox Ready R");
+
+    public bool CanAttack =>
+        !isDead &&
+        !isBeingExecuted &&
+        !isAttacking &&
+        !isBlocking &&
+        !isStunned &&
+        !isDeflectReacting &&
+        !isBlockReacting &&
+        Time.time >= nextAttackTime &&
+        IsAnimatorReadyToAttack();
+
     public bool CanBlock => !isDead && !isBeingExecuted && !isAttacking && !isBlocking && !isDeflectReacting && !isBlockReacting && !isStunned;
 
     private void Awake()
@@ -77,17 +93,8 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 
     public bool TryAttack()
     {
-        Debug.Log(
-            $"[EnemyCombat] TryAttack called. " +
-            $"CanAttack={CanAttack}, " +
-            $"isAttacking={isAttacking}, " +
-            $"Time={Time.time}, " +
-            $"nextAttackTime={nextAttackTime}"
-        );
-
         if (!CanAttack)
         {
-            Debug.Log("[EnemyCombat] TryAttack blocked.");
             return false;
         }
 
@@ -110,6 +117,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         }
         currentAttackInvalidated = false;
         isAttacking = true;
+        attackStartTime = Time.time;
         nextAttackTime = Time.time + enemyAttackCooldown;
 
         Debug.Log(
@@ -121,6 +129,30 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         animate.SetTrigger("Attack");
         return true;
     }
+
+    private void Update()
+    {
+        if (!isAttacking)
+            return;
+
+        if (Time.time - attackStartTime < maximumAttackDuration)
+            return;
+
+        Debug.LogWarning(
+            $"[EnemyCombat] Attack exceeded maximum duration. " +
+            $"Time={Time.time:F3}, " +
+            $"Started={attackStartTime:F3}, " +
+            $"Duration={Time.time - attackStartTime:F3}"
+        );
+
+        InterruptCurrentAttack();
+
+        if (animate != null)
+        {
+            animate.ResetTrigger("Attack");
+        }
+    }
+
     public void EndAttack()
     {
         isAttacking = false;
@@ -395,5 +427,19 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         {
             attackTimelineDriver.CancelCurrentAttack();
         }
+    }
+
+    private bool IsAnimatorReadyToAttack()
+    {
+        if (animate == null || !animate.isActiveAndEnabled)
+            return false;
+
+        if (animate.IsInTransition(0))
+            return false;
+
+        AnimatorStateInfo state =
+            animate.GetCurrentAnimatorStateInfo(0);
+
+        return state.fullPathHash == OxReadyRHash;
     }
 }

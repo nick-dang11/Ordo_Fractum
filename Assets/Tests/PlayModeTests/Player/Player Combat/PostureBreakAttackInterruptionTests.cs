@@ -138,6 +138,7 @@ public class PostureBreakAttackInterruptionTests
     private FieldInfo enemyIsAttackingField;
     private FieldInfo enemyWeaponHitboxField;
     private FieldInfo enemyAttackTimelineDriverField;
+    private FieldInfo enemyAttackStartTimeField;
 
     // =========================================================
     // POSTURE FIELDS
@@ -686,6 +687,18 @@ public class PostureBreakAttackInterruptionTests
 
     private void ResolveMembers()
     {
+        enemyAttackStartTimeField =
+            enemyCombatType.GetField(
+                "attackStartTime",
+                BindingFlags.Instance |
+                BindingFlags.NonPublic
+            );
+
+        Assert.IsNotNull(
+            enemyAttackStartTimeField,
+            "Could not find EnemyCombat.attackStartTime."
+        );
+
         applyPostureDamageMethod =
             enemyPostureType.GetMethod(
                 "ApplyPostureDamage",
@@ -1150,6 +1163,11 @@ public class PostureBreakAttackInterruptionTests
         enemyIsAttackingField.SetValue(
             enemyCombat,
             true
+        );
+
+        enemyAttackStartTimeField.SetValue(
+            enemyCombat,
+            Time.time
         );
 
         int attackToken =

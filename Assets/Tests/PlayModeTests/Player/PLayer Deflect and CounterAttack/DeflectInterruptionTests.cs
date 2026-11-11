@@ -189,6 +189,12 @@ public class DeflectInterruptionTests
             true
         );
 
+        SetPrivateField(
+            primaryEnemy.Combat,
+            "attackStartTime",
+            Time.time
+        );
+
         Assert.IsTrue(
             GetProperty<bool>(
                 primaryEnemy.Combat,
@@ -332,6 +338,7 @@ public class DeflectInterruptionTests
 
         yield return null;
 
+
         SetPrivateField(
             primaryEnemy.Combat,
             "isAttacking",
@@ -339,10 +346,23 @@ public class DeflectInterruptionTests
         );
 
         SetPrivateField(
+            primaryEnemy.Combat,
+            "attackStartTime",
+            Time.time
+        );
+
+        SetPrivateField(
             enemyB.Combat,
             "isAttacking",
             true
         );
+
+        SetPrivateField(
+            enemyB.Combat,
+            "attackStartTime",
+            Time.time
+        );
+
 
         InvokeMethod(
             primaryEnemy.Combat,
