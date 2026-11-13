@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class IdleState : BaseState
@@ -14,21 +15,36 @@ public class IdleState : BaseState
 
     public override void UpdateState(StateManager context)
     {
-        if (context.inputManager.IsEvadeRequested && context.movement.IsGrounded) 
-        { 
-            context.SwitchState(context.EvadingState); 
+        // Check whether the player requested healing.
+        if (context.inputManager.self_heal)
+        {
+            // Consume the healing input.
+            context.inputManager.self_heal = false;
+
+            if (context.healing != null &&
+                context.healing.CanStartHealing())
+            {
+                context.SwitchState(context.healingState);
+            }
+
             return;
         }
 
+        if (context.inputManager.IsEvadeRequested &&
+            context.movement.IsGrounded)
+        {
+            context.SwitchState(context.EvadingState);
+            return;
+        }
 
         if (context.combat.BlockPressedThisFrame)
         {
             context.SwitchState(context.blockState);
         }
-        else if (context.combat.input.attack || context.combat.input.heavyAttack)
+        else if (context.combat.input.attack ||
+                 context.combat.input.heavyAttack)
         {
             context.SwitchState(context.attackingState);
         }
-        
     }
 }

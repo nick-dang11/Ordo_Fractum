@@ -43,19 +43,14 @@ public class PlayerInputManager : MonoBehaviour
     // link these in inspector: PlayerInput via "Invoke Unity Events"
     // see pinned messages in #github-commits for example
 
-    public void OnMove(InputAction.CallbackContext context)
+     public void OnMove(InputAction.CallbackContext context)
     {
-        bool isMovementRestricted =
-            stateManager != null &&
-            (stateManager.currentState == stateManager.playerExecutingState ||
-             stateManager.currentState == stateManager.playerStunnedState);
-
-        if (isMovementRestricted)
+        if (IsActionRestricted())
         {
             move = Vector2.zero;
             return;
         }
-
+    
         MoveInput(context.ReadValue<Vector2>());
     }
 
@@ -209,28 +204,23 @@ public class PlayerInputManager : MonoBehaviour
 
     private void Update()
     {
-        bool isMovementRestricted =
-            stateManager != null &&
-            (stateManager.currentState == stateManager.playerExecutingState ||
-             stateManager.currentState == stateManager.playerStunnedState);
-
-        if (isMovementRestricted)
+        if (IsActionRestricted())
         {
             move = Vector2.zero;
             sprint = false;
             jump = false;
-
+    
             attack = false;
             heavyAttack = false;
             block = false;
             self_heal = false;
-
+    
             IsEvadeRequested = false;
             evadeArmed = false;
-
+    
             return;
         }
-
+    
         CheckEvadeRequest();
     }
 
@@ -269,6 +259,7 @@ public class PlayerInputManager : MonoBehaviour
     {
         return stateManager != null &&
             (stateManager.currentState == stateManager.playerExecutingState ||
-             stateManager.currentState == stateManager.playerStunnedState);
+             stateManager.currentState == stateManager.playerStunnedState ||
+             stateManager.currentState == stateManager.healingState);
     }
 }

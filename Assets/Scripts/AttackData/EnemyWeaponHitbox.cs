@@ -74,6 +74,13 @@ public class EnemyWeaponHitbox : WeaponHitbox
             return;
         }
         Debug.Log("[Defense] Result = HIT");
+
+        HealingAnimation healing = playerCombat.GetComponentInParent<HealingAnimation>();
+
+        if (healing != null && healing.IsHealing)
+        {
+            healing.InterruptHealing();
+        }
         healthSystem.TakeDamage(Mathf.RoundToInt(CurrentDamage)); // rounding to prevent unforseen errors
 
         Animator playerAnimator = playerCombat.GetComponent<Animator>();
