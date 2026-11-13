@@ -45,105 +45,133 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+   
     private void Update()
     {
+
+        if (_CharacterController.isGrounded && _velocity.y < 0f)
+        {
+            _velocity.y = -2f;
+        }
+    
+        _velocity.y += _gravity * Time.deltaTime;
+    
         if (stateManager != null &&
-         (stateManager.currentState == stateManager.playerExecutingState ||
-          stateManager.currentState == stateManager.playerStunnedState ||
-          stateManager.currentState == stateManager.healingState))
+            (stateManager.currentState == stateManager.playerExecutingState ||
+             stateManager.currentState == stateManager.playerStunnedState ||
+             stateManager.currentState == stateManager.healingState))
         {
             _Animator.SetFloat("MoveX", 0f);
             _Animator.SetFloat("MoveY", 0f);
             _Animator.SetBool("IsMoving", false);
             _Animator.SetBool("IsSprinting", false);
-
+    
             return;
         }
-
-        bool inCombat = _combatDetection != null && _combatDetection.isEnemyNearby;
+    
+        bool inCombat = _combatDetection != null &&
+                        _combatDetection.isEnemyNearby;
+    
         _Animator.SetBool("InCombat", inCombat);
-
+    
         Vector2 input = _moveAction.ReadValue<Vector2>();
         Vector2 normalizedInput = Vector2.ClampMagnitude(input, 1.0f);
         Vector3 moveDirection = Vector3.zero;
-
+    
         if (normalizedInput.sqrMagnitude > 0.01f && _MainCamera != null)
         {
             Vector3 camForward = _MainCamera.forward;
             Vector3 camRight = _MainCamera.right;
-
+    
             camForward.y = 0f;
             camRight.y = 0f;
             camForward.Normalize();
             camRight.Normalize();
-
-            moveDirection = (camForward * normalizedInput.y) + (camRight * normalizedInput.x);
+    
+            moveDirection = (camForward * normalizedInput.y) +
+                            (camRight * normalizedInput.x);
         }
-
-        Vector3 localMoveDir = transform.InverseTransformDirection(moveDirection);
+    
+        Vector3 localMoveDir =
+            transform.InverseTransformDirection(moveDirection);
+    
         float maxBlendSpeed = 1.85f;
-
+    
         if (localMoveDir.sqrMagnitude > 0.01f)
         {
-            // normalizes weights for diagonal inputs
-            Vector3 normalizedLocal = localMoveDir.normalized * normalizedInput.magnitude;
+            // Normalize weights for diagonal inputs.
+            Vector3 normalizedLocal =
+                localMoveDir.normalized * normalizedInput.magnitude;
+    
             localMoveDir.x = normalizedLocal.x;
             localMoveDir.z = normalizedLocal.z;
         }
-
+    
         float targetX = localMoveDir.x * maxBlendSpeed;
         float targetY = localMoveDir.z * maxBlendSpeed;
-
+    
         if (normalizedInput.sqrMagnitude < 0.01f)
         {
             targetX = 0f;
             targetY = 0f;
         }
-
-        _Animator.SetFloat("MoveX", targetX, 0.1f, Time.deltaTime);
-        _Animator.SetFloat("MoveY", targetY, 0.1f, Time.deltaTime);
-
+    
+        _Animator.SetFloat(
+            "MoveX",
+            targetX,
+            0.1f,
+            Time.deltaTime
+        );
+    
+        _Animator.SetFloat(
+            "MoveY",
+            targetY,
+            0.1f,
+            Time.deltaTime
+        );
+    
         if (moveDirection.sqrMagnitude > 0.01f)
         {
             Vector3 camForwardFlat = _MainCamera.forward;
             camForwardFlat.y = 0f;
-
+    
             if (camForwardFlat.sqrMagnitude > 0.001f)
             {
-                Quaternion targetRotation = Quaternion.LookRotation(camForwardFlat);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+                Quaternion targetRotation =
+                    Quaternion.LookRotation(camForwardFlat);
+    
+                transform.rotation = Quaternion.RotateTowards(
+                    transform.rotation,
+                    targetRotation,
+                    _rotationSpeed * Time.deltaTime
+                );
             }
         }
-
+    
         bool isMoving = normalizedInput.sqrMagnitude > 0.01f;
+    
         if (_Animator.GetBool("IsMoving") != isMoving)
         {
             _Animator.SetBool("IsMoving", isMoving);
         }
-
-        if (_CharacterController.isGrounded && _velocity.y < 0)
-        {
-            _velocity.y = -2f;
-        }
-
-        _velocity.y += _gravity * Time.deltaTime;
-
+    
         bool sprintHeld =
             _sprintAction != null &&
             _sprintAction.IsPressed();
-
+    
         bool validSprintDirection =
             targetY >= -0.05f;
-
+    
         bool isSprinting = CanSprint(
             isMoving,
             sprintHeld,
             validSprintDirection,
             inCombat
         );
-
+    
         _Animator.SetBool("IsSprinting", isSprinting);
     }
+
 
     private void OnAnimatorMove()
     {
