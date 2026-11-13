@@ -10,6 +10,7 @@ public class StateManager : MonoBehaviour
     public PlayerEvade playerEvade;
     public PlayerExecution playerExecution;
     public PlayerPosture posture;
+    public HealingAnimation healing;
 
     public IdleState idleState = new IdleState();
     public BlockingState blockState = new BlockingState();
@@ -17,6 +18,7 @@ public class StateManager : MonoBehaviour
     public EvadingState EvadingState = new EvadingState();
     public ExecutingState playerExecutingState = new ExecutingState();
     public PlayerStunnedState playerStunnedState = new PlayerStunnedState();
+    public HealingState healingState = new HealingState();
 
     private void Start()
     {
@@ -26,6 +28,7 @@ public class StateManager : MonoBehaviour
         if (playerEvade == null) playerEvade = GetComponent<PlayerEvade>();
         if (playerExecution == null) playerExecution = GetComponent<PlayerExecution>();
         if (posture == null) posture = GetComponent<PlayerPosture>();
+        if (healing == null) healing = GetComponent<HealingAnimation>();
         
         currentState = idleState;
         currentState.EnterState(this);
