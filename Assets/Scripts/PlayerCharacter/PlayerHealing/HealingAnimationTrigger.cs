@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class HealingAnimation : MonoBehaviour
@@ -8,171 +9,260 @@ public class HealingAnimation : MonoBehaviour
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private PlayerWill playerWill;
 
-
     [Header("Timing for Heal Animation")]
-    [SerializeField] private float applyHealAfter = 0.8f;
     [SerializeField] private float healingDuration = 1.8f;
 
     [Header("Healing Cost")]
     [SerializeField] private float healWillCost = 25f;
 
+    [Header("Partial Healing Settings")]
+    [SerializeField, Range(0f, 1f)]
+    private float minimumHealProgress = 0.5f;
+
+    // Healing state tracking
+    private bool isHealing = false;
+    private bool healingSettled = false;
+    private float healingTimer = 0f;
+
+    // Animator trigger
+    private static readonly int HealTrigger =
+        Animator.StringToHash("Heal");
+
+    // Public properties
+    public bool IsHealing => isHealing;
 
     public float NormalizedProgress =>
-    healingDuration > 0f
-        ? Mathf.Clamp01(healingTimer / healingDuration)
-        : 0f;
+        healingDuration > 0f
+            ? Mathf.Clamp01(healingTimer / healingDuration)
+            : 0f;
 
-    private bool healingSettled;
+    private void Awake()
+    {
+        // Automatically locate missing references
+        if (playerInputManager == null)
+            playerInputManager = GetComponent<PlayerInputManager>();
 
+        if (healthSystem == null)
+            healthSystem = GetComponent<PlayerHealth>();
 
+        if (playerWill == null)
+            playerWill = GetComponent<PlayerWill>();
 
-
-    //Represnets whether the player is currently healing or not
-    private bool isHealing; // Represents whether the player is currently healing or not
-    private bool healingAlreadyApplied; // Represents whether the healing effect has already been applied during the current healing process
-    private float healingTimer; // Timer for the healing process
-
-    private static readonly int HealTrigger = Animator.StringToHash("Heal");
-    // Healtrigger is hash value of the "Heal" trigger parameter in the animator to trigger the healing animation.
-    public bool IsHealing => isHealing; // Public property to access the isHealing state from other scripts
+        if (playerAnimator == null)
+            playerAnimator = GetComponentInChildren<Animator>();
+    }
 
     private void Update()
     {
-        if(playerInputManager.self_heal)// when press "R" key,self_heal is set to true in PlayerInputManager
-        {
-            playerInputManager.self_heal = false; // Reset the self_heal flag to false after processing the healing input
-            TryStartHealing();
-        }
+        // Healing is started by HealingState.
+        // This script only manages healing progress.
 
-        if(!isHealing)
-        {
+        if (!isHealing)
             return;
-        }
 
         healingTimer += Time.deltaTime;
-        if(!healingAlreadyApplied && healingTimer >= applyHealAfter)
-        {
-            ApplyHealingEffect();
-        }
 
-        if(healingTimer >= healingDuration)
+        // Complete healing once the duration is reached
+        if (healingTimer >= healingDuration)
         {
             FinishHealing();
         }
-       // isHealing = true;
-       // healingAlreadyApplied = false;
-       // ApplyHealingEffect();
     }
 
-     private void TryStartHealing()
+    // Check whether the player is allowed to heal
+    public bool CanStartHealing()
     {
+        StateManager manager = GetComponent<StateManager>();
+
+        // Healing is only allowed from IdleState
+        // or while entering HealingState.
+        bool validState =
+            manager == null ||
+            manager.currentState == manager.idleState ||
+            manager.currentState == manager.healingState;
+
+        if (!validState)
+            return false;
+
         if (isHealing)
+            return false;
+
+        if (healthSystem == null || playerWill == null ||
+            playerAnimator == null)
         {
-            Debug.Log("Cannot heal: Already healing.");
-            return;
+            return false;
         }
 
+        // Prevent healing if player is dead
+        if (healthSystem.health <= 0)
+            return false;
+
+        // Prevent healing at full health
         if (healthSystem.health >= healthSystem.maxHealth)
-        {
-            Debug.Log("Cannot heal: Health is already full.");
-            return;
-        }
+            return false;
 
-        if (playerWill == null)
-        {
-            Debug.LogWarning("Cannot heal: PlayerWill reference is missing.");
-            return;
-        }
-
+        // Require enough Will for the full healing cost
         if (!playerWill.HasWill(healWillCost))
+            return false;
+
+        return true;
+    }
+
+    // Start a new healing attempt
+    public bool TryStartHealing()
+    {
+        if (!CanStartHealing())
         {
-            Debug.Log("Cannot heal: Not enough Will.");
-            return;
+            Debug.Log(
+                "[Healing] Cannot start: Requirements not met."
+            );
+
+            return false;
         }
 
+        // Initialize healing
         isHealing = true;
-        healingAlreadyApplied = false;
+        healingSettled = false;
         healingTimer = 0f;
 
-        playerAnimator.SetTrigger(HealTrigger);
-
-        Debug.Log("Healing started.");
-    }
-
-    private void ApplyHealingEffect()
-    {
-        if (!isHealing || healingAlreadyApplied)
-        {
-            Debug.Log("Cannot apply healing effect: Not currently healing.");
-            return;
-        }
-
-        if (!playerWill.SpendWill(healWillCost))
-        {
-            Debug.Log("Healing cancelled: Not enough Will.");
-            FinishHealing();
-            return;
-        }
-
-        healingAlreadyApplied = true;
-
-        healthSystem.Heal(healthSystem.heal_Amount);
-
-        Debug.Log(
-            $"Healing applied. Will cost: {healWillCost}"
-        );
-    }
-    public void FinishHealing()
-    {
-    
-        isHealing = false;
-        healingAlreadyApplied = false;
-        healingTimer = 0f;
-        Debug.Log("Healing finished.");
-    }
-
-    public void ResetForRespawn()
-    {
-        isHealing = false;
-        healingAlreadyApplied = false;
-        healingTimer = 0f;
+        // Clear healing input
         if (playerInputManager != null)
         {
             playerInputManager.self_heal = false;
         }
-        if (playerAnimator != null)
-        {
-            playerAnimator.ResetTrigger(HealTrigger);
-        }
-        Debug.Log("[HealingAnimation] Reset for respawn.");
+
+        // Start healing animation
+        playerAnimator.ResetTrigger(HealTrigger);
+        playerAnimator.SetTrigger(HealTrigger);
+
+        Debug.Log("[Healing] Healing started.");
+
+        return true;
     }
 
+    // Apply healing once based on completed progress
     private void SettleHealing(float progress)
     {
+        // Prevent applying healing more than once
         if (!isHealing || healingSettled)
             return;
-    
+
         healingSettled = true;
+
         progress = Mathf.Clamp01(progress);
-    
-        if (progress >= 0.5f)
+
+        // Check whether enough of the animation completed
+        if (progress >= minimumHealProgress)
         {
+            // Calculate how much health can be restored
             int healthToRestore = Mathf.Min(
                 healthSystem.heal_Amount,
                 healthSystem.maxHealth - healthSystem.health
             );
-    
+
+            // Deduct Will proportionally to progress
             float willCost = healWillCost * progress;
-    
-            if (healthToRestore > 0 &&
-                playerWill.SpendWill(willCost))
+
+            if (healthToRestore > 0)
             {
-                healthSystem.Heal(healthToRestore);
+                // Only apply healing if Will deduction succeeds
+                if (playerWill.SpendWill(willCost))
+                {
+                    healthSystem.Heal(healthToRestore);
+
+                    Debug.Log(
+                        $"[Healing] Restored {healthToRestore} HP. " +
+                        $"Will spent: {willCost:F2}"
+                    );
+                }
+                else
+                {
+                    Debug.LogWarning(
+                        "[Healing] Not enough Will to settle healing."
+                    );
+                }
             }
         }
-    
-        Debug.Log($"Healing settled at {progress:P0}");
+        else
+        {
+            Debug.Log(
+                "[Healing] Interrupted before minimum progress. " +
+                "No healing applied."
+            );
+        }
+
+        Debug.Log(
+            $"[Healing] Settled at {progress:P0}"
+        );
+
         isHealing = false;
     }
-  
+
+    // Called when the healing process completes
+    public void FinishHealing()
+    {
+        if (!isHealing)
+            return;
+
+        // Apply full healing and full Will cost
+        SettleHealing(1f);
+
+        healingTimer = 0f;
+
+        Debug.Log("[Healing] Healing completed.");
+    }
+
+    // Called when healing is interrupted by another action
+    public void InterruptHealing()
+    {
+        if (!isHealing)
+            return;
+
+        // Capture progress BEFORE resetting the timer
+        float progress = NormalizedProgress;
+
+        Debug.Log(
+            $"[Healing] Interrupted at {progress:P0}"
+        );
+
+        // Apply partial healing if threshold was reached
+        SettleHealing(progress);
+
+        // Clear pending healing trigger
+        if (playerAnimator != null)
+        {
+            playerAnimator.ResetTrigger(HealTrigger);
+        }
+
+        healingTimer = 0f;
+
+        // Prevent stale healing input
+        if (playerInputManager != null)
+        {
+            playerInputManager.self_heal = false;
+        }
+    }
+
+    // Reset healing when the player respawns
+    public void ResetForRespawn()
+    {
+        // Cancel without awarding partial healing
+        isHealing = false;
+        healingSettled = false;
+        healingTimer = 0f;
+
+        if (playerInputManager != null)
+        {
+            playerInputManager.self_heal = false;
+        }
+
+        if (playerAnimator != null)
+        {
+            playerAnimator.ResetTrigger(HealTrigger);
+        }
+
+        Debug.Log(
+            "[HealingAnimation] Reset for respawn."
+        );
+    }
 }
