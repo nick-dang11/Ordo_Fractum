@@ -17,6 +17,11 @@ public class HealingAnimation : MonoBehaviour
     [SerializeField] private float healWillCost = 25f;
 
 
+    public float NormalizedProgress =>
+    healingDuration > 0f
+        ? Mathf.Clamp01(healingTimer / healingDuration)
+        : 0f;
+
 
     //Represnets whether the player is currently healing or not
     private bool isHealing; // Represents whether the player is currently healing or not
