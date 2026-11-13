@@ -48,8 +48,9 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         if (stateManager != null &&
-             (stateManager.currentState == stateManager.playerExecutingState ||
-             stateManager.currentState == stateManager.playerStunnedState))
+         (stateManager.currentState == stateManager.playerExecutingState ||
+          stateManager.currentState == stateManager.playerStunnedState ||
+          stateManager.currentState == stateManager.healingState))
         {
             _Animator.SetFloat("MoveX", 0f);
             _Animator.SetFloat("MoveY", 0f);
@@ -169,6 +170,13 @@ public class PlayerMovement : MonoBehaviour
             _CharacterController.enabled)
         {
             Vector3 movement = _Animator.deltaPosition;
+            bool isHealing = stateManager != null && stateManager.currentState == stateManager.healingState;
+            
+            if (isHealing)
+            {
+                movement.x = 0f;
+                movement.z = 0f;
+            }
 
             if (_Animator.GetBool("IsSprinting"))
             {
