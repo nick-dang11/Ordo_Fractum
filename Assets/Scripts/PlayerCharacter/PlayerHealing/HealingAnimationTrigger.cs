@@ -22,6 +22,10 @@ public class HealingAnimation : MonoBehaviour
         ? Mathf.Clamp01(healingTimer / healingDuration)
         : 0f;
 
+    private bool healingSettled;
+
+
+
 
     //Represnets whether the player is currently healing or not
     private bool isHealing; // Represents whether the player is currently healing or not
@@ -141,6 +145,34 @@ public class HealingAnimation : MonoBehaviour
             playerAnimator.ResetTrigger(HealTrigger);
         }
         Debug.Log("[HealingAnimation] Reset for respawn.");
+    }
+
+    private void SettleHealing(float progress)
+    {
+        if (!isHealing || healingSettled)
+            return;
+    
+        healingSettled = true;
+        progress = Mathf.Clamp01(progress);
+    
+        if (progress >= 0.5f)
+        {
+            int healthToRestore = Mathf.Min(
+                healthSystem.heal_Amount,
+                healthSystem.maxHealth - healthSystem.health
+            );
+    
+            float willCost = healWillCost * progress;
+    
+            if (healthToRestore > 0 &&
+                playerWill.SpendWill(willCost))
+            {
+                healthSystem.Heal(healthToRestore);
+            }
+        }
+    
+        Debug.Log($"Healing settled at {progress:P0}");
+        isHealing = false;
     }
   
 }
