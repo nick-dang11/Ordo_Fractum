@@ -6644,7 +6644,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0782c40dacaa9d4384ce019b92207bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponlevelSystem
-  damageTable: []
+  damageTable:
+  - lightDamage: 10
+    heavyDamage: 40
+    counterDamage: 25
+  - lightDamage: 15
+    heavyDamage: 45
+    counterDamage: 30
+  - lightDamage: 100
+    heavyDamage: 50
+    counterDamage: 35
   currentLevel: 1
 --- !u!1001 &3016538680853475536
 PrefabInstance:
