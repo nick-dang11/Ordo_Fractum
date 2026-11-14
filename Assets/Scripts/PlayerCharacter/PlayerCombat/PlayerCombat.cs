@@ -10,6 +10,7 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     [SerializeField] private BlockZone blockZone;
     [SerializeField] private CombatClashFeedback clashFeedback;
     [SerializeField] private PlayerPosture playerPosture;
+    [Header("Weapon Damage system")]
 
     public bool wasAttacking = false;
     public bool isAttacking = false;
@@ -74,10 +75,28 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     [Header("Enemy Targeting")]
     [SerializeField] private PlayerActionController targeting;
 
+    [SerializeField] private WeaponDamageSystem weaponDamageSystem;
+
     private void Awake()
     {
         if (targeting == null)
             targeting = GetComponent<PlayerActionController>();
+
+        if(weaponDamageSystem == null)
+        {
+            weaponDamageSystem = GetComponent<WeaponDamageSystem>();
+        }
+
+        if(weaponDamageSystem != null)
+        {
+            weaponDamageSystem.OnWeaponLevelChanged += UpdateAttackDamage;
+
+            UpdateAttackDamage();
+        }
+        else
+        {
+            Debug.LogWarning("[PlayerCombat] WeaponDamageSystem reference is missing.");
+        }
     }
 
     void Start() { }
@@ -231,6 +250,7 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
             comboStep = 1;
     
             SetPendingDamage(isHeavy ? heavyAttackDamage : lightAttackDamage);
+            
         }
     }
 
@@ -621,6 +641,32 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         );
 
         return allowed;
+    }
+
+    private void UpdateAttackDamage()
+    {
+        if(weaponDamageSystem == null)
+        {
+            Debug.LogWarning("[PlayerCombat] WeaponDamageSystem reference is missing.");
+            return;
+        }
+
+        lightAttackDamage = weaponDamageSystem.GetLightDamage();
+        heavyAttackDamage = weaponDamageSystem.GetHeavyDamage();
+        counterDamage = weaponDamageSystem.GetCounterDamage();
+
+        Debug.Log($"[PlayerCombat] Attack damage updated: " +
+                  $"Light={lightAttackDamage}, " +
+                  $"Heavy={heavyAttackDamage}, " +
+                  $"Counter={counterDamage}");
+    }
+
+    private void OnDestroy()
+    {
+        if(weaponDamageSystem != null)
+        {
+            weaponDamageSystem.OnWeaponLevelChanged -= UpdateAttackDamage;
+        }
     }
 
 }
