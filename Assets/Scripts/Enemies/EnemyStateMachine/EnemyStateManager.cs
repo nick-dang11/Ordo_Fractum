@@ -29,6 +29,7 @@ public class EnemyStateManager : MonoBehaviour
     public EnemyStunnedState StunnedState { get; private set; }
     public EnemyDeathState DeathState { get; private set; }
     public EnemyExecutedState ExecutedState { get; private set; }
+    public EnemyAttackingState AttackingState { get; private set; }
 
 
     public void Awake()
@@ -58,6 +59,7 @@ public class EnemyStateManager : MonoBehaviour
         StunnedState = new EnemyStunnedState();
         DeathState = new EnemyDeathState();
         ExecutedState = new EnemyExecutedState();
+        AttackingState = new EnemyAttackingState();
     }
 
     private void Start()
@@ -68,6 +70,13 @@ public class EnemyStateManager : MonoBehaviour
     private void Update()
     {
         CurrentState?.UpdateState(this);
+
+        if (combat == null) return;
+        
+        if (CurrentState == NeutralState && combat.IsAttacking)
+        {
+            SwitchState(AttackingState);
+        }
     }
 
     public bool SwitchState(EnemyBaseState newState, bool force = false)
@@ -80,6 +89,12 @@ public class EnemyStateManager : MonoBehaviour
 
             return false;
         }
+
+        if (!force && ((CurrentState == AttackingState && newState == BlockState) || (CurrentState == BlockState && newState == AttackingState)))
+        {
+            return false;
+        }
+
 
         if (!force && CurrentState != null && newState.PriorityLevel < CurrentState.PriorityLevel) return false;
 

@@ -18,6 +18,9 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     private bool canCombo = false;
     public bool IsAttacking => isAttacking;
 
+    public int AttackSequence { get; private set; }
+    public int ConfirmedAttackSequence { get; private set; }
+
     private int comboStep = 0;
 
     public float lightAttackCooldown = 0.4f;
@@ -215,7 +218,8 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     
         if (canCombo && comboStep < 3)
         {
-            
+            AttackSequence++;
+
             if (targeting != null)
             {
                 targeting.SnapToAttackTarget();
@@ -230,7 +234,8 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         }
         else if (Time.time >= (isHeavy ? nextHeavyAttackTime : nextLightAttackTime))
         {
-            
+            AttackSequence++;
+
             if (targeting != null)
             {
                 targeting.SnapToAttackTarget();
@@ -259,6 +264,20 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         ForceStopBlocking();
         isAttacking = true;
     }
+
+    public void ConfirmAttackStarted()
+    {
+        if (ConfirmedAttackSequence >= AttackSequence) return;
+
+        ConfirmedAttackSequence = AttackSequence;
+
+        Debug.Log(
+            $"[PlayerCombat] Confirmed attack started. " +
+            $"Sequence={ConfirmedAttackSequence}",
+            this
+        );
+    }
+
 
     public void EndAttack()
     {
