@@ -210,9 +210,12 @@ public class BloodVFXTests
         );
     }
 
+
     [UnityTest]
     public IEnumerator SpawnBloodVFX_SpawnsAtImpactPoint()
     {
+        Physics.SyncTransforms();
+
         Vector3 expectedHitPoint =
             targetCollider.ClosestPoint(
                 weaponCollider.bounds.center
@@ -226,9 +229,7 @@ public class BloodVFXTests
         yield return null;
 
         GameObject spawnedBlood =
-            GameObject.Find(
-                "BloodVFX_TestPrefab(Clone)"
-            );
+            GameObject.Find("BloodVFX_TestPrefab(Clone)");
 
         Assert.IsNotNull(spawnedBlood);
 
@@ -241,6 +242,7 @@ public class BloodVFXTests
             "Blood VFX was not spawned at the expected impact point."
         );
     }
+
 
     [UnityTest]
     public IEnumerator SpawnBloodVFX_IsDestroyedAfterLifetime()

@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class AttackStateBehaviour : StateMachineBehaviour
@@ -26,6 +27,14 @@ public class AttackStateBehaviour : StateMachineBehaviour
         }
 
         attackToken = timelineDriver.BeginAttack(attackData);
+
+        PlayerCombat playerCombat = animator.GetComponent<PlayerCombat>();
+
+        if (playerCombat != null)
+        {
+            playerCombat.ConfirmAttackStarted();
+        }
+
         Debug.Log($"Entered attack state with AttackData: {attackData.name}");
     }
 
@@ -43,9 +52,7 @@ public class AttackStateBehaviour : StateMachineBehaviour
             timelineDriver.EndAttack(attackToken);
         }
 
-        IAttackLifecycle lifecycle =
-            animator.GetComponent<IAttackLifecycle>();
-
+        IAttackLifecycle lifecycle = animator.GetComponent<IAttackLifecycle>();
         lifecycle?.OnAttackEnded();
     }
 }
