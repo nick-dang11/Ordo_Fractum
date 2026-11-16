@@ -15,7 +15,8 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     public bool wasAttacking = false;
     public bool isAttacking = false;
     private bool isBlocking = false;
-    private bool canCombo = false;
+    //private bool canCombo = false;
+    private bool comboQueued = false;
     public bool IsAttacking => isAttacking;
 
     public int AttackSequence { get; private set; }
@@ -104,7 +105,11 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 
     void Start() { }
 
-    void Update() { UpdateCounterWindow(); }
+    void Update()
+    {
+        UpdateCounterWindow();
+        UpdateAttackRecovery();
+    }
 
     private void LateUpdate()
     {
@@ -212,57 +217,109 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         wasHeavyAttacking = input.heavyAttack;
     }
 
+
     private void ProcessAttackInput(bool isHeavy)
     {
-        Debug.Log($"[Combat] Input received. canCombo={canCombo}, comboStep={comboStep}, isHeavy={isHeavy}");
-    
-        if (canCombo && comboStep < 3)
-        {
-            AttackSequence++;
+        if (animate == null || isCountering)
+            return;
 
-            if (targeting != null)
+        bool attackActive = isAttacking || IsAttackAnimationPlaying();
+
+        Debug.Log($"[Combat] Input received. " + $"attackActive={attackActive}, " + $"comboQueued={comboQueued}, " + $"comboStep={comboStep}, " + $"isHeavy={isHeavy}");
+
+        // CASE 1: Player is currently attacking.
+        if (attackActive)
+        {
+            // Only one follow-up request per combo attack.
+            if (comboQueued)
             {
-                targeting.SnapToAttackTarget();
+                Debug.LogWarning($"[Combo] REJECTED: Previous attack still queued. " + $"Step={comboStep}");
+                return;
             }
-    
-            
-            animate.SetTrigger(isHeavy ? "ComboHeavy" : "ComboLight");
-    
+
+            // Three attacks maximum.
+            if (comboStep >= 3)
+            {
+                Debug.Log("[Combo] Maximum three-hit chain reached.");
+                return;
+            }
+
+            // Check the current AttackData combo window.
+            if (!CanComboCurrentAttack())
+            {
+                Debug.Log("[Combo] Input outside combo window.");
+                return;
+            }
+
+            comboQueued = true;
             comboStep++;
-    
-            SetPendingDamage(isHeavy ? heavyAttackDamage : lightAttackDamage);
-        }
-        else if (Time.time >= (isHeavy ? nextHeavyAttackTime : nextLightAttackTime))
-        {
             AttackSequence++;
 
             if (targeting != null)
             {
                 targeting.SnapToAttackTarget();
             }
-    
-            if (isHeavy)
-            {
-                animate.SetTrigger("HeavyAttack");
-                nextHeavyAttackTime = Time.time + heavyAttackCooldown;
-            }
-            else
-            {
-                animate.SetTrigger("LightAttack");
-                nextLightAttackTime = Time.time + lightAttackCooldown;
-            }
-    
-            comboStep = 1;
-    
-            SetPendingDamage(isHeavy ? heavyAttackDamage : lightAttackDamage);
-            
+
+            SetPendingDamage(
+                isHeavy ? heavyAttackDamage : lightAttackDamage
+            );
+
+            animate.SetTrigger(
+                isHeavy ? "ComboHeavy" : "ComboLight"
+            );
+
+            Debug.Log(
+                $"[Combo] Follow-up accepted. Step={comboStep}"
+            );
+            return;
         }
+
+        // CASE 2: Player is not attacking.
+        // Avoid starting an attack during an Animator transition.
+        if (animate.IsInTransition(0))
+            return;
+
+        float nextAllowedTime = isHeavy ? nextHeavyAttackTime : nextLightAttackTime;
+
+        if (Time.time < nextAllowedTime)
+            return;
+
+        comboStep = 1;
+        comboQueued = false;
+        AttackSequence++;
+
+        if (targeting != null)
+        {
+            targeting.SnapToAttackTarget();
+        }
+
+        SetPendingDamage(isHeavy ? heavyAttackDamage : lightAttackDamage);
+
+        if (isHeavy)
+        {
+            animate.SetTrigger("HeavyAttack");
+            nextHeavyAttackTime = Time.time + heavyAttackCooldown;
+        }
+        else
+        {
+            animate.SetTrigger("LightAttack");
+            nextLightAttackTime = Time.time + lightAttackCooldown;
+        }
+
+        Debug.Log($"[Combo] Initial attack started. Step={comboStep}");
     }
+
 
     public void StartAttack()
     {
         ForceStopBlocking();
         isAttacking = true;
+        // The queued follow-up has entered its attack animation.
+        if (comboQueued)
+        {
+            comboQueued = false;
+            Debug.Log($"[Combo] Attack {comboStep} animation started.");
+        }
     }
 
     public void ConfirmAttackStarted()
@@ -279,17 +336,49 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     }
 
 
+
+
     public void EndAttack()
     {
-        isAttacking = false;
-        canCombo = false;
-        comboStep = 0;
-        animate.ResetTrigger("LightAttack");
-        animate.ResetTrigger("HeavyAttack");
-        animate.ResetTrigger("ComboLight");
-        animate.ResetTrigger("ComboHeavy");
-        Debug.Log($"[Combat] EndAttack fired at {Time.time}");
+        // Ensure the previous attack cannot keep dealing damage.
+        if (weaponHitbox != null)
+        {
+            weaponHitbox.DisableHitbox();
+        }
+
+        // A previous animation's end event should not
+        // reset the chain while an attack state is active.
+        if (animate != null && IsAttackAnimationPlaying())
+        {
+            Debug.Log("[Combo] EndAttack received, but Animator " + "is still in an attack state. Deferring reset.");
+
+            return;
+        }
+
+        ResetAttackChain();
     }
+
+
+    private void ResetAttackChain()
+    {
+        isAttacking = false;
+        comboQueued = false;
+        comboStep = 0;
+        if (weaponHitbox != null)
+        {
+            weaponHitbox.DisableHitbox();
+        }
+
+        if (animate != null)
+        {
+            animate.ResetTrigger("LightAttack");
+            animate.ResetTrigger("HeavyAttack");
+            animate.ResetTrigger("ComboLight");
+            animate.ResetTrigger("ComboHeavy");
+        }
+        Debug.Log("[Combo] Attack chain reset.");
+    }
+
 
     public void OnAttackEnded()
     {
@@ -298,12 +387,10 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 
     public void EnableCombo()
     {
-        canCombo = true;
     }
 
     public void DisableCombo()
     {
-        canCombo = false;
     }
 
     public void EnableWeaponHitbox()
@@ -404,12 +491,7 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     public void ResetForRespawn()
     {
         ForceStopBlocking();
-        isAttacking = false;
-        canCombo = false;
-        if (weaponHitbox != null)
-        {
-            weaponHitbox.DisableHitbox();
-        }
+        ResetAttackChain();
         Debug.Log("[PlayerCombat] Reset for respawn.");
     }
 
@@ -687,25 +769,60 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
             weaponDamageSystem.OnWeaponLevelChanged -= UpdateAttackDamage;
         }
     }
+
     private bool CanComboCurrentAttack()
     {
         if (animate == null || isCountering)
             return false;
 
-        if (animate.IsInTransition(0))
-            return false;
+        AnimatorStateInfo current = animate.GetCurrentAnimatorStateInfo(0);
 
-        AnimatorStateInfo current =
-            animate.GetCurrentAnimatorStateInfo(0);
+        if (animate.IsInTransition(0))
+        {
+            AnimatorStateInfo next = animate.GetNextAnimatorStateInfo(0);
+            Debug.LogWarning($"[Combo] REJECTED: Animator transitioning. " + $"CurrentHash={current.shortNameHash}, " + $"NextHash={next.shortNameHash}");
+            return false;
+        }
 
         if (!current.IsTag("Attack"))
+        {
+            Debug.LogWarning("[Combo] REJECTED: Current state is not an attack.");
             return false;
+        }
 
         AttackData data = FindAttackDefinition(current);
 
         if (data == null)
+        {
+            Debug.LogWarning($"[Combo] REJECTED: No matching AttackData. " + $"StateHash={current.shortNameHash}. " + $"Check PlayerCombat's Attack Definitions array.");
             return false;
+        }
 
-        return data.IsWithinComboWindow(current.normalizedTime);
+        if (!data.IsAttackValid() || !data.IsComboWindowValid())
+        {
+            Debug.LogWarning($"[Combo] REJECTED: Invalid or disabled " + $"combo window on {data.name}. " + $"Enabled={data.allowComboWindow}");
+            return false;
+        }
+
+        bool allowed = data.IsWithinComboWindow(current.normalizedTime);
+
+        Debug.Log($"[Combo] State={data.animationStateName}, " + $"Time={current.normalizedTime:F3}, " + $"Window={data.ComboWindowStartNormalized:F3}-" + $"{data.ComboWindowEndNormalized:F3}, " + $"Step={comboStep}, " + $"Allowed={allowed}");
+
+        return allowed;
+    }
+
+    private void UpdateAttackRecovery()
+    {
+        if (!isAttacking || isCountering)
+            return;
+
+        // If the Animator has returned to a non-attack state
+        // but the script still thinks we're attacking,
+        // clean up the attack chain.
+        if (!IsAttackAnimationPlaying())
+        {
+            Debug.LogWarning("[Combo] Attack state mismatch detected. Resetting.");
+            ResetAttackChain();
+        }
     }
 }

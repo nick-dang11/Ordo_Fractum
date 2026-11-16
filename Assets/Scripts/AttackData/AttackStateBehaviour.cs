@@ -26,10 +26,12 @@ public class AttackStateBehaviour : StateMachineBehaviour
             return;
         }
 
-        attackToken = timelineDriver.BeginAttack(attackData);
-
         PlayerCombat playerCombat = animator.GetComponent<PlayerCombat>();
-
+        if (playerCombat != null)
+        {
+            playerCombat.StartAttack();
+        }
+        attackToken = timelineDriver.BeginAttack(attackData);
         if (playerCombat != null)
         {
             playerCombat.ConfirmAttackStarted();
