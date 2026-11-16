@@ -48,7 +48,8 @@ public class AttackData : ScriptableObject
     public bool allowComboWindow = false;
 
     [Tooltip("First frame where another attack can be chained")]
-    public int comboWindowStartFrame => ((totalFrames - endHitFrame) / 2) + endHitFrame;
+    //public int comboWindowStartFrame => ((totalFrames - endHitFrame) / 2) + endHitFrame;
+    public int comboWindowStartFrame => endHitFrame + 1;
 
     [Tooltip("Last frame where another attack can be chained")]
     public int comboWindowEndFrame => totalFrames;
