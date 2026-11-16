@@ -188,21 +188,17 @@ public class BloodVFXTests
         }
     }
 
-    [UnityTest]
-    public IEnumerator SpawnBloodVFX_CreatesBloodObject()
+
+    [Test]
+    public void SpawnBloodVFX_CreatesBloodObject()
     {
         spawnBloodMethod.Invoke(
             weaponHitbox,
             new object[] { targetCollider }
         );
 
-        // Allow Unity one frame to process the instantiated object.
-        yield return null;
-
         GameObject spawnedBlood =
-            GameObject.Find(
-                "BloodVFX_TestPrefab(Clone)"
-            );
+            GameObject.Find("BloodVFX_TestPrefab(Clone)");
 
         Assert.IsNotNull(
             spawnedBlood,
@@ -210,9 +206,8 @@ public class BloodVFXTests
         );
     }
 
-
-    [UnityTest]
-    public IEnumerator SpawnBloodVFX_SpawnsAtImpactPoint()
+    [Test]
+    public void SpawnBloodVFX_SpawnsAtImpactPoint()
     {
         Physics.SyncTransforms();
 
@@ -226,22 +221,29 @@ public class BloodVFXTests
             new object[] { targetCollider }
         );
 
-        yield return null;
-
         GameObject spawnedBlood =
             GameObject.Find("BloodVFX_TestPrefab(Clone)");
 
-        Assert.IsNotNull(spawnedBlood);
+        Assert.IsNotNull(
+            spawnedBlood,
+            "Blood VFX should exist immediately after spawning."
+        );
+
+        float distance = Vector3.Distance(
+            spawnedBlood.transform.position,
+            expectedHitPoint
+        );
 
         Assert.That(
-            Vector3.Distance(
-                spawnedBlood.transform.position,
-                expectedHitPoint
-            ),
+            distance,
             Is.LessThan(0.001f),
-            "Blood VFX was not spawned at the expected impact point."
+            $"Blood VFX position mismatch. " +
+            $"Expected={expectedHitPoint}, " +
+            $"Actual={spawnedBlood.transform.position}, " +
+            $"Distance={distance:F6}"
         );
     }
+
 
 
     [UnityTest]
