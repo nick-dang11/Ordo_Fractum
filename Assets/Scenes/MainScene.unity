@@ -500,10 +500,6 @@ PrefabInstance:
       propertyPath: 'patrolPoints.Array.data[3]'
       value: 
       objectReference: {fileID: 323550567}
-    - target: {fileID: 872181531737438651, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
-      propertyPath: enemyAttackCooldown
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 1635731429984112327, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -591,10 +587,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3047151988590228466, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
-      insertIndex: 8
-      addedObject: {fileID: 1591431727}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
 --- !u!1 &254210830
 GameObject:
@@ -4728,65 +4721,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1588963444}
   m_CullTransparentMesh: 1
---- !u!1 &1591431689 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3047151988590228466, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
-  m_PrefabInstance: {fileID: 251197837}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1591431717 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 163640941635355023, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
-  m_PrefabInstance: {fileID: 251197837}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1591431689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d2067f495bfb004d999c14e2808864d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyStateManager
---- !u!114 &1591431719 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 872181531737438651, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
-  m_PrefabInstance: {fileID: 251197837}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1591431689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2756ca0542ecc8b4196044c834c22af8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyCombat
---- !u!114 &1591431723 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8325864871925291311, guid: 1b412b87b4347e94db7801574a7cbc13, type: 3}
-  m_PrefabInstance: {fileID: 251197837}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1591431689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8469e4427ab9ec845a49197bf26f0202, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyCombatDetection
---- !u!114 &1591431727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1591431689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fcd12313f2188f46a8a6e72352fa183, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyDefenseDecision
-  enemyCombat: {fileID: 1591431719}
-  combatDetection: {fileID: 1591431723}
-  stateManager: {fileID: 1591431717}
-  blockChance: 1
-  minimumReactionDelay: 0.15
-  maximumReactionDelay: 0.35
-  attackObservationTimeout: 0.5
-  blockDuration: 0.65
-  defensiveCooldown: 1.5
 --- !u!114 &1602472602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6556,14 +6490,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3398993597898389615, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: healingDuration
-      value: 1.2
-      objectReference: {fileID: 0}
     - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
       propertyPath: m_Camera
       value: 
@@ -6573,45 +6499,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1169850605}
     - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_ActionEvents.Array.size
-      value: 23
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_ActionEvents.Array.data[22].m_ActionId
-      value: e64da875-0c88-4497-8bcc-a6f8190cbaa3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_ActionEvents.Array.data[22].m_ActionName
-      value: 'Player/OpenMenue[/Keyboard/escape]'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_ActionEvents.Array.data[22].m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_ActionEvents.Array.data[22].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
       propertyPath: m_ActionEvents.Array.data[22].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1865273164}
-    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_ActionEvents.Array.data[22].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_ActionEvents.Array.data[22].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnOpenMenu
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_ActionEvents.Array.data[22].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: PauseMenu, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075066420366787807, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: m_ActionEvents.Array.data[22].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 4174983778475235283, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
       propertyPath: mainCamera
       value: 
@@ -6644,29 +6534,10 @@ PrefabInstance:
       propertyPath: 'hearts.Array.data[3]'
       value: 
       objectReference: {fileID: 1080786939}
-    - target: {fileID: 6898766285396604641, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: deflectWindow
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6898766285396604641, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: attackDefinitions.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6898766285396604641, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: 'attackDefinitions.Array.data[0]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 67c132c1b79bd5f498037bd8df05082f, type: 2}
-    - target: {fileID: 6898766285396604641, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      propertyPath: 'attackDefinitions.Array.data[1]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 589f66d98c17f234893c188790219d61, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 939421551388515731}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
 --- !u!4 &939421551388515702 stripped
 Transform:
@@ -6678,29 +6549,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3047151988590228466, guid: bc4b686121a31d54584078b434ef4cc4, type: 3}
   m_PrefabInstance: {fileID: 939421551388515701}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &939421551388515731
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 939421551388515704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0782c40dacaa9d4384ce019b92207bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeaponlevelSystem
-  damageTable:
-  - lightDamage: 10
-    heavyDamage: 40
-    counterDamage: 25
-  - lightDamage: 15
-    heavyDamage: 45
-    counterDamage: 30
-  - lightDamage: 100
-    heavyDamage: 50
-    counterDamage: 35
-  currentLevel: 1
 --- !u!1001 &3016538680853475536
 PrefabInstance:
   m_ObjectHideFlags: 0
