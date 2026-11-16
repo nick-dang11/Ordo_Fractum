@@ -42,6 +42,17 @@ public class AttackData : ScriptableObject
     [Tooltip("Last frame where late blocking is allowed")]
     private int lateBlockCancelEndFrame => totalFrames;
 
+    [Header("Combo Window")]
+
+    [Tooltip("Allow a follow-up attack during this animation")]
+    public bool allowComboWindow = false;
+
+    [Tooltip("First frame where another attack can be chained")]
+    public int comboWindowStartFrame => ((totalFrames - endHitFrame) / 2) + endHitFrame;
+
+    [Tooltip("Last frame where another attack can be chained")]
+    public int comboWindowEndFrame => totalFrames;
+
     //[Header("Combat Stats")]
     //public float damage;
 
@@ -56,6 +67,10 @@ public class AttackData : ScriptableObject
     public float LateBlockCancelStartNormalized => totalFrames > 0 ? (float)lateBlockCancelStartFrame / totalFrames : 0f;
 
     public float LateBlockCancelEndNormalized => totalFrames > 0 ? (float)lateBlockCancelEndFrame / totalFrames : 0f;
+
+    public float ComboWindowStartNormalized => totalFrames > 0 ? (float)comboWindowStartFrame / totalFrames : 0f;
+
+    public float ComboWindowEndNormalized => totalFrames > 0 ? (float)comboWindowEndFrame / totalFrames : 0f;
 
     public bool IsAttackValid()
     {
@@ -148,5 +163,36 @@ public class AttackData : ScriptableObject
             return true;
         }
         return false;
+    }
+    public bool IsComboWindowValid()
+    {
+        if (!allowComboWindow)
+            return false;
+
+        if (totalFrames <= 0)
+            return false;
+
+        if (comboWindowStartFrame <= endHitFrame)
+            return false;
+
+        if (comboWindowEndFrame < comboWindowStartFrame)
+            return false;
+
+        if (comboWindowEndFrame > totalFrames)
+            return false;
+
+        return true;
+    }
+
+    public bool IsWithinComboWindow(float normalizedTime)
+    {
+        if (!IsComboWindowValid() || float.IsNaN(normalizedTime) || normalizedTime < 0f || normalizedTime > 1f)
+        {
+            return false;
+        }
+
+        int currentFrame = Mathf.Clamp(Mathf.FloorToInt(normalizedTime * totalFrames), 1, totalFrames);
+
+        return currentFrame >= comboWindowStartFrame && currentFrame <= comboWindowEndFrame;
     }
 }
