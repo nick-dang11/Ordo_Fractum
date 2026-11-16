@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
 {
@@ -72,6 +73,8 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         IsAnimatorReadyToAttack();
 
     public bool CanBlock => !isDead && !isBeingExecuted && !isAttacking && !isBlocking && !isDeflectReacting && !isBlockReacting && !isStunned;
+
+    public event Action OnEnemyDied;
 
     private void Awake()
     {
@@ -262,6 +265,7 @@ public class EnemyCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         if (isDead) return;
 
         isBeingExecuted = false; // not all deaths caused by execution!
+        OnEnemyDied?.Invoke();
         isDead = true;
 
         if (deadLayer != -1) SetLayerRecursively(gameObject, deadLayer); // fixed CombatDetection flagging corpse as active enemy

@@ -607,6 +607,7 @@ GameObject:
   - component: {fileID: 6230063808028939835}
   - component: {fileID: 2249948433049224511}
   - component: {fileID: 872181531737438651}
+  - component: {fileID: 8338506382730579194}
   - component: {fileID: 7124248941740884681}
   - component: {fileID: 163640941635355023}
   - component: {fileID: 8766218699057898754}
@@ -617,6 +618,7 @@ GameObject:
   - component: {fileID: 956708287060126303}
   - component: {fileID: 8345775540156111504}
   - component: {fileID: 4436548227930582800}
+  - component: {fileID: 2218956088380344174}
   m_Layer: 8
   m_Name: MocapEnemy
   m_TagString: Enemy
@@ -782,9 +784,30 @@ MonoBehaviour:
   postureUI: {fileID: 3792806945608335472}
   enemyCollider: {fileID: 6291261830347497589}
   enemyDamage: 1
-  enemyAttackCooldown: 2
+  enemyAttackCooldown: 20
+  maximumAttackDuration: 4
   deflectReactionDuration: 0.6
   blockReactionDuration: 0.35
+--- !u!114 &8338506382730579194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fcd12313f2188f46a8a6e72352fa183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDefenseDecision
+  enemyCombat: {fileID: 872181531737438651}
+  combatDetection: {fileID: 8325864871925291311}
+  stateManager: {fileID: 163640941635355023}
+  blockChance: 1
+  minimumReactionDelay: 0.15
+  maximumReactionDelay: 0.35
+  blockDuration: 0.65
+  defensiveCooldown: 1.5
 --- !u!114 &7124248941740884681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -962,6 +985,21 @@ MonoBehaviour:
   detectionRadius: 2.5
   radiusColor: {r: 0, g: 0, b: 0.72156864, a: 1}
   floorOffset: 0.05
+--- !u!114 &2218956088380344174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e06720433e53d8a4ba0f8bec3976f822, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMaterialDrop
+  enemyCombat: {fileID: 0}
+  whetstonePrefab: {fileID: 7304644669314223986, guid: 29c0c9dffef93f54d814184aa37748e9, type: 3}
+  dropAmount: 10
 --- !u!1 &3792806945608335472
 GameObject:
   m_ObjectHideFlags: 0
