@@ -687,5 +687,25 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
             weaponDamageSystem.OnWeaponLevelChanged -= UpdateAttackDamage;
         }
     }
+    private bool CanComboCurrentAttack()
+    {
+        if (animate == null || isCountering)
+            return false;
 
+        if (animate.IsInTransition(0))
+            return false;
+
+        AnimatorStateInfo current =
+            animate.GetCurrentAnimatorStateInfo(0);
+
+        if (!current.IsTag("Attack"))
+            return false;
+
+        AttackData data = FindAttackDefinition(current);
+
+        if (data == null)
+            return false;
+
+        return data.IsWithinComboWindow(current.normalizedTime);
+    }
 }
