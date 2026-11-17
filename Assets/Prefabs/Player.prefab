@@ -514,8 +514,16 @@ MonoBehaviour:
   pendingDamage: 0
   counterWindowDuration: 0.75
   attackDefinitions:
-  - {fileID: 11400000, guid: 67c132c1b79bd5f498037bd8df05082f, type: 2}
+  - {fileID: 11400000, guid: 9fabad917c5dc684c8b4fdd864e040cd, type: 2}
+  - {fileID: 11400000, guid: a13dffce0152a1943bc2368a390d42fb, type: 2}
+  - {fileID: 11400000, guid: 97db8d954b2a4e34698d9cef3b18e716, type: 2}
+  - {fileID: 11400000, guid: 02723c627c1fc8d4c89ba7474729b901, type: 2}
   - {fileID: 11400000, guid: 589f66d98c17f234893c188790219d61, type: 2}
+  - {fileID: 11400000, guid: 67c132c1b79bd5f498037bd8df05082f, type: 2}
+  - {fileID: 11400000, guid: f3728bce87903f642a026c0779a986e0, type: 2}
+  - {fileID: 11400000, guid: 66b97bcef4e70954ab6468b1fe88bcef, type: 2}
+  - {fileID: 11400000, guid: 5f08d4501525db34abe247946797bcb3, type: 2}
+  - {fileID: 11400000, guid: 0d75760ff335657488385d5310116671, type: 2}
   counterRange: 10
   counterDebugIndicator: {fileID: 0}
   deflectPostureDamage: 25
