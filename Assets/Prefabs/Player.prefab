@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 4492030412610434946}
   - component: {fileID: 6091600611702403923}
   - component: {fileID: 2750258661037353773}
+  - component: {fileID: 8231408151006078792}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -885,6 +886,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0782c40dacaa9d4384ce019b92207bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponlevelSystem
+  inventory: {fileID: 2750258661037353773}
   damageTable:
   - lightDamage: 10
     heavyDamage: 40
@@ -895,6 +897,8 @@ MonoBehaviour:
   - lightDamage: 100
     heavyDamage: 50
     counterDamage: 35
+  level2cost: 1
+  level3cost: 30
   currentLevel: 1
 --- !u!114 &2750258661037353773
 MonoBehaviour:
@@ -909,6 +913,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Inventory
   whetstone: 0
+--- !u!114 &8231408151006078792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047151988590228466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b68a7fa16793a14c9f542646b0be808, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameSaveManager
+  playerHealth: {fileID: 5221989036913721363}
+  playerTransform: {fileID: 1635731429984112327}
 --- !u!1 &3626785393333263137
 GameObject:
   m_ObjectHideFlags: 0
