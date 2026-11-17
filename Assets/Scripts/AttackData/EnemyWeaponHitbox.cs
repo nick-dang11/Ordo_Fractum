@@ -81,16 +81,37 @@ public class EnemyWeaponHitbox : WeaponHitbox
         {
             healing.InterruptHealing();
         }
-        healthSystem.TakeDamage(Mathf.RoundToInt(CurrentDamage)); // rounding to prevent unforseen errors
-
+  
+        healthSystem.TakeDamage(Mathf.RoundToInt(CurrentDamage));
+        
         Animator playerAnimator = playerCombat.GetComponent<Animator>();
-
-        if (playerAnimator != null)
+        
+        // Ensure the player has their weapon equipped
+        // when entering hitstun, even if the player
+        // never moved or completed Unsheath.
+        if (playerAnimator != null && healthSystem.health > 0)
         {
+            SheathSwordToggle swordToggle =
+                playerCombat.GetComponent<SheathSwordToggle>();
+        
+            if (swordToggle != null)
+            {
+                swordToggle.EquipSword();
+        
+                Debug.Log(
+                    "[HitReact] Sword equipped before hit reaction."
+                );
+            }
+            else
+            {
+                Debug.LogWarning(
+                    "[HitReact] SheathSwordToggle component not found."
+                );
+            }
+        
             playerAnimator.SetTrigger("HitReact");
         }
 
-        SpawnBloodVFX(contactedCollider);
 
 
     }
