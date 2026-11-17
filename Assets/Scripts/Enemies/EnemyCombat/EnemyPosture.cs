@@ -80,6 +80,13 @@ public class EnemyPosture : MonoBehaviour
         if (damage <= 0f || isPostureBroken)
             return;
 
+        if (stateManager != null &&
+            (stateManager.CurrentState == stateManager.DeathState ||
+             stateManager.CurrentState == stateManager.ExecutedState))
+        {
+            return;
+        }
+
         currentPosture += damage * postureDamageMultiplier;
 
         currentPosture = Mathf.Clamp(currentPosture, 0f, maxPosture);

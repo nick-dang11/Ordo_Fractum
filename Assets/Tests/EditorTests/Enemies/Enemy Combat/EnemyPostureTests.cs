@@ -1,3 +1,4 @@
+
 using System;
 using System.Reflection;
 using NUnit.Framework;
@@ -55,6 +56,7 @@ public class EnemyPostureTests
 
     private PropertyInfo currentStateProperty;
     private PropertyInfo stunnedStateProperty;
+    private PropertyInfo neutralStateProperty;
 
     private FieldInfo maxPostureField;
     private FieldInfo stateManagerField;
@@ -142,6 +144,13 @@ public class EnemyPostureTests
                 BindingFlags.Public
             );
 
+        neutralStateProperty =
+            enemyStateManagerType.GetProperty(
+                "NeutralState",
+                BindingFlags.Instance |
+                BindingFlags.Public
+            );
+
         maxPostureField =
             enemyPostureType.GetField(
                 "maxPosture",
@@ -164,6 +173,7 @@ public class EnemyPostureTests
 
         Assert.IsNotNull(currentStateProperty);
         Assert.IsNotNull(stunnedStateProperty);
+        Assert.IsNotNull(neutralStateProperty);
 
         Assert.IsNotNull(maxPostureField);
         Assert.IsNotNull(stateManagerField);
@@ -176,6 +186,47 @@ public class EnemyPostureTests
         stateManagerField.SetValue(
             enemyPosture,
             enemyStateManager
+        );
+
+        // Edit Mode does not automatically invoke MonoBehaviour.Start().
+        // Initialize the state manager before running posture tests.
+        MethodInfo startMethod =
+            enemyStateManagerType.GetMethod(
+                "Start",
+                BindingFlags.Instance |
+                BindingFlags.NonPublic
+            );
+
+        Assert.IsNotNull(
+            startMethod,
+            "Could not find EnemyStateManager.Start()."
+        );
+
+        startMethod.Invoke(
+            enemyStateManager,
+            null
+        );
+
+        // Confirm that the state manager begins in its neutral state.
+        object currentState =
+            currentStateProperty.GetValue(
+                enemyStateManager
+            );
+
+        object neutralState =
+            neutralStateProperty.GetValue(
+                enemyStateManager
+            );
+
+        Assert.IsNotNull(
+            neutralState,
+            "EnemyStateManager.NeutralState was not initialized."
+        );
+
+        Assert.AreSame(
+            neutralState,
+            currentState,
+            "EnemyStateManager should begin in NeutralState."
         );
     }
 

@@ -784,7 +784,7 @@ MonoBehaviour:
   postureUI: {fileID: 3792806945608335472}
   enemyCollider: {fileID: 6291261830347497589}
   enemyDamage: 1
-  enemyAttackCooldown: 20
+  enemyAttackCooldown: 5
   maximumAttackDuration: 4
   deflectReactionDuration: 0.6
   blockReactionDuration: 0.35
@@ -803,7 +803,7 @@ MonoBehaviour:
   enemyCombat: {fileID: 872181531737438651}
   combatDetection: {fileID: 8325864871925291311}
   stateManager: {fileID: 163640941635355023}
-  blockChance: 1
+  blockChance: 0.3
   minimumReactionDelay: 0.15
   maximumReactionDelay: 0.35
   blockDuration: 0.65
@@ -997,7 +997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06720433e53d8a4ba0f8bec3976f822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMaterialDrop
-  enemyCombat: {fileID: 0}
+  enemyCombat: {fileID: 872181531737438651}
   whetstonePrefab: {fileID: 7304644669314223986, guid: 29c0c9dffef93f54d814184aa37748e9, type: 3}
   dropAmount: 10
 --- !u!1 &3792806945608335472
