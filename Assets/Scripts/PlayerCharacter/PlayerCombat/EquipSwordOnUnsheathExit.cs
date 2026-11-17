@@ -1,16 +1,28 @@
+
 using UnityEngine;
 
-public class EquipSwordOnUnsheathExit : MonoBehaviour
+public class EquipSwordOnUnsheathExit : StateMachineBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void OnStateExit(
+        Animator animator,
+        AnimatorStateInfo stateInfo,
+        int layerIndex)
     {
-        
-    }
+        // Only equip the sword if the player
+        // is still in combat.
+        if (!animator.GetBool("InCombat"))
+            return;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        SheathSwordToggle swordToggle =
+            animator.GetComponent<SheathSwordToggle>();
+
+        if (swordToggle != null)
+        {
+            swordToggle.EquipSword();
+
+            Debug.Log(
+                "[Weapon] Unsheath exited. Sword equipped."
+            );
+        }
     }
 }
