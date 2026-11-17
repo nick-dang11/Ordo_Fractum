@@ -124,15 +124,19 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         if (input == null)
             return;
 
-        if (isAttacking)
+        // Release blocking normally.
+        if (!input.block)
         {
-            ForceStopBlocking();
+            if (isBlocking)
+                EndBlock();
+
             return;
         }
 
-        if (!input.block && isBlocking)
+        // Only attempt to begin blocking on a fresh press.
+        if (BlockPressedThisFrame && !isBlocking)
         {
-            EndBlock();
+            BeginBlock();
         }
     }
 
@@ -447,15 +451,41 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
     }
     public void BeginBlock()
     {
-        Debug.Log($"[Block DEBUG] BeginBlock called. " + $"input.block={input?.block}, " + $"isAttacking={isAttacking}, " + $"blockZoneAssigned={blockZone != null}");
-        if (input == null)
+        if (input == null || animate == null || isCountering)
             return;
 
-        if (isAttacking)
+        if (!input.block || isBlocking)
             return;
 
+        bool attackActive = isAttacking || IsAttackAnimationPlaying();
+
+        if (attackActive)
+        {
+            // Allow attack cancellation only during valid
+            // early or late block-cancel windows.
+            if (!CanBlockCancelCurrentAttack())
+            {
+                Debug.Log("[BlockCancel] Block rejected. " + "Outside valid cancel window.");
+                return;
+            }
+
+            Debug.Log("[BlockCancel] Valid cancel window. " + "Canceling current attack.");
+
+            // Stop the attack timeline so an outgoing attack
+            // cannot reactivate its weapon hitbox.
+            AttackTimelineDriver timelineDriver = GetComponent<AttackTimelineDriver>();
+
+            if (timelineDriver != null)
+            {
+                timelineDriver.CancelCurrentAttack();
+            }
+
+            // Clear pending combo inputs and attack state.
+            ResetAttackChain();
+        }
+
+        // Begin normal blocking.
         lastBlockTime = Time.time;
-
         isBlocking = true;
 
         animate.SetBool("Block", true);
@@ -468,7 +498,6 @@ public class PlayerCombat : MonoBehaviour, IAttackDamageSource, IAttackLifecycle
         {
             Debug.LogError("[PlayerCombat] BlockZone reference is missing.", this);
         }
-
         Debug.Log($"[Block] Block started at {lastBlockTime}");
     }
     private void EndBlock()
