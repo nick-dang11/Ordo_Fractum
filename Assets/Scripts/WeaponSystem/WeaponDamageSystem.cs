@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 public class WeaponDamageSystem : MonoBehaviour
 {
     public event Action OnWeaponLevelChanged;
+    [Header("Inventory Reference")]
+    [SerializeField] private Inventory inventory;
     [System.Serializable]
     public class WeaponLevel
     {
@@ -18,6 +20,7 @@ public class WeaponDamageSystem : MonoBehaviour
     // Damage table with only 3 weapon levels
     [Header("Weapon Damage Table")]
     [SerializeField]
+
     private WeaponLevel[] damageTable =
     {
         new WeaponLevel
@@ -39,6 +42,13 @@ public class WeaponDamageSystem : MonoBehaviour
             counterDamage = 35f
         }
     };
+
+    [Header("Upgrade Costs")]
+    [SerializeField, Min(1)]
+    private int level2cost = 1;
+
+    [SerializeField, Min(1)]
+    private int level3cost = 29;
 
     [Header("Current Weapon Level")]
     [SerializeField, Range(1, 3)]
@@ -85,14 +95,46 @@ public class WeaponDamageSystem : MonoBehaviour
     }
     public void UpgradeWeapon()
     {
-        if (damageTable == null || damageTable.Length == 0)
-            return;
-        if (currentLevel < 3 &&
-            currentLevel < damageTable.Length)
+        if(inventory == null)
         {
-            currentLevel++;
-            Debug.Log("Weapon upgraded to level " + currentLevel);
-            OnWeaponLevelChanged?.Invoke();
+            Debug.LogError("Inventory reference is missing.");
+            return;
+        }
+
+        if(damageTable == null || damageTable.Length < 3 || currentLevel < 1 || currentLevel >= 3)
+        {
+            Debug.Log("Weapon cannot be upgrades further.");
+            return;
+        }
+
+        int cost = GetUpgradeCost();
+        Debug.Log($"Attempting to upgrade weapon. Current Level: {currentLevel}, Upgrade Cost: {cost}, Whetstone Available: {inventory.Whetstone}");
+
+        if(!inventory.SpendWhetstone(cost))
+        {
+            Debug.Log("Not enough Whetstones to upgrade weapon.");
+            return;
+        }
+
+        currentLevel++;
+
+        Debug.Log("Weapon upgraded to level " + currentLevel);
+        OnWeaponLevelChanged?.Invoke();
+    }
+
+    public int GetUpgradeCost()
+    {
+        if(currentLevel == 1)
+        {
+            return level2cost;
+        }
+        if(currentLevel == 2)
+        {
+            return level3cost;
+        }
+        else
+        {
+            return 0; // No further upgrades available
         }
     }
     private void Update()
@@ -100,7 +142,7 @@ public class WeaponDamageSystem : MonoBehaviour
         if (Keyboard.current !=null && Keyboard.current.uKey.wasPressedThisFrame)
         {
             UpgradeWeapon();
-            Debug.Log("Weapon upgraded to level " + currentLevel);
+           
         }
     }
 }

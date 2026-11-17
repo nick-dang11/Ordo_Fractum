@@ -1071,6 +1071,118 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 4626148118972072134
+      type: {class: Start, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        ID:
+          m_Value0: 12270568957916119996
+          m_Value1: 3230494647515885167
+        Graph:
+          rid: 8990957766093832195
+        m_Parent:
+          rid: -2
+        m_Child:
+          rid: 4626148118972072135
+        Repeat: 1
+        AllowMultipleRepeatsPerTick: 0
+    - rid: 4626148118972072135
+      type: {class: BranchingConditionComposite, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        ID:
+          m_Value0: 4023340645008695317
+          m_Value1: 8572117173661472616
+        Graph:
+          rid: 8990957766093832195
+        m_Parent:
+          rid: 4626148118972072134
+        m_Children:
+        - rid: 4626148118972072136
+        - rid: 4626148118972072137
+        m_RegisteredObservers: []
+        m_Conditions:
+        - rid: 4626148118972072138
+        m_RequiresAllConditions: 0
+        True:
+          rid: 4626148118972072136
+        False:
+          rid: 4626148118972072137
+        m_CurrentChild:
+          rid: -2
+        m_ObserverType: 0
+    - rid: 4626148118972072136
+      type: {class: BranchingConditionComposite, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        ID:
+          m_Value0: 979814701571993781
+          m_Value1: 7972653148649382290
+        Graph:
+          rid: 8990957766093832195
+        m_Parent:
+          rid: 4626148118972072135
+        m_Children:
+        - rid: 4626148118972072139
+        - rid: 4626148118972072140
+        m_RegisteredObservers: []
+        m_Conditions:
+        - rid: 4626148118972072141
+        m_RequiresAllConditions: 0
+        True:
+          rid: 4626148118972072139
+        False:
+          rid: 4626148118972072140
+        m_CurrentChild:
+          rid: -2
+        m_ObserverType: 0
+    - rid: 4626148118972072137
+      type: {class: PatrolsAction, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          m_Value0: 4588726251646299728
+          m_Value1: 16219761618170874236
+        Graph:
+          rid: 8990957766093832195
+        m_Parent:
+          rid: 4626148118972072135
+        Enemy:
+          rid: 5319909152907591875
+    - rid: 4626148118972072138
+      type: {class: EnemyCanSeeAPlayerCondition, ns: , asm: Assembly-CSharp}
+      data:
+        Graph:
+          rid: 8990957766093832195
+        Enemy:
+          rid: 5319909152907591875
+    - rid: 4626148118972072139
+      type: {class: EnemyAttacksAction, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          m_Value0: 5666946432238313442
+          m_Value1: 381459035015183338
+        Graph:
+          rid: 8990957766093832195
+        m_Parent:
+          rid: 4626148118972072136
+        Enemy:
+          rid: 5319909152907591875
+    - rid: 4626148118972072140
+      type: {class: ChasesPlayerAction, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          m_Value0: 306487163828098198
+          m_Value1: 15326471961718000945
+        Graph:
+          rid: 8990957766093832195
+        m_Parent:
+          rid: 4626148118972072136
+        Enemy:
+          rid: 5319909152907591875
+    - rid: 4626148118972072141
+      type: {class: EnemyInCombatRangeCondition, ns: , asm: Assembly-CSharp}
+      data:
+        Graph:
+          rid: 8990957766093832195
+        Enemy:
+          rid: 5319909152907591875
     - rid: 5319909152907591875
       type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -1087,161 +1199,6 @@ MonoBehaviour:
           m_Value1: 3622686186274304372
         Name: PatrolPoints
         m_Value: []
-    - rid: 7155424127648530681
-      type: {class: Start, ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        ID:
-          m_Value0: 12270568957916119996
-          m_Value1: 3230494647515885167
-        Graph:
-          rid: 8990957766093832195
-        m_Parent:
-          rid: -2
-        m_Child:
-          rid: 7155424127648530682
-        Repeat: 1
-        AllowMultipleRepeatsPerTick: 0
-    - rid: 7155424127648530682
-      type: {class: BranchingConditionComposite, ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        ID:
-          m_Value0: 4023340645008695317
-          m_Value1: 8572117173661472616
-        Graph:
-          rid: 8990957766093832195
-        m_Parent:
-          rid: 7155424127648530681
-        m_Children:
-        - rid: 7155424127648530683
-        - rid: 7155424127648530684
-        m_RegisteredObservers: []
-        m_Conditions:
-        - rid: 7155424127648530685
-        m_RequiresAllConditions: 0
-        True:
-          rid: 7155424127648530683
-        False:
-          rid: 7155424127648530684
-        m_CurrentChild:
-          rid: -2
-        m_ObserverType: 0
-    - rid: 7155424127648530683
-      type: {class: BranchingConditionComposite, ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        ID:
-          m_Value0: 979814701571993781
-          m_Value1: 7972653148649382290
-        Graph:
-          rid: 8990957766093832195
-        m_Parent:
-          rid: 7155424127648530682
-        m_Children:
-        - rid: 7155424127648530686
-        - rid: 7155424127648530687
-        m_RegisteredObservers: []
-        m_Conditions:
-        - rid: 7155424127648530688
-        m_RequiresAllConditions: 0
-        True:
-          rid: 7155424127648530686
-        False:
-          rid: 7155424127648530687
-        m_CurrentChild:
-          rid: -2
-        m_ObserverType: 0
-    - rid: 7155424127648530684
-      type: {class: PatrolsAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 4588726251646299728
-          m_Value1: 16219761618170874236
-        Graph:
-          rid: 8990957766093832195
-        m_Parent:
-          rid: 7155424127648530682
-        Enemy:
-          rid: 5319909152907591875
-    - rid: 7155424127648530685
-      type: {class: EnemyCanSeeAPlayerCondition, ns: , asm: Assembly-CSharp}
-      data:
-        Graph:
-          rid: 8990957766093832195
-        Enemy:
-          rid: 5319909152907591875
-    - rid: 7155424127648530686
-      type: {class: BranchingConditionComposite, ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        ID:
-          m_Value0: 8843197885152044515
-          m_Value1: 6826502257687307780
-        Graph:
-          rid: 8990957766093832195
-        m_Parent:
-          rid: 7155424127648530683
-        m_Children:
-        - rid: 7155424127648530689
-        - rid: 7155424127648530690
-        m_RegisteredObservers: []
-        m_Conditions:
-        - rid: 7155424127648530691
-        m_RequiresAllConditions: 0
-        True:
-          rid: 7155424127648530689
-        False:
-          rid: 7155424127648530690
-        m_CurrentChild:
-          rid: -2
-        m_ObserverType: 0
-    - rid: 7155424127648530687
-      type: {class: ChasesPlayerAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 306487163828098198
-          m_Value1: 15326471961718000945
-        Graph:
-          rid: 8990957766093832195
-        m_Parent:
-          rid: 7155424127648530683
-        Enemy:
-          rid: 5319909152907591875
-    - rid: 7155424127648530688
-      type: {class: EnemyInCombatRangeCondition, ns: , asm: Assembly-CSharp}
-      data:
-        Graph:
-          rid: 8990957766093832195
-        Enemy:
-          rid: 5319909152907591875
-    - rid: 7155424127648530689
-      type: {class: EnemyBlocksAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 6426787632346979796
-          m_Value1: 12010256974622303553
-        Graph:
-          rid: 8990957766093832195
-        m_Parent:
-          rid: 7155424127648530686
-        Enemy:
-          rid: 5319909152907591875
-    - rid: 7155424127648530690
-      type: {class: EnemyAttacksAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 5666946432238313442
-          m_Value1: 381459035015183338
-        Graph:
-          rid: 8990957766093832195
-        m_Parent:
-          rid: 7155424127648530686
-        Enemy:
-          rid: 5319909152907591875
-    - rid: 7155424127648530691
-      type: {class: EnemyShouldBlockCondition, ns: , asm: Assembly-CSharp}
-      data:
-        Graph:
-          rid: 8990957766093832195
-        Enemy:
-          rid: 5319909152907591875
     - rid: 8990957766093832195
       type: {class: BehaviorGraphModule, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -1253,7 +1210,7 @@ MonoBehaviour:
           rid: 8990957766093832196
         BlackboardGroupReferences: []
         Root:
-          rid: 7155424127648530681
+          rid: 4626148118972072134
         m_VersionTimestamp: 639303718773685930
     - rid: 8990957766093832196
       type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
