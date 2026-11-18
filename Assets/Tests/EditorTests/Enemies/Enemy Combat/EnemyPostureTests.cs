@@ -188,8 +188,24 @@ public class EnemyPostureTests
             enemyStateManager
         );
 
-        // Edit Mode does not automatically invoke MonoBehaviour.Start().
-        // Initialize the state manager before running posture tests.
+        // Edit Mode tests must initialize the state manager lifecycle explicitly.
+        // Awake creates NeutralState, StunnedState, and the other state instances.
+        MethodInfo awakeMethod =
+            enemyStateManagerType.GetMethod(
+                "Awake",
+                BindingFlags.Instance |
+                BindingFlags.Public |
+                BindingFlags.NonPublic
+            );
+
+        Assert.IsNotNull(
+            awakeMethod,
+            "Could not find EnemyStateManager.Awake()."
+        );
+
+        awakeMethod.Invoke(enemyStateManager, null);
+
+        // Start selects NeutralState as the initial state.
         MethodInfo startMethod =
             enemyStateManagerType.GetMethod(
                 "Start",
